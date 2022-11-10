@@ -52,3 +52,7 @@ const serco_schema = new Schema<serco>({
     required: true,
   },
 });
+
+serco_schema.index({ llave: 1 }, { unique: true });
+
+export const serco_model = model<serco>("serco", serco_schema);
