@@ -6,10 +6,8 @@ interface activ {
   ubicacion: string;
   direct: string;
   subdirect: string;
-  reg_act: {
-    cod_act: string;
-    nombre_act: string;
-  };
+  codigo: string;
+  nombre: string;
 }
 
 const activ_schema = new Schema<activ>({
@@ -25,15 +23,13 @@ const activ_schema = new Schema<activ>({
     type: String,
     required: true,
   },
-  reg_act: {
-    cod_act: {
-      type: String,
-      required: true,
-    },
-    nombre_act: {
-      type: String,
-      required: true,
-    },
+  codigo: {
+    type: String,
+    required: true,
+  },
+  nombre: {
+    type: String,
+    required: true,
   },
 });
 

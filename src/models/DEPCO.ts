@@ -6,13 +6,13 @@ interface depco {
   ubicacion: string;
   direct: string;
   subdirect: string;
-  cod_dep: string;
-  descrip_dep: string;
-  responsable_dep: string;
-  oper_dep: string;
-  cod_serco_dep: string;
-  cargo_dep: string;
-  correo_dep: string;
+  codigo: string;
+  descripcion: string;
+  responsable: string;
+  oper: string;
+  codSerco: string;
+  cargo: string;
+  correo: string;
 }
 
 const depco_schema = new Schema<depco>({
@@ -28,31 +28,31 @@ const depco_schema = new Schema<depco>({
     type: String,
     required: true,
   },
-  cod_dep: {
+  codigo: {
     type: String,
     required: true,
   },
-  descrip_dep: {
+  descripcion: {
     type: String,
     required: true,
   },
-  responsable_dep: {
+  responsable: {
     type: String,
     required: true,
   },
-  oper_dep: {
+  oper: {
     type: String,
     required: true,
   },
-  cod_serco_dep: {
+  codSerco: {
     type: String,
     required: true,
   },
-  cargo_dep: {
+  cargo: {
     type: String,
     required: true,
   },
-  correo_dep: {
+  correo: {
     type: String,
     required: true,
   },

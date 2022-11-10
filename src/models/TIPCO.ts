@@ -6,12 +6,9 @@ interface tipco {
   ubicacion: string;
   direct: string;
   subdirect: string;
-  cod_tipco: string;
-  descrip_tipco: {
-    descrip1_tipco: string;
-    descrip2_tipco: string;
-  };
-  dias_tipco: string;
+  codigo: string;
+  descripcion: string;
+  dias: string;
 }
 
 const tipco_schema = new Schema<tipco>({
@@ -27,21 +24,15 @@ const tipco_schema = new Schema<tipco>({
     type: String,
     required: true,
   },
-  cod_tipco: {
+  codigo: {
     type: String,
     required: true,
   },
-  descrip_tipco: {
-    descrip1_tipco: {
+  descripcion: {
       type: String,
       required: true,
-    },
-    descrip2_tipco: {
-      type: String,
-      required: true,
-    },
   },
-  dias_tipco: {
+  dias: {
     type: String,
     required: true,
   },

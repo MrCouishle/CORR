@@ -6,12 +6,9 @@ interface holding {
   ubicacion: string;
   direct: string;
   subdirect: string;
-  cod_holding: string;
-  descrip_holding: {
-    descrip1_holding: string;
-    descrip2_holding: string;
-  };
-  activa_holding: string;
+  codigo: string;
+  descripcion: string;
+  activa: string;
 }
 
 const holding_schema = new Schema<holding>({
@@ -27,21 +24,15 @@ const holding_schema = new Schema<holding>({
     type: String,
     required: true,
   },
-  cod_holding: {
+  codigo: {
     type: String,
     required: true,
   },
-  descrip_holding: {
-    descrip1_holding: {
+  descripcion: {
       type: String,
       required: true,
-    },
-    descrip2_holding: {
-      type: String,
-      required: true,
-    },
   },
-  activa_holding: {
+  activa: {
     type: String,
     required: true,
   },

@@ -6,11 +6,8 @@ interface remidep {
   ubicacion: string;
   direct: string;
   subdirect: string;
-  cod_depremi: string;
-  descrip_depremi: {
-    descrip1_depremi: string;
-    descrip2_depremi: string;
-  };
+  codigo: string;
+  descripcion: string;
 }
 
 const remidep_schema = new Schema<remidep>({
@@ -26,19 +23,13 @@ const remidep_schema = new Schema<remidep>({
     type: String,
     required: true,
   },
-  cod_depremi: {
+  codigo: {
     type: String,
     required: true,
   },
-  descrip_depremi: {
-    descrip1_depremi: {
+  descripcion: {
       type: String,
       required: true,
-    },
-    descrip2_depremi: {
-      type: String,
-      required: true,
-    },
   },
 });
 

@@ -6,11 +6,8 @@ interface cargops {
   ubicacion: string;
   direct: string;
   subdirect: string;
-  cod_cargo: string;
-  descrip_cargo: {
-    descrip2_cargo: string;
-    descrip1_cargo: string;
-  };
+  codigo: string;
+  descripcion: string;
 }
 
 const cargops_schema = new Schema<cargops>({
@@ -26,19 +23,13 @@ const cargops_schema = new Schema<cargops>({
     type: String,
     required: true,
   },
-  cod_cargo: {
+  codigo: {
     type: String,
     required: true,
   },
-  descrip_cargo: {
-    descrip2_cargo: {
+  descripcion: {
       type: String,
       required: true,
-    },
-    descrip1_cargo: {
-      type: String,
-      required: true,
-    },
   },
 });
 

@@ -6,11 +6,8 @@ interface unifun {
   ubicacion: string;
   direct: string;
   subdirect: string;
-  cod_unifun: string;
-  descrip_unifun: {
-    descrip1_unifun: string;
-    descrip2_unifun: string;
-  };
+  codigo: string;
+  descripcion: string;
 }
 
 const unifun_schema = new Schema<unifun>({
@@ -26,19 +23,13 @@ const unifun_schema = new Schema<unifun>({
     type: String,
     required: true,
   },
-  cod_unifun: {
+  codigo: {
     type: String,
     required: true,
   },
-  descrip_unifun: {
-    descrip1_unifun: {
+  descripcion: {
       type: String,
       required: true,
-    },
-    descrip2_unifun: {
-      type: String,
-      required: true,
-    },
   },
 });
 

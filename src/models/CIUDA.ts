@@ -6,17 +6,14 @@ interface ciuda {
   ubicacion: string;
   direct: string;
   subdirect: string;
-  cod_ciu: {
-    dpto_ciu: string;
-    ciu_ciu: string;
+  codCiu: {
+    dptCiu: string;
+    ciuCiu: string;
   };
-  nombre_ciu: {
-    nombre1_ciu: string;
-    nombre2_ciu: string;
-  };
-  pais_ciu: string;
-  actbarrios_ciu: string;
-  increm_ciu: string;
+  nombre: string;
+  pais: string;
+  actbarrios: string;
+  increm: string;
 }
 
 const ciuda_schema = new Schema<ciuda>({
@@ -32,35 +29,29 @@ const ciuda_schema = new Schema<ciuda>({
     type: String,
     required: true,
   },
-  cod_ciu: {
-    dpto_ciu: {
+  codCiu: {
+    dptCiu: {
       type: String,
       required: true,
     },
-    ciu_ciu: {
-      type: String,
-      required: true,
-    },
-  },
-  nombre_ciu: {
-    nombre1_ciu: {
-      type: String,
-      required: true,
-    },
-    nombre2_ciu: {
+    ciuCiu: {
       type: String,
       required: true,
     },
   },
-  pais_ciu: {
+  nombre: {
     type: String,
     required: true,
   },
-  actbarrios_ciu: {
+  pais: {
     type: String,
     required: true,
   },
-  increm_ciu: {
+  actbarrios: {
+    type: String,
+    required: true,
+  },
+  increm: {
     type: String,
     required: true,
   },
