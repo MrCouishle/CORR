@@ -18,19 +18,20 @@ interface depco {
 const depco_schema = new Schema<depco>({
   ubicacion: {
     type: String,
-    required: true,
+    default: "",
   },
   direct: {
     type: String,
-    required: true,
+    default: "",
   },
   subdirect: {
     type: String,
-    required: true,
+    default: "",
   },
   codigo: {
     type: String,
     required: true,
+    unique: true,
   },
   descripcion: {
     type: String,
@@ -54,10 +55,10 @@ const depco_schema = new Schema<depco>({
   },
   correo: {
     type: String,
-    required: true,
+    default: "",
   },
 });
 
-depco_schema.index({ llave: 1 }, { unique: true });
+depco_schema.index({ codigo: 1 }, { unique: true });
 
 export const depco_model = model<depco>("depco", depco_schema);

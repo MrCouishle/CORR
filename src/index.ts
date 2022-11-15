@@ -25,20 +25,20 @@ app.get("/", (req: Request, res: Response) => {
   res.send("API funcionado :)");
 });
 
+app.use("/api", routes.SERCO);
+app.use("/api", routes.DEPCO);
+app.use("/api", routes.TIPCO);
+app.use("/api", routes.AUXTIP);
+app.use("/api", routes.UNIFUN);
 // app.use("/api", routes.ACTIV);
-// app.use("/api", routes.AUXTIP);
 // app.use("/api", routes.CARGOPS);
 // app.use("/api", routes.CIUDA);
 // app.use("/api", routes.CORRES);
-// app.use("/api", routes.DEPCO);
 // app.use("/api", routes.HOLDING);
 // app.use("/api", routes.MACORR);
 // app.use("/api", routes.REMIDEP);
 // app.use("/api", routes.RESCORR);
-// app.use("/api", routes.SERCO);
 // app.use("/api", routes.TERCE);
-// app.use("/api", routes.TIPCO);
-// app.use("/api", routes.UNIFUN);
 // app.use("/api", routes.USUAR);
 app.use("/api", routes.Entrys);
 

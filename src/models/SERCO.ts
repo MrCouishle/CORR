@@ -17,19 +17,20 @@ interface serco {
 const serco_schema = new Schema<serco>({
   ubicacion: {
     type: String,
-    required: true,
+    default: "",
   },
   direct: {
     type: String,
-    required: true,
+    default: "",
   },
   subdirect: {
     type: String,
-    required: true,
+    default: "",
   },
   codigo: {
     type: String,
     required: true,
+    unique: true,
   },
   descripcion: {
     type: String,
@@ -45,14 +46,12 @@ const serco_schema = new Schema<serco>({
   },
   operMod: {
     type: String,
-    required: true,
   },
   fechaMod: {
     type: String,
-    required: true,
   },
 });
 
-serco_schema.index({ llave: 1 }, { unique: true });
+serco_schema.index({ codigo: 1 }, { unique: true });
 
 export const serco_model = model<serco>("serco", serco_schema);

@@ -166,9 +166,10 @@ export function null_to_0(next: any, self: any) {
 export const delete_response = (
   nom: String,
   doc: any,
-  codigo: any,
+  codigo= "",
   res: Response
 ) => {
+  console.log(nom, doc, codigo, res)
   if (doc === null) res.json({ msg: "No existe documento" }).status(204);
   else if (doc.deletedCount == 0)
     res.json({ msg: `El código (${codigo}) de ${nom} no existe.`, cod_error: "01" }).status(204);

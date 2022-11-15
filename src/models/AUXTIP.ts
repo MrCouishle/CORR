@@ -14,19 +14,20 @@ interface auxtip {
 const auxtip_schema = new Schema<auxtip>({
   ubicacion: {
     type: String,
-    required: true,
+    default: "",
   },
   direct: {
     type: String,
-    required: true,
+    default: "",
   },
   subdirect: {
     type: String,
-    required: true,
+    default: "",
   },
   codigo: {
       type: String,
       required: true,
+      unique: true,
   },
   codSerco: {
       type: String,
@@ -38,6 +39,6 @@ const auxtip_schema = new Schema<auxtip>({
   },
 });
 
-auxtip_schema.index({ llave: 1 }, { unique: true });
+auxtip_schema.index({ codigo: 1 }, { unique: true });
 
 export const auxtip_model = model<auxtip>("auxtip", auxtip_schema);

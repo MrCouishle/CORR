@@ -13,19 +13,20 @@ interface unifun {
 const unifun_schema = new Schema<unifun>({
   ubicacion: {
     type: String,
-    required: true,
+    default:"",
   },
   direct: {
     type: String,
-    required: true,
+    default:"",
   },
   subdirect: {
     type: String,
-    required: true,
+    default:"",
   },
   codigo: {
     type: String,
     required: true,
+    unique: true,
   },
   descripcion: {
       type: String,
@@ -33,6 +34,6 @@ const unifun_schema = new Schema<unifun>({
   },
 });
 
-unifun_schema.index({ llave: 1 }, { unique: true });
+unifun_schema.index({ cosigo: 1 }, { unique: true });
 
 export const unifun_model = model<unifun>("unifun", unifun_schema);

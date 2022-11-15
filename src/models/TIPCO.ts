@@ -14,19 +14,20 @@ interface tipco {
 const tipco_schema = new Schema<tipco>({
   ubicacion: {
     type: String,
-    required: true,
+    default: "",
   },
   direct: {
     type: String,
-    required: true,
+    default: "",
   },
   subdirect: {
     type: String,
-    required: true,
+    default: "",
   },
   codigo: {
     type: String,
     required: true,
+    unique: true,
   },
   descripcion: {
       type: String,
@@ -38,6 +39,6 @@ const tipco_schema = new Schema<tipco>({
   },
 });
 
-tipco_schema.index({ llave: 1 }, { unique: true });
+tipco_schema.index({ codigo: 1 }, { unique: true });
 
 export const tipco_model = model<tipco>("tipco", tipco_schema);
