@@ -14,23 +14,24 @@ interface holding {
 const holding_schema = new Schema<holding>({
   ubicacion: {
     type: String,
-    required: true,
+    default: "",
   },
   direct: {
     type: String,
-    required: true,
+    default: "",
   },
   subdirect: {
     type: String,
-    required: true,
+    default: "",
   },
   codigo: {
     type: String,
     required: true,
+    unique: true,
   },
   descripcion: {
-      type: String,
-      required: true,
+    type: String,
+    required: true,
   },
   activa: {
     type: String,
@@ -38,6 +39,6 @@ const holding_schema = new Schema<holding>({
   },
 });
 
-holding_schema.index({ llave: 1 }, { unique: true });
+holding_schema.index({ codigo: 1 }, { unique: true });
 
 export const holding_model = model<holding>("holding", holding_schema);

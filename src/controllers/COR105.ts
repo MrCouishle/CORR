@@ -60,7 +60,7 @@ export const getUnifun = async (req: Request, res: Response) => {
       const data = await unifun_model.findOne({codigo: codigo}, omitirId);
       if(data) res.json(data)
       else res.json({ msg: 0 });
-      console.log("Esta es la data de SercoID: ", data)
+      console.log("Esta es la data de UnifunID: ", data)
     } catch (error) {
       res.json({ msg: error });
     }

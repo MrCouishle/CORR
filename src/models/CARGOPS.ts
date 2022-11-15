@@ -13,19 +13,20 @@ interface cargops {
 const cargops_schema = new Schema<cargops>({
   ubicacion: {
     type: String,
-    required: true,
+    default: "",
   },
   direct: {
     type: String,
-    required: true,
+    default: "",
   },
   subdirect: {
     type: String,
-    required: true,
+    default: "",
   },
   codigo: {
     type: String,
     required: true,
+    unique: true,
   },
   descripcion: {
       type: String,
@@ -33,6 +34,6 @@ const cargops_schema = new Schema<cargops>({
   },
 });
 
-cargops_schema.index({ llave: 1 }, { unique: true });
+cargops_schema.index({ codigo: 1 }, { unique: true });
 
 export const cargops_model = model<cargops>("cargops", cargops_schema);

@@ -13,19 +13,20 @@ interface remidep {
 const remidep_schema = new Schema<remidep>({
   ubicacion: {
     type: String,
-    required: true,
+    default: "",
   },
   direct: {
     type: String,
-    required: true,
+    default: "",
   },
   subdirect: {
     type: String,
-    required: true,
+    default: "",
   },
   codigo: {
     type: String,
     required: true,
+    unique: true,
   },
   descripcion: {
       type: String,
@@ -33,6 +34,6 @@ const remidep_schema = new Schema<remidep>({
   },
 });
 
-remidep_schema.index({ llave: 1 }, { unique: true });
+remidep_schema.index({ codigo: 1 }, { unique: true });
 
 export const remidep_model = model<remidep>("remidep", remidep_schema);
