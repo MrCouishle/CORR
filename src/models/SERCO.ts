@@ -50,7 +50,7 @@ const serco_schema = new Schema<serco>({
   fechaMod: {
     type: String,
   },
-});
+})
 
 serco_schema.index({ codigo: 1 }, { unique: true });
 

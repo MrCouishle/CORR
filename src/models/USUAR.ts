@@ -3,835 +3,775 @@ import mongoose, { Schema, model } from "mongoose";
 mongoose.pluralize(null);
 
 interface usuar {
-  ubicacion: string;
-  direct: string;
-  subdirect: string;
-  nombre_usu: {
-    nombre1_usu: {
-      nom1_usu: string;
-      nom2_usu: string;
-    };
-    nombre2_usu: {
-      nom3_usu: string;
-    };
-  };
-  nit_usu: string;
-  dv_usu: string;
-  direcc_usu: {
-    direcc1_usu: string;
-    direcc2_usu: string;
-  };
-  cod_ciu_usu: {
-    dpt_ciu_usu: string;
-    ciu_ciu_usu: string;
-  };
-  tel_usu: string;
-  nuir_usu: string;
-  prefijo_usu: string;
-  lista_pol_usu: string;
-  iva_s_usu: string;
-  nombre_alterno: {
-    nombre1_alterno: string;
-    nombre2_alterno: string;
-  };
-  nit_alt: string;
-  dv_alt: string;
-  direcc_alt: {
-    direcc1_alt: string;
-    direcc2_alt: string;
-  };
-  cod_ciu_alt: string;
-  tel_alt: string;
-  prefijo_alt: string;
-  lista_pol_alt: string;
-  iva_s_alt: string;
-  limi_costo_usu: string;
-  exten_fac_usu: string;
-  cta_efect_usu: string;
-  retail_usu: string;
-  aprox_usu: string;
-  repetido_usu: string;
-  descto_usu: string;
-  retenedor_usu: string;
-  contado_usu: string;
-  presup_usu: string;
-  ctl_cheq_usu: string;
-  dep_inven_usu: string;
-  formato_rbo_usu: string;
-  separa_caja_alt: string;
-  limit_venta_usu: string;
-  cuadre_usu: string;
-  costo_usu: string;
-  ctl_usu: string;
-  invent_usu: string;
-  cartera_usu: string;
-  tipo_cod_usu: string;
-  copia_usu: string;
-  puc_usu: string;
-  directorio_usu: string;
-  archmae_usu: string;
-  archter_usu: {
-    nom1_archter_usu: string;
-    nom2_archter_usu: string;
-  };
-  barras_usu: string;
-  pos_usu: string;
-  asume_iva_usu: string;
-  asume_vlr_usu: string;
-  iva_usu: string;
-  iva_2_usu: string;
-  iva_3_usu: string;
-  autoret_usu: string;
-  resol_dian_usu: {
-    resol1_usu: string;
-    resol2_usu: string;
-  };
-  clave_usu: string;
-  clave_nit_usu: string;
-  clave_inv_usu: string;
-  clave_men_usu: string;
-  clave_con_usu: string;
-  clave_car_usu: string;
-  clave_otr_usu: string;
-  clave_men_inv: string;
-  clave_2_usu: string;
-  barras_fact_usu: string;
-  activ_usu: string;
-  clave_correc_usu: string;
-  ret_fact_usu: string;
-  porc_cree_usu: string;
-  nom_egreso_usu: string;
-  formato_egr_usu: string;
-  f_liq_base_fact_usu: string;
-  despacho_usu: string;
-  niif_usu: string;
-  costo_art_usu: string;
-  mult_rubro_usu: string;
-  dir_dian_usu: string;
-  fact_inf_costo_usu: string;
-  deprec_dif_niif_usu: string;
-  alerta_transp_usu: string;
-  per_ini_niif_usu: {
-    ano_ini_niif_usu: string;
-    mes_ini_niif_usu: string;
-  };
-  sal_min_usu: string;
-  mens_menu_usu: {
-    mens1_menu_usu: string;
-    mens2_menu_usu: string;
-  };
-  ley1429_usu: string;
-  menu_suc_usu: string;
-  sup_deventa_usu: string;
-  lote_farm_usu: string;
-  tip_caj_usu: string;
-  nota_entrega_usu: string;
-  placa_usu: string;
-  cuotas_usu: string;
-  restric_ex_usu: string;
-  max_mora_usu: string;
-  contab_pos_usu: string;
-  reteiva_usu: string;
-  pedido_usu: string;
-  autocree_usu: string;
-  dir_inv_usu: string;
-  tipo_empr_usu: string;
-  e_mail_usu: string;
-  serv_email_usu: string;
-  clave_email_usu: string;
-  ssl_email_usu: string;
-  item_max_usu: string;
-  imp_fact_usu: string;
-  imp_cot_usu: string;
-  imp_ord_usu: string;
-  lista_precio_usu: string;
-  email_fact_usu: string;
-  serv_email_fact_usu: string;
-  clave_email_fact_usu: string;
-  ssl_email_fact_usu: string;
-  email_nom_usu: string;
-  serv_email_nom_usu: string;
-  clave_email_nom_usu: string;
-  ssl_email_nom_usu: string;
-  costo_deud_usu: string;
-  ruta_estampilla_usu: string;
-  autorteica_usu: string;
-  ret_cree_usu: string;
-  conv_iyc_anual_usu: string;
-  conv_iyc_bimes_usu: string;
-  directorio_ant_usu: string;
-  acta_remi_usu: string;
-  clave_iyc_usu: string;
-  precio_suc_usu: string;
-  ip_local_usu: string;
-  ip_publica_usu: string;
-  usuario_sql_usu: string;
-  clave_sql_usu: string;
-  ley1943_usu: string;
-  control_formu_usu: string;
-  amp_deta_usu: string;
-  cta_tdebito_usu: string;
-  cta_tcredito_usu: string;
-  cta_cheque_usu: string;
-  fac_pedi_usu: string;
-  fac_coti_usu: string;
-  fac_remi_usu: string;
-  fac_alis_usu: string;
-  terce_ventana_usu: string;
-  alerta_cumple_usu: string;
-  tiquete_regalo_usu: string;
-  contab_dcto_usu: string;
-}
+	ubicacion: string;
+	directorio: string;
+	subdirectorio: string;
+	nombre: string;
+	nit: number;
+	dv: number;
+	direcc: string;
+	codCiu: {
+		dpt: number;
+		ciu: number;
+	};
+	tel: string;
+	nuir: string;
+	prefijo: string;
+	listaPol: string;
+	ivaS: string;
+	nombreAlterno: string;
+	nitAlt: number;
+	dvAlt: number;
+	direccAlt: string;
+	codCiuAlt: number;
+	// tel: string;  SE ESTA REPITIENDO ESTA VARIABLE
+	prefijoAlt: string;
+	listaPolAlt: string;
+	ivaSAlt: string;
+	limiCosto: string;
+	extenFac: string;
+	ctaEfect: string;
+	retail: string;
+	aprox: string;
+	repetido: string;
+	descto: string;
+	retenedor: string;
+	contado: string;
+	presup: string;
+	ctlCheq: string;
+	depInven: string;
+	formatoRbo: string;
+	separaCajaAlt: string;
+	limitVenta: string;
+	cuadre: string;
+	costo: string;
+	ctl: string;
+	invent: string;
+	cartera: string;
+	tipoCod: string;
+	copia: string;
+	puc: string;
+	// directorio: string; SE ESTA REPITIENDO ESTA VARIABLE
+	archmae: string;
+	archter: string;
+	barras: string;
+	pos: string;
+	asumeIva: string;
+	asumeVlr: string;
+	iva: number;
+	iva2: number;
+	iva3: number;
+	autoret: string;
+	resolDian: string;
+	clave: string;
+	claveNit: string;
+	claveInv: string;
+	claveMen: string;
+	claveCon: string;
+	claveCar: string;
+	claveOtr: string;
+	claveMenInv: string;
+	clave2: string;
+	barrasFact: string;
+	activ: string;
+	claveCorrec: string;
+	retFact: string;
+	porcCree: number;
+	nomEgreso: string;
+	formatoEgr: string;
+	fLiqBaseFact: number;
+	despacho: string;
+	niif: string;
+	costoArt: string;
+	multRubro: string;
+	dirDian: string;
+	factInfCosto: string;
+	deprecDifNiif: string;
+	alertaTransp: string;
+	perIniNiif: number;
+	salMin: number;
+	mensMenu: string;
+	ley1429: string;
+	menuSuc: string;
+	supDeventa: string;
+	loteFarm: string;
+	tipCaj: string;
+	notaEntrega: string;
+	placa: string;
+	cuotas: string;
+	restricEx: string;
+	maxMora: number;
+	contabPos: string;
+	reteiva: string;
+	pedido: string;
+	autocree: string;
+	dirInv: string;
+	tipoEmpr: string;
+	email: string;
+	servEmail: string;
+	claveEmail: string;
+	sslEmail: string;
+	itemMax: number;
+	impFact: string;
+	impCot: string;
+	impOrd: string;
+	listaPrecio: string;
+	emailFact: string;
+	servEmailFact: string;
+	claveEmailFact: string;
+	sslEmailFact: string;
+	emailNom: string;
+	servEmailNom: string;
+	claveEmailNom: string;
+	sslEmailNom: string;
+	costoDeud: string;
+	rutaEstampilla: string;
+	autorteica: string;
+	retCree: string;
+	convIycAnual: string;
+	convIycBimes: string;
+	directorioAnt: string;
+	actaRemi: string;
+	claveIyc: string;
+	precioSuc: string;
+	ipLocal: string;
+	ipPublica: string;
+	usuarioSql: string;
+	claveSql: string;
+	ley1943: string;
+	controlFormu: string;
+	ampDeta: string;
+	ctaTdebito: string;
+	ctaTcredito: string;
+	ctaCheque: string;
+	facPedi: string;
+	facCoti: string;
+	facRemi: string;
+	facAlis: string;
+	terceVentana: string;
+	alertaCumple: string;
+	tiqueteRegalo: string;
+	contabDcto: string;
+	demandaInduc: string;
+	interfazCorres: string;
+	prefijoUrg: string;
+	prefijoConsExt: string;
+	prefijoTransi: string;
+};
 
 const usuar_schema = new Schema<usuar>({
     ubicacion: {
-        type: String,
-        required: true,
+      type: String,
+      default: " "
     },
-  direct: {
-    type: String,
-    required: true,
-  },
-  subdirect: {
-    type: String,
-    required: true,
-  },
-  nombre_usu: {
-    nombre1_usu: {
-      nom1_usu: {
-        type: String,
-        required: true,
+    directorio: {
+      type: String,
+      default: " "
+    },
+    subdirectorio: {
+      type: String,
+      default: " "
+    },
+    nombre: {
+      type: String,
+      default: " "
+    },
+    nit: {
+      type: Number,
+      default: 0,
+    },
+    dv: {
+      type: Number,
+      default: 0,
+    },
+    direcc: {
+      type: String,
+      default: " "
+    },
+    codCiu: {
+      dpt: {
+        type: Number,
+        default:0,
       },
-      nom2_usu: {
-        type: String,
-        required: true,
+      ciu: {
+        type: Number,
+        default:0,
       },
     },
-    nombre2_usu: {
-      nom3_usu: {
-        type: String,
-        required: true,
-      },
+    tel: {
+      type: String,
+      default: " "
     },
-  },
-  nit_usu: {
-    type: String,
-    required: true,
-  },
-  dv_usu: {
-    type: String,
-    required: true,
-  },
-  direcc_usu: {
-    direcc1_usu: {
-        type: String,
-        required: true,
+    nuir: {
+      type: String,
+      default: " "
     },
-    direcc2_usu: {
-        type: String,
-        required: true,
+    prefijo: {
+      type: String,
+      default: " "
     },
-  },
-  cod_ciu_usu: {
-    dpt_ciu_usu: {
-        type: String,
-        required: true,
+    listaPol: {
+      type: String,
+      default: " "
     },
-    ciu_ciu_usu: {
-        type: String,
-        required: true,
+    ivaS: {
+      type: String,
+      default: " "
     },
-  },
-  tel_usu: {
-    type: String,
-    required: true,
-  },
-  nuir_usu: {
-    type: String,
-    required: true,
-  },
-  prefijo_usu: {
-    type: String,
-    required: true,
-  },
-  lista_pol_usu: {
-    type: String,
-    required: true,
-  },
-  iva_s_usu: {
-    type: String,
-    required: true,
-  },
-  nombre_alterno: {
-    nombre1_alterno: {
-        type: String,
-        required: true,
+    nombreAlterno: {
+      type: String,
+      default: " "
     },
-    nombre2_alterno: {
-        type: String,
-        required: true,
+    nitAlt: {
+      type: Number,
+      default:0,
     },
-  },
-  nit_alt: {
-    type: String,
-    required: true,
-  },
-  dv_alt: {
-    type: String,
-    required: true,
-  },
-  direcc_alt: {
-    direcc1_alt: {
-        type: String,
-        required: true,
+    dvAlt: {
+      type: Number,
+      default:0,
     },
-    direcc2_alt: {
-        type: String,
-        required: true,
+    direccAlt: {
+      type: String,
+      default: " "
     },
-  },
-  cod_ciu_alt: {
-    type: String,
-    required: true,
-  },
-  tel_alt: {
-    type: String,
-    required: true,
-  },
-  prefijo_alt: {
-    type: String,
-    required: true,
-  },
-  lista_pol_alt: {
-    type: String,
-    required: true,
-  },
-  iva_s_alt: {
-    type: String,
-    required: true,
-  },
-  limi_costo_usu: {
-    type: String,
-    required: true,
-  },
-  exten_fac_usu: {
-    type: String,
-    required: true,
-  },
-  cta_efect_usu: {
-    type: String,
-    required: true,
-  },
-  retail_usu: {
-    type: String,
-    required: true,
-  },
-  aprox_usu: {
-    type: String,
-    required: true,
-  },
-  repetido_usu: {
-    type: String,
-    required: true,
-  },
-  descto_usu: {
-    type: String,
-    required: true,
-  },
-  retenedor_usu: {
-    type: String,
-    required: true,
-  },
-  contado_usu: {
-    type: String,
-    required: true,
-  },
-  presup_usu: {
-    type: String,
-    required: true,
-  },
-  ctl_cheq_usu: {
-    type: String,
-    required: true,
-  },
-  dep_inven_usu: {
-    type: String,
-    required: true,
-  },
-  formato_rbo_usu: {
-    type: String,
-    required: true,
-  },
-  separa_caja_alt: {
-    type: String,
-    required: true,
-  },
-  limit_venta_usu: {
-    type: String,
-    required: true,
-  },
-  cuadre_usu: {
-    type: String,
-    required: true,
-  },
-  costo_usu: {
-    type: String,
-    required: true,
-  },
-  ctl_usu: {
-    type: String,
-    required: true,
-  },
-  invent_usu: {
-    type: String,
-    required: true,
-  },
-  cartera_usu: {
-    type: String,
-    required: true,
-  },
-  tipo_cod_usu: {
-    type: String,
-    required: true,
-  },
-  copia_usu: {
-    type: String,
-    required: true,
-  },
-  puc_usu: {
-    type: String,
-    required: true,
-  },
-  directorio_usu: {
-    type: String,
-    required: true,
-  },
-  archmae_usu: {
-    type: String,
-    required: true,
-  },
-  archter_usu: {
-    nom1_archter_usu: {
-        type: String,
-        required: true,
+    codCiuAlt: {
+      type: Number,
+      default:0,
     },
-    nom2_archter_usu: {
-        type: String,
-        required: true,
+    // tel: {
+    //   type: String,
+    //   default: " "
+    // },
+    prefijoAlt: {
+      type: String,
+      default: " "
     },
-  },
-  barras_usu: {
-    type: String,
-    required: true,
-  },
-  pos_usu: {
-    type: String,
-    required: true,
-  },
-  asume_iva_usu: {
-    type: String,
-    required: true,
-  },
-  asume_vlr_usu: {
-    type: String,
-    required: true,
-  },
-  iva_usu: {
-    type: String,
-    required: true,
-  },
-  iva_2_usu: {
-    type: String,
-    required: true,
-  },
-  iva_3_usu: {
-    type: String,
-    required: true,
-  },
-  autoret_usu: {
-    type: String,
-    required: true,
-  },
-  resol_dian_usu: {
-    resol1_usu: {
-        type: String,
-        required: true,
+    listaPolAlt: {
+      type: String,
+      default: " "
     },
-    resol2_usu: {
-        type: String,
-        required: true,
+    ivaSAlt: {
+      type: String,
+      default: " "
     },
-  },
-  clave_usu: {
-    type: String,
-    required: true,
-  },
-  clave_nit_usu: {
-    type: String,
-    required: true,
-  },
-  clave_inv_usu: {
-    type: String,
-    required: true,
-  },
-  clave_men_usu: {
-    type: String,
-    required: true,
-  },
-  clave_con_usu: {
-    type: String,
-    required: true,
-  },
-  clave_car_usu: {
-    type: String,
-    required: true,
-  },
-  clave_otr_usu: {
-    type: String,
-    required: true,
-  },
-  clave_men_inv: {
-    type: String,
-    required: true,
-  },
-  clave_2_usu: {
-    type: String,
-    required: true,
-  },
-  barras_fact_usu: {
-    type: String,
-    required: true,
-  },
-  activ_usu: {
-    type: String,
-    required: true,
-  },
-  clave_correc_usu: {
-    type: String,
-    required: true,
-  },
-  ret_fact_usu: {
-    type: String,
-    required: true,
-  },
-  porc_cree_usu: {
-    type: String,
-    required: true,
-  },
-  nom_egreso_usu: {
-    type: String,
-    required: true,
-  },
-  formato_egr_usu: {
-    type: String,
-    required: true,
-  },
-  f_liq_base_fact_usu: {
-    type: String,
-    required: true,
-  },
-  despacho_usu: {
-    type: String,
-    required: true,
-  },
-  niif_usu: {
-    type: String,
-    required: true,
-  },
-  costo_art_usu: {
-    type: String,
-    required: true,
-  },
-  mult_rubro_usu: {
-    type: String,
-    required: true,
-  },
-  dir_dian_usu: {
-    type: String,
-    required: true,
-  },
-  fact_inf_costo_usu: {
-    type: String,
-    required: true,
-  },
-  deprec_dif_niif_usu: {
-    type: String,
-    required: true,
-  },
-  alerta_transp_usu: {
-    type: String,
-    required: true,
-  },
-  per_ini_niif_usu: {
-    ano_ini_niif_usu: {
-        type: String,
-        required: true,
+    limiCosto: {
+      type: String,
+      default: " "
     },
-    mes_ini_niif_usu: {
-        type: String,
-        required: true,
+    extenFac: {
+      type: String,
+      default: " "
     },
-  },
-  sal_min_usu: {
-    type: String,
-    required: true,
-  },
-  mens_menu_usu: {
-    mens1_menu_usu: {
-        type: String,
-        required: true,
+    ctaEfect: {
+      type: String,
+      default: " "
     },
-    mens2_menu_usu: {
-        type: String,
-        required: true,
+    retail: {
+      type: String,
+      default: " "
     },
-  },
-  ley1429_usu: {
-    type: String,
-    required: true,
-  },
-  menu_suc_usu: {
-    type: String,
-    required: true,
-  },
-  sup_deventa_usu: {
-    type: String,
-    required: true,
-  },
-  lote_farm_usu: {
-    type: String,
-    required: true,
-  },
-  tip_caj_usu: {
-    type: String,
-    required: true,
-  },
-  nota_entrega_usu: {
-    type: String,
-    required: true,
-  },
-  placa_usu: {
-    type: String,
-    required: true,
-  },
-  cuotas_usu: {
-    type: String,
-    required: true,
-  },
-  restric_ex_usu: {
-    type: String,
-    required: true,
-  },
-  max_mora_usu: {
-    type: String,
-    required: true,
-  },
-  contab_pos_usu: {
-    type: String,
-    required: true,
-  },
-  reteiva_usu: {
-    type: String,
-    required: true,
-  },
-  pedido_usu: {
-    type: String,
-    required: true,
-  },
-  autocree_usu: {
-    type: String,
-    required: true,
-  },
-  dir_inv_usu: {
-    type: String,
-    required: true,
-  },
-  tipo_empr_usu: {
-    type: String,
-    required: true,
-  },
-  e_mail_usu: {
-    type: String,
-    required: true,
-  },
-  serv_email_usu: {
-    type: String,
-    required: true,
-  },
-  clave_email_usu: {
-    type: String,
-    required: true,
-  },
-  ssl_email_usu: {
-    type: String,
-    required: true,
-  },
-  item_max_usu: {
-    type: String,
-    required: true,
-  },
-  imp_fact_usu: {
-    type: String,
-    required: true,
-  },
-  imp_cot_usu: {
-    type: String,
-    required: true,
-  },
-  imp_ord_usu: {
-    type: String,
-    required: true,
-  },
-  lista_precio_usu: {
-    type: String,
-    required: true,
-  },
-  email_fact_usu: {
-    type: String,
-    required: true,
-  },
-  serv_email_fact_usu: {
-    type: String,
-    required: true,
-  },
-  clave_email_fact_usu: {
-    type: String,
-    required: true,
-  },
-  ssl_email_fact_usu: {
-    type: String,
-    required: true,
-  },
-  email_nom_usu: {
-    type: String,
-    required: true,
-  },
-  serv_email_nom_usu: {
-    type: String,
-    required: true,
-  },
-  clave_email_nom_usu: {
-    type: String,
-    required: true,
-  },
-  ssl_email_nom_usu: {
-    type: String,
-    required: true,
-  },
-  costo_deud_usu: {
-    type: String,
-    required: true,
-  },
-  ruta_estampilla_usu: {
-    type: String,
-    required: true,
-  },
-  autorteica_usu: {
-    type: String,
-    required: true,
-  },
-  ret_cree_usu: {
-    type: String,
-    required: true,
-  },
-  conv_iyc_anual_usu: {
-    type: String,
-    required: true,
-  },
-  conv_iyc_bimes_usu: {
-    type: String,
-    required: true,
-  },
-  directorio_ant_usu: {
-    type: String,
-    required: true,
-  },
-  acta_remi_usu: {
-    type: String,
-    required: true,
-  },
-  clave_iyc_usu: {
-    type: String,
-    required: true,
-  },
-  precio_suc_usu: {
-    type: String,
-    required: true,
-  },
-  ip_local_usu: {
-    type: String,
-    required: true,
-  },
-  ip_publica_usu: {
-    type: String,
-    required: true,
-  },
-  usuario_sql_usu: {
-    type: String,
-    required: true,
-  },
-  clave_sql_usu: {
-    type: String,
-    required: true,
-  },
-  ley1943_usu: {
-    type: String,
-    required: true,
-  },
-  control_formu_usu: {
-    type: String,
-    required: true,
-  },
-  amp_deta_usu: {
-    type: String,
-    required: true,
-  },
-  cta_tdebito_usu: {
-    type: String,
-    required: true,
-  },
-  cta_tcredito_usu: {
-    type: String,
-    required: true,
-  },
-  cta_cheque_usu: {
-    type: String,
-    required: true,
-  },
-  fac_pedi_usu: {
-    type: String,
-    required: true,
-  },
-  fac_coti_usu: {
-    type: String,
-    required: true,
-  },
-  fac_remi_usu: {
-    type: String,
-    required: true,
-  },
-  fac_alis_usu: {
-    type: String,
-    required: true,
-  },
-  terce_ventana_usu: {
-    type: String,
-    required: true,
-  },
-  alerta_cumple_usu: {
-    type: String,
-    required: true,
-  },
-  tiquete_regalo_usu: {
-    type: String,
-    required: true,
-  },
-  contab_dcto_usu: {
-    type: String,
-    required: true,
-  },
-});
+    aprox: {
+      type: String,
+      default: " "
+    },
+    repetido: {
+      type: String,
+      default: " "
+    },
+    descto: {
+      type: String,
+      default: " "
+    },
+    retenedor: {
+      type: String,
+      default: " "
+    },
+    contado: {
+      type: String,
+      default: " "
+    },
+    presup: {
+      type: String,
+      default: " "
+    },
+    ctlCheq: {
+      type: String,
+      default: " "
+    },
+    depInven: {
+      type: String,
+      default: " "
+    },
+    formatoRbo: {
+      type: String,
+      default: " "
+    },
+    separaCajaAlt: {
+      type: String,
+      default: " "
+    },
+    limitVenta: {
+      type: String,
+      default: " "
+    },
+    cuadre: {
+      type: String,
+      default: " "
+    },
+    costo: {
+      type: String,
+      default: " "
+    },
+    ctl: {
+      type: String,
+      default: " "
+    },
+    invent: {
+      type: String,
+      default: " "
+    },
+    cartera: {
+      type: String,
+      default: " "
+    },
+    tipoCod: {
+      type: String,
+      default: " "
+    },
+    copia: {
+      type: String,
+      default: " "
+    },
+    puc: {
+      type: String,
+      default: " "
+    },
+    // directorio: {
+    //   type: String,
+    //   default: " "
+    // },
+    archmae: {
+      type: String,
+      default: " "
+    },
+    archter: {
+      type: String,
+      default: " "
+    },
+    barras: {
+      type: String,
+      default: " "
+    },
+    pos: {
+      type: String,
+      default: " "
+    },
+    asumeIva: {
+      type: String,
+      default: " "
+    },
+    asumeVlr: {
+      type: String,
+      default: " "
+    },
+    iva: {
+      type: Number,
+      default:0,
+    },
+    iva2: {
+      type: Number,
+      default:0,
+    },
+    iva3: {
+      type: Number,
+      default:0,
+    },
+    autoret: {
+      type: String,
+      default: " "
+    },
+    resolDian: {
+      type: String,
+      default: " "
+    },
+    clave: {
+      type: String,
+      default: " "
+    },
+    claveNit: {
+      type: String,
+      default: " "
+    },
+    claveInv: {
+      type: String,
+      default: " "
+    },
+    claveMen: {
+      type: String,
+      default: " "
+    },
+    claveCon: {
+      type: String,
+      default: " "
+    },
+    claveCar: {
+      type: String,
+      default: " "
+    },
+    claveOtr: {
+      type: String,
+      default: " "
+    },
+    claveMenInv: {
+      type: String,
+      default: " "
+    },
+    clave2: {
+      type: String,
+      default: " "
+    },
+    barrasFact: {
+      type: String,
+      default: " "
+    },
+    activ: {
+      type: String,
+      default: " "
+    },
+    claveCorrec: {
+      type: String,
+      default: " "
+    },
+    retFact: {
+      type: String,
+      default: " "
+    },
+    porcCree: {
+      type: Number,
+      default:0,
+    },
+    nomEgreso: {
+      type: String,
+      default: " "
+    },
+    formatoEgr: {
+      type: String,
+      default: " "
+    },
+    fLiqBaseFact: {
+      type: Number,
+      default:0,
+    },
+    despacho: {
+      type: String,
+      default: " "
+    },
+    niif: {
+      type: String,
+      default: " "
+    },
+    costoArt: {
+      type: String,
+      default: " "
+    },
+    multRubro: {
+      type: String,
+      default: " "
+    },
+    dirDian: {
+      type: String,
+      default: " "
+    },
+    factInfCosto: {
+      type: String,
+      default: " "
+    },
+    deprecDifNiif: {
+      type: String,
+      default: " "
+    },
+    alertaTransp: {
+      type: String,
+      default: " "
+    },
+    perIniNiif: {
+      type: Number,
+      default:0,
+    },
+    salMin: {
+      type: Number,
+      default:0,
+    },
+    mensMenu: {
+      type: String,
+      default: " "
+    },
+    ley1429: {
+      type: String,
+      default: " "
+    },
+    menuSuc: {
+      type: String,
+      default: " "
+    },
+    supDeventa: {
+      type: String,
+      default: " "
+    },
+    loteFarm: {
+      type: String,
+      default: " "
+    },
+    tipCaj: {
+      type: String,
+      default: " "
+    },
+    notaEntrega: {
+      type: String,
+      default: " "
+    },
+    placa: {
+      type: String,
+      default: " "
+    },
+    cuotas: {
+      type: String,
+      default: " "
+    },
+    restricEx: {
+      type: String,
+      default: " "
+    },
+    maxMora: {
+      type: Number,
+      default:0,
+    },
+    contabPos: {
+      type: String,
+      default: " "
+    },
+    reteiva: {
+      type: String,
+      default: " "
+    },
+    pedido: {
+      type: String,
+      default: " "
+    },
+    autocree: {
+      type: String,
+      default: " "
+    },
+    dirInv: {
+      type: String,
+      default: " "
+    },
+    tipoEmpr: {
+      type: String,
+      default: " "
+    },
+    email: {
+      type: String,
+      default: " "
+    },
+    servEmail: {
+      type: String,
+      default: " "
+    },
+    claveEmail: {
+      type: String,
+      default: " "
+    },
+    sslEmail: {
+      type: String,
+      default: " "
+    },
+    itemMax: {
+      type: Number,
+      default:0,
+    },
+    impFact: {
+      type: String,
+      default: " "
+    },
+    impCot: {
+      type: String,
+      default: " "
+    },
+    impOrd: {
+      type: String,
+      default: " "
+    },
+    listaPrecio: {
+      type: String,
+      default: " "
+    },
+    emailFact: {
+      type: String,
+      default: " "
+    },
+    servEmailFact: {
+      type: String,
+      default: " "
+    },
+    claveEmailFact: {
+      type: String,
+      default: " "
+    },
+    sslEmailFact: {
+      type: String,
+      default: " "
+    },
+    emailNom: {
+      type: String,
+      default: " "
+    },
+    servEmailNom: {
+      type: String,
+      default: " "
+    },
+    claveEmailNom: {
+      type: String,
+      default: " "
+    },
+    sslEmailNom: {
+      type: String,
+      default: " "
+    },
+    costoDeud: {
+      type: String,
+      default: " "
+    },
+    rutaEstampilla: {
+      type: String,
+      default: " "
+    },
+    autorteica: {
+      type: String,
+      default: " "
+    },
+    retCree: {
+      type: String,
+      default: " "
+    },
+    convIycAnual: {
+      type: String,
+      default: " "
+    },
+    convIycBimes: {
+      type: String,
+      default: " "
+    },
+    directorioAnt: {
+      type: String,
+      default: " "
+    },
+    actaRemi: {
+      type: String,
+      default: " "
+    },
+    claveIyc: {
+      type: String,
+      default: " "
+    },
+    precioSuc: {
+      type: String,
+      default: " "
+    },
+    ipLocal: {
+      type: String,
+      default: " "
+    },
+    ipPublica: {
+      type: String,
+      default: " "
+    },
+    usuarioSql: {
+      type: String,
+      default: " "
+    },
+    claveSql: {
+      type: String,
+      default: " "
+    },
+    ley1943: {
+      type: String,
+      default: " "
+    },
+    controlFormu: {
+      type: String,
+      default: " "
+    },
+    ampDeta: {
+      type: String,
+      default: " "
+    },
+    ctaTdebito: {
+      type: String,
+      default: " "
+    },
+    ctaTcredito: {
+      type: String,
+      default: " "
+    },
+    ctaCheque: {
+      type: String,
+      default: " "
+    },
+    facPedi: {
+      type: String,
+      default: " "
+    },
+    facCoti: {
+      type: String,
+      default: " "
+    },
+    facRemi: {
+      type: String,
+      default: " "
+    },
+    facAlis: {
+      type: String,
+      default: " "
+    },
+    terceVentana: {
+      type: String,
+      default: " "
+    },
+    alertaCumple: {
+      type: String,
+      default: " "
+    },
+    tiqueteRegalo: {
+      type: String,
+      default: " "
+    },
+    contabDcto: {
+      type: String,
+      default: " "
+    },
+    demandaInduc: {
+      type: String,
+      default: " "
+    },
+    interfazCorres: {
+      type: String,
+      default: " "
+    },
+    prefijoUrg: {
+      type: String,
+      default: " "
+    },
+    prefijoConsExt: {
+      type: String,
+      default: " "
+    },
+    prefijoTransi: {
+      type: String,
+      default: " "
+    },
+  })
 
-usuar_schema.index({ llave: 1 }, { unique: true });
+usuar_schema.index({ codigo: 1 }, { unique: true });
 
 export const usuar_model = model<usuar>("usuar", usuar_schema);

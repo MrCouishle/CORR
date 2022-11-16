@@ -13,21 +13,21 @@ interface ciuda {
   nombre: string;
   pais: string;
   actbarrios: string;
-  increm: string;
+  increm: number;
 }
 
 const ciuda_schema = new Schema<ciuda>({
   ubicacion: {
     type: String,
-    required: true,
+    default: "",
   },
   direct: {
     type: String,
-    required: true,
+    default: "",
   },
   subdirect: {
     type: String,
-    required: true,
+    default: "",
   },
   codCiu: {
     dptCiu: {
@@ -52,7 +52,7 @@ const ciuda_schema = new Schema<ciuda>({
     required: true,
   },
   increm: {
-    type: String,
+    type: Number,
     required: true,
   },
 });
