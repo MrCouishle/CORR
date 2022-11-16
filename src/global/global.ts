@@ -169,7 +169,6 @@ export const delete_response = (
   codigo= "",
   res: Response
 ) => {
-  console.log(nom, doc, codigo, res)
   if (doc === null) res.json({ msg: "No existe documento" }).status(204);
   else if (doc.deletedCount == 0)
     res.json({ msg: `El código (${codigo}) de ${nom} no existe.`, cod_error: "01" }).status(204);
@@ -202,7 +201,7 @@ export const get_response = (
   else res.json(doc);
 };
 
-export const get_all_response = (doc: any, res: Response) => {
+export const get_all_response = ( doc: any, res: Response) => {
   if (doc.length === 0)
     res.json({ msg: `No hay datos disponibles.` , cod_error: "01" }).status(200);
   else res.json(doc).status(204);

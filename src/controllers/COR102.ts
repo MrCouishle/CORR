@@ -12,8 +12,7 @@ import { depco_model } from "../models/DEPCO";
 export const getDepco = async (req: Request, res: Response) => {
   try {
     const data = await depco_model.find({}, omitirId);
-    if (data) res.json(data);
-    else res.json({ msg: 0 });
+    get_all_response(data, res)
   } catch (error) {
     res.json({ msg: error });
   }
@@ -34,10 +33,9 @@ export const putDepco = async (req: Request, res: Response) => {
   try {
     const {codigo} = req.params;
     const body = req.body;
-    console.log(req.body);
-    console.log(body.codigo);
+    delete body.codigo
     const data = await depco_model.updateOne({codigo: codigo}, body, { runValidators: true });
-    edit_response("depco", data, "", res);
+    edit_response("depco", data, codigo, res);
   } catch (error) {
     console.log("hlis");
     res.json({ msg: error });
@@ -48,8 +46,7 @@ export const deleteDepco = async (req: Request, res: Response) => {
   try {
     const { codigo } = req.params;
     const data = await depco_model.deleteOne({ codigo: codigo });
-    // delete_response("depco", data, concatenarCodigos(codigo), res);
-    res.json({msg: data.deletedCount})
+    delete_response("depco", data, codigo, res);
   } catch (error) {
     res.json({ msg: error });
   }
@@ -59,9 +56,7 @@ export const getDepcoId = async (req: Request, res: Response) => {
   try {
     const { codigo } = req.params
     const data = await depco_model.findOne({codigo: codigo}, omitirId);
-    if(data) res.json(data)
-    else res.json({ msg: 0 });
-    console.log("Esta es la data de DepcoID: ", data)
+    get_response("depco", data, codigo, res);
   } catch (error) {
     res.json({ msg: error });
   }

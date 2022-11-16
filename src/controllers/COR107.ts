@@ -12,15 +12,13 @@ import { holding_model } from "../models/HOLDING";
 export const getHolding = async (req: Request, res: Response) => {
     try {
       const data = await holding_model.find({}, omitirId);
-      if (data) res.json(data);
-      else res.json({ msg: 0 });
+      get_all_response(data, res)
     } catch (error) {
       res.json({ msg: error });
     }
   };
 
   export const postHolding = async (req: Request, res: Response) => {
-    console.log(req.body);
     try {
       new holding_model(req.body).save((err) => {
         if (err) res.json({ msg: err.message });
@@ -35,10 +33,9 @@ export const getHolding = async (req: Request, res: Response) => {
     try {
       const {codigo} = req.params;
       const body = req.body;
-      console.log(req.body);
-      console.log(body.codigo);
+      delete body.codigo;
       const data = await holding_model.updateOne({codigo: codigo}, body, { runValidators: true });
-      edit_response("remidep", data, "", res);
+      edit_response("remidep", data, codigo, res);
     } catch (error) {
       res.json({ msg: error });
     }
@@ -48,7 +45,7 @@ export const getHolding = async (req: Request, res: Response) => {
     try {
       const { codigo } = req.params;
       const data = await holding_model.deleteOne({ codigo: codigo });
-      res.json({msg: data.deletedCount})
+      delete_response("holding", data, codigo, res)
     } catch (error) {
       res.json({ msg: error });
     }
@@ -58,9 +55,7 @@ export const getHolding = async (req: Request, res: Response) => {
     try {
       const { codigo } = req.params
       const data = await holding_model.findOne({codigo: codigo}, omitirId);
-      if(data) res.json(data)
-      else res.json({ msg: 0 });
-      console.log("Esta es la data de HoldingpID: ", data)
+      get_response("holding", data, codigo, res);
     } catch (error) {
       res.json({ msg: error });
     }

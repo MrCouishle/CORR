@@ -12,8 +12,7 @@ import { unifun_model } from "../models/UNIFUN";
 export const getUnifun = async (req: Request, res: Response) => {
     try {
       const data = await unifun_model.find({}, omitirId);
-      if (data) res.json(data);
-      else res.json({ msg: 0 });
+      get_all_response(data, res)
     } catch (error) {
       res.json({ msg: error });
     }
@@ -35,10 +34,9 @@ export const getUnifun = async (req: Request, res: Response) => {
     try {
       const {codigo} = req.params;
       const body = req.body;
-      console.log(req.body);
-      console.log(body.codigo);
+      delete body.codigo
       const data = await unifun_model.updateOne({codigo: codigo}, body, { runValidators: true });
-      edit_response("unifun", data, "", res);
+      edit_response("unifun", data, codigo, res);
     } catch (error) {
       res.json({ msg: error });
     }
@@ -48,7 +46,7 @@ export const getUnifun = async (req: Request, res: Response) => {
     try {
       const { codigo } = req.params;
       const data = await unifun_model.deleteOne({ codigo: codigo });
-      res.json({msg: data.deletedCount})
+      delete_response("unifun", data, codigo, res)
     } catch (error) {
       res.json({ msg: error });
     }
@@ -58,9 +56,7 @@ export const getUnifun = async (req: Request, res: Response) => {
     try {
       const { codigo } = req.params
       const data = await unifun_model.findOne({codigo: codigo}, omitirId);
-      if(data) res.json(data)
-      else res.json({ msg: 0 });
-      console.log("Esta es la data de UnifunID: ", data)
+      get_response("unifun", data, codigo, res);
     } catch (error) {
       res.json({ msg: error });
     }

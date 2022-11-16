@@ -12,8 +12,7 @@ import { remidep_model } from "../models/REMIDEP";
 export const getRemidep = async (req: Request, res: Response) => {
     try {
       const data = await remidep_model.find({}, omitirId);
-      if (data) res.json(data);
-      else res.json({ msg: 0 });
+      get_all_response(data, res)
     } catch (error) {
       res.json({ msg: error });
     }
@@ -35,10 +34,9 @@ export const getRemidep = async (req: Request, res: Response) => {
     try {
       const {codigo} = req.params;
       const body = req.body;
-      console.log(req.body);
-      console.log(body.codigo);
+      delete body.codigo;
       const data = await remidep_model.updateOne({codigo: codigo}, body, { runValidators: true });
-      edit_response("remidep", data, "", res);
+      edit_response("remidep", data, codigo, res);
     } catch (error) {
       res.json({ msg: error });
     }
@@ -48,7 +46,7 @@ export const getRemidep = async (req: Request, res: Response) => {
     try {
       const { codigo } = req.params;
       const data = await remidep_model.deleteOne({ codigo: codigo });
-      res.json({msg: data.deletedCount})
+      delete_response("remidep", data, codigo, res)
     } catch (error) {
       res.json({ msg: error });
     }
@@ -58,9 +56,7 @@ export const getRemidep = async (req: Request, res: Response) => {
     try {
       const { codigo } = req.params
       const data = await remidep_model.findOne({codigo: codigo}, omitirId);
-      if(data) res.json(data)
-      else res.json({ msg: 0 });
-      console.log("Esta es la data de RemidepID: ", data)
+      get_response("remidep", data, codigo, res);
     } catch (error) {
       res.json({ msg: error });
     }
