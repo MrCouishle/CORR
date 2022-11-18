@@ -6,7 +6,11 @@ interface depco {
   ubicacion: string;
   direct: string;
   subdirect: string;
+<<<<<<< HEAD
   codigo: Number;
+=======
+  codigo: number;
+>>>>>>> 92120f69f73cfb8e23ec28f2a41ab63377778864
   descripcion: string;
   responsable: string;
   oper: string;

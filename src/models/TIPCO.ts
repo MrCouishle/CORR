@@ -8,7 +8,7 @@ interface tipco {
   subdirect: string;
   codigo: string;
   descripcion: string;
-  dias: string;
+  dias: number;
 }
 
 const tipco_schema = new Schema<tipco>({
@@ -34,7 +34,7 @@ const tipco_schema = new Schema<tipco>({
       required: true,
   },
   dias: {
-    type: String,
+    type: Number,
     required: true,
   },
 });
