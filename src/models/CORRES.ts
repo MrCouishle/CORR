@@ -1,440 +1,421 @@
 import mongoose, { Schema, model } from "mongoose";
 
 mongoose.pluralize(null);
-
 interface corres {
   ubicacion: string;
   direct: string;
   subdirect: string;
-  llave_pon: {
-    ano_llave_pon: string;
-    cont_pon: string;
-  };
-  datos_pon: {
-    fecha_pon: {
-      ano_pon: string;
-      mes_pon: string;
-      dia_pon: string;
-    };
-    hora_pon: {
-      hr_pon: string;
-      mn_pon: string;
-    };
-    nit_pon: string;
-    tipo_corres_pon: string;
-    descrip_pon: string;
-    ser_pon: string;
-    operdiri_pon: string;
-    dep_pon: string;
-    fol_pon: string;
-    fold_pon: string;
-    esta_pon: string;
-    anex_pon: string;
-    tipo_anexo_pon: string;
-    otro_anexo_pon: string;
-    nro_fact_pon: string;
-    monto_pon: string;
-    fecha_fact_pon: {
-      ano_ini_pon: string;
-      mes_ini_pon: string;
-      dia_ini_pon: string;
-    };
-    fecha_entre_pon: {
-      ano_fin_pon: string;
-      mes_fin_pon: string;
-      dia_fin_pon: string;
-    };
-    nro_guia_pon: string;
-    persentre_pon: string;
-    observ_pon: {
-      reng_pon: [];
-    };
-    tabla_dep_pon: [
-      {
-        dep_tab_pon: string;
-        esta_tab_pon: string;
-      }
-    ];
-    cod_auxco_pon: string;
-    tabla_oper_pon: [
-      {
-        operdiri1_pon: string;
-      }
-    ];
-    llave_resp_pon: {
-      ano_res_pon: string;
-      cont_res_pon: string;
-    };
-    error_rips_pon: {
-      nro_rips_pon: string;
-    };
-    nro_envio_pon: string;
-    proceden_pon: string;
-    dptoremi_pon: string;
-    manejo_pon: string;
-    holding_pon: string;
-    centro_cos_pon: string;
-    ciudad_pon: string;
-    cargo_ops_pon: string;
-    llave_cau_pon: {
-      lote_cau_pon: {
-        lote1_cau_pon: string;
-        lote2_cau_pon: string;
-      };
-      comprob_cau_pon: {
-        comp1_cau_pon: string;
-        comp2_cau_pon: string;
-      };
-    };
-    fecha_cau_pon: {
-      ano_cau_pon: string;
-      mes_cau_pon: string;
-      dia_cau_pon: string;
-    };
-    llave_pag_pon: {
-      lote_pag_pon: {
-        lote1_pag_pon: string;
-        lote2_pag_pon: string;
-      };
-      comprob_pag_pon: {
-        comp1_pag_pon: string;
-        comp2_pag_pon: string;
-      };
-    };
-    fecha_pag_pon: {
-      ano_pag_pon: string;
-      mes_pag_pon: string;
-      dia_pag_pon: string;
-    };
-    oper_pon: string;
-    oper_modi_pon: string;
-    fecha_modi_pon: {
-      ano_modi_pon: string;
-      mes_modi_pon: string;
-      dia_modi_pon: string;
-    };
-    dias_tipco_pon: string;
-    medio_ing_pon: string;
-  };
+  llave: { anoLlave: number; cont: number };
+  fecha: Date;
+  nit: number;
+  tipoCorres: string;
+  descrip: string;
+  ser: string;
+  operdiri: string;
+  dep: string;
+  fol: string;
+  fold: string;
+  esta: number;
+  anex: string;
+  tipoAnexo: number;
+  otroAnexo: string;
+  nroFact: string;
+  monto: number;
+  fechaFact: Date;
+  fechaEntre: Date;
+  nroGuia: string;
+  persentre: string;
+  observ: string;
+  tablaDep: [
+    { depTap: string; estaTab: number },
+    { depTap: string; estaTab: number },
+    { depTap: string; estaTab: number },
+    { depTap: string; estaTab: number },
+    { depTap: string; estaTab: number }
+  ];
+  codAux: number;
+  tablaOper: [
+    { operdiri1: string },
+    { operdiri1: string },
+    { operdiri1: string },
+    { operdiri1: string },
+    { operdiri1: string }
+  ];
+  anoRes: number;
+  contResPon: number;
+  errorRips: [
+    { nroRips: number },
+    { nroRips: number },
+    { nroRips: number },
+    { nroRips: number },
+    { nroRips: number },
+    { nroRips: number },
+    { nroRips: number },
+    { nroRips: number },
+    { nroRips: number },
+    { nroRips: number },
+    { nroRips: number }
+  ];
+  nroEnvio: number;
+  proceden: number;
+  deptoremi: number;
+  manejo: number;
+  holding: number;
+  centroCos: string;
+  ciudad: string;
+  cargoOps: string;
+  loteCau: string;
+  comprobCau: string;
+  fechaCau: Date;
+  lotePag: string;
+  comprobPag: string;
+  fechaPag: Date;
+  oper: string;
+  operModi: string;
+  fechaModi: Date;
+  diasTipco: number;
+  medioIng: number;
+  contAtnt1: number;
+  contAtnt2: number;
+  contAtnt3: number;
 }
 
 const corres_schema = new Schema<corres>({
-    ubicacion: {
-        type: String,
-        required: true,
-    },
+  ubicacion: {
+    type: String,
+    default: "",
+  },
   direct: {
     type: String,
-    required: true,
+    default: "",
   },
   subdirect: {
     type: String,
-    required: true,
+    default: "",
   },
-  llave_pon: {
-    ano_llave_pon: {
-        type: String,
-        required: true,
+  llave: {
+    anoLlave: {
+      type: Number,
+      default: 0,
     },
-    cont_pon: {
-        type: String,
-        required: true,
+    cont: {
+      type: Number,
+      default: 0,
     },
   },
-  datos_pon: {
-    fecha_pon: {
-      ano_pon: {
+  fecha: Date,
+  nit: {
+    type: Number,
+    default: 0,
+  },
+  tipoCorres: {
+    type: String,
+    default: "",
+  },
+  descrip: {
+    type: String,
+    default: "",
+  },
+  ser: {
+    type: String,
+    default: "",
+  },
+  operdiri: {
+    type: String,
+    default: "",
+  },
+  dep: {
+    type: String,
+    default: "",
+  },
+  fol: {
+    type: String,
+    default: "",
+  },
+  fold: {
+    type: String,
+    default: "",
+  },
+  esta: {
+    type:Number,
+    default:0
+  },
+  anex: {
+    type: String,
+    default: "",
+  },
+  tipoAnexo: {
+    type:Number,
+    default:0
+  },
+  otroAnexo: {
+    type: String,
+    default: "",
+  },
+  nroFact: {
+    type: String,
+    default: "",
+  },
+  monto: {
+    type: Number,
+    default: 0,
+  },
+  fechaFact: Date,
+  fechaEntre: Date,
+  nroGuia: {
+    type: String,
+    default: "",
+  },
+  persentre: {
+    type: String,
+    default: "",
+  },
+  observ: {
+    type: String,
+    default: "",
+  },
+  tablaDep: [
+    {
+      depTap: {
         type: String,
-        required: true,
+        default: "",
       },
-      mes_pon: {
-        type: String,
-        required: true,
-      },
-      dia_pon: {
-        type: String,
-        required: true,
-      },
-    },
-    hora_pon: {
-      hr_pon: {
-        type: String,
-        required: true,
-      },
-      mn_pon: {
-        type: String,
-        required: true,
-      },
-    },
-    nit_pon: {
-        type: String,
-        required: true,
-    },
-    tipo_corres_pon: {
-        type: String,
-        required: true,
-    },
-    descrip_pon: {
-        type: String,
-        required: true,
-    },
-    ser_pon: {
-        type: String,
-        required: true,
-    },
-    operdiri_pon: {
-        type: String,
-        required: true,
-    },
-    dep_pon: {
-        type: String,
-        required: true,
-    },
-    fol_pon: {
-        type: String,
-        required: true,
-    },
-    fold_pon: {
-        type: String,
-        required: true,
-    },
-    esta_pon: {
-        type: String,
-        required: true,
-    },
-    anex_pon: {
-        type: String,
-        required: true,
-    },
-    tipo_anexo_pon: {
-        type: String,
-        required: true,
-    },
-    otro_anexo_pon: {
-        type: String,
-        required: true,
-    },
-    nro_fact_pon: {
-        type: String,
-        required: true,
-    },
-    monto_pon: {
-        type: String,
-        required: true,
-    },
-    fecha_fact_pon: {
-      ano_ini_pon: {
-        type: String,
-        required: true,
-      },
-      mes_ini_pon: {
-        type: String,
-        required: true,
-      },
-      dia_ini_pon: {
-        type: String,
-        required: true,
+      estaTab: {
+        type: Number,
+        default: 0,
       },
     },
-    fecha_entre_pon: {
-      ano_fin_pon: {
+    {
+      depTap: {
         type: String,
-        required: true,
+        default: "",
       },
-      mes_fin_pon: {
-        type: String,
-        required: true,
-      },
-      dia_fin_pon: {
-        type: String,
-        required: true,
+      estaTab: {
+        type: Number,
+        default: 0,
       },
     },
-    nro_guia_pon: {
+    {
+      depTap: {
         type: String,
-        required: true,
-    },
-    persentre_pon: {
-        type: String,
-        required: true,
-    },
-    observ_pon: {
-      reng_pon: [],
-    },
-    tabla_dep_pon: [
-      {
-        dep_tab_pon: {
-            type: String,
-            required: true,
-        },
-        esta_tab_pon: {
-            type: String,
-            required: true,
-        },
-      }
-    ],
-    cod_auxco_pon: {
-        type: String,
-        required: true,
-    },
-    tabla_oper_pon: [
-      {
-        operdiri1_pon: {
-            type: String,
-            required: true,
-        },
-      }
-    ],
-    llave_resp_pon: {
-      ano_res_pon: {
-        type: String,
-        required: true,
+        default: "",
       },
-      cont_res_pon: {
-        type: String,
-        required: true,
+      estaTab: {
+        type: Number,
+        default: 0,
       },
     },
-    error_rips_pon: {
-      nro_rips_pon: {
+    {
+      depTap: {
         type: String,
-        required: true,
+        default: "",
+      },
+      estaTab: {
+        type: Number,
+        default: 0,
       },
     },
-    nro_envio_pon: {
+    {
+      depTap: {
         type: String,
-        required: true,
-    },
-    proceden_pon: {
-        type: String,
-        required: true,
-    },
-    dptoremi_pon: {
-        type: String,
-        required: true,
-    },
-    manejo_pon: {
-        type: String,
-        required: true,
-    },
-    holding_pon: {
-        type: String,
-        required: true,
-    },
-    centro_cos_pon: {
-        type: String,
-        required: true,
-    },
-    ciudad_pon: {
-        type: String,
-        required: true,
-    },
-    cargo_ops_pon: {
-        type: String,
-        required: true,
-    },
-    llave_cau_pon: {
-      lote_cau_pon: {
-        lote1_cau_pon: {
-            type: String,
-            required: true,
-        },
-        lote2_cau_pon: {
-            type: String,
-            required: true,
-        },
+        default: "",
       },
-      comprob_cau_pon: {
-        comp1_cau_pon: {
-            type: String,
-            required: true,
-        },
-        comp2_cau_pon: {
-            type: String,
-            required: true,
-        },
+      estaTab: {
+        type: Number,
+        default: 0,
       },
     },
-    fecha_cau_pon: {
-      ano_cau_pon: {
+  ],
+  codAux: {
+    type: Number,
+    default: 0,
+  },
+  tablaOper: [
+    {
+      operdiri1: {
         type: String,
-        required: true,
-      },
-      mes_cau_pon: {
-        type: String,
-        required: true,
-      },
-      dia_cau_pon: {
-        type: String,
-        required: true,
+        default: "",
       },
     },
-    llave_pag_pon: {
-      lote_pag_pon: {
-        lote1_pag_pon: {
-            type: String,
-            required: true,
-        },
-        lote2_pag_pon: {
-            type: String,
-            required: true,
-        },
-      },
-      comprob_pag_pon: {
-        comp1_pag_pon: {
-            type: String,
-            required: true,
-        },
-        comp2_pag_pon: {
-            type: String,
-            required: true,
-        },
+    {
+      operdiri1: {
+        type: String,
+        default: "",
       },
     },
-    fecha_pag_pon: {
-      ano_pag_pon: {
+    {
+      operdiri1: {
         type: String,
-        required: true,
-      },
-      mes_pag_pon: {
-        type: String,
-        required: true,
-      },
-      dia_pag_pon: {
-        type: String,
-        required: true,
+        default: "",
       },
     },
-    oper_pon: {
+    {
+      operdiri1: {
         type: String,
-        required: true,
-    },
-    oper_modi_pon: {
-        type: String,
-        required: true,
-    },
-    fecha_modi_pon: {
-      ano_modi_pon: {
-        type: String,
-        required: true,
-      },
-      mes_modi_pon: {
-        type: String,
-        required: true,
-      },
-      dia_modi_pon: {
-        type: String,
-        required: true,
+        default: "",
       },
     },
-    dias_tipco_pon: {
+    {
+      operdiri1: {
         type: String,
-        required: true,
+        default: "",
+      },
     },
-    medio_ing_pon: {
-        type: String,
-        required: true,
+  ],
+  anoRes: {
+    type: Number,
+    default: 0,
+  },
+  contResPon: {
+    type: Number,
+    default: 0,
+  },
+  errorRips: [
+    {
+      nroRips: {
+        type: Number,
+        default: 0,
+      },
     },
+    {
+      nroRips: {
+        type: Number,
+        default: 0,
+      },
+    },
+    {
+      nroRips: {
+        type: Number,
+        default: 0,
+      },
+    },
+    {
+      nroRips: {
+        type: Number,
+        default: 0,
+      },
+    },
+    {
+      nroRips: {
+        type: Number,
+        default: 0,
+      },
+    },
+    {
+      nroRips: {
+        type: Number,
+        default: 0,
+      },
+    },
+    {
+      nroRips: {
+        type: Number,
+        default: 0,
+      },
+    },
+    {
+      nroRips: {
+        type: Number,
+        default: 0,
+      },
+    },
+    {
+      nroRips: {
+        type: Number,
+        default: 0,
+      },
+    },
+    {
+      nroRips: {
+        type: Number,
+        default: 0,
+      },
+    },
+    {
+      nroRips: {
+        type: Number,
+        default: 0,
+      },
+    },
+  ],
+  nroEnvio: {
+    type: Number,
+    default: 0,
+  },
+  proceden: {
+    type: Number,
+    default: 0,
+  },
+  deptoremi: {
+    type: Number,
+    default: 0,
+  },
+  manejo: {
+    type: Number,
+    default: 0,
+  },
+  holding: {
+    type: Number,
+    default: 0,
+  },
+  centroCos: {
+    type: String,
+    default: "",
+  },
+  ciudad: {
+    type: String,
+    default: "",
+  },
+  cargoOps: {
+    type: String,
+    default: "",
+  },
+  loteCau: {
+    type: String,
+    default: "",
+  },
+  comprobCau: {
+    type: String,
+    default: "",
+  },
+  fechaCau: Date,
+  lotePag: {
+    type: String,
+    default: "",
+  },
+  comprobPag: {
+    type: String,
+    default: "",
+  },
+  fechaPag: Date,
+  oper: {
+    type: String,
+    default: "",
+  },
+  operModi: {
+    type: String,
+    default: "",
+  },
+  fechaModi: Date,
+  diasTipco: {
+    type: Number,
+    default: 0,
+  },
+  medioIng: {
+    type: Number,
+    default: 0,
+  },
+  contAtnt1: {
+    type: Number,
+    default: 0,
+  },
+  contAtnt2: {
+    type: Number,
+    default: 0,
+  },
+  contAtnt3: {
+    type: Number,
+    default: 0,
   },
 });
 

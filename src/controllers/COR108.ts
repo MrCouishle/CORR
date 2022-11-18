@@ -37,7 +37,7 @@ export const getCargops = async (req: Request, res: Response) => {
       console.log(req.body);
       delete body.codigo;
       const data = await cargops_model.updateOne({codigo: codigo}, body, { runValidators: true });
-      edit_response("remidep", data, codigo, res);
+      edit_response("cargops", data, codigo, res);
     } catch (error) {
       res.json({ msg: error });
     }

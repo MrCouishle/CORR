@@ -6,7 +6,7 @@ interface depco {
   ubicacion: string;
   direct: string;
   subdirect: string;
-  codigo: string;
+  codigo: Number;
   descripcion: string;
   responsable: string;
   oper: string;
@@ -29,7 +29,7 @@ const depco_schema = new Schema<depco>({
     default: "",
   },
   codigo: {
-    type: String,
+    type: Number,
     required: true,
     unique: true,
   },
