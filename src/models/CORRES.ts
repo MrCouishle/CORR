@@ -88,7 +88,7 @@ const corres_schema = new Schema<corres>({
   direct: {
     type: String,
     default: "",
-  },
+  }, 
   subdirect: {
     type: String,
     default: "",
@@ -96,12 +96,14 @@ const corres_schema = new Schema<corres>({
   llave: {
     anoLlave: {
       type: Number,
-      default: 0,
+      required:true,
     },
     cont: {
       type: Number,
-      default: 0,
+      required:true
     },
+    type:Object,
+    unique:true
   },
   fecha: Date,
   nit: {
@@ -417,8 +419,9 @@ const corres_schema = new Schema<corres>({
     type: Number,
     default: 0,
   },
-});
+}); 
 
-corres_schema.index({ llave: 1 }, { unique: true });
+//corres_schema.index({ llave: 1 }, { unique: true });
 
 export const corres_model = model<corres>("corres", corres_schema);
+ 
