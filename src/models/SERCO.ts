@@ -9,9 +9,9 @@ interface serco {
   codigo: string;
   descripcion: string;
   operCre: string;
-  fechaCre: string;
+  fechaCre: Date;
   operMod: string;
-  fechaMod: string;
+  fechaMod: Date;
 }
 
 const serco_schema = new Schema<serco>({
@@ -41,14 +41,14 @@ const serco_schema = new Schema<serco>({
     required: true,
   },
   fechaCre: {
-    type: String,
+    type: Date,
     required: true,
   },
   operMod: {
     type: String,
   },
   fechaMod: {
-    type: String,
+    type: Date,
   },
 })
 

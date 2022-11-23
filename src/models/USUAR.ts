@@ -4,8 +4,8 @@ mongoose.pluralize(null);
 
 interface usuar {
 	ubicacion: string;
-	directorio: string;
-	subdirectorio: string;
+	direct: string;
+	subdirect: string;
 	nombre: string;
 	nit: number;
 	dv: number;
@@ -40,7 +40,7 @@ interface usuar {
 	presup: string;
 	ctlCheq: string;
 	depInven: string;
-	formatoRbo: string;
+	formatoRbo: number;
 	separaCajaAlt: string;
 	limitVenta: string;
 	cuadre: string;
@@ -48,10 +48,10 @@ interface usuar {
 	ctl: string;
 	invent: string;
 	cartera: string;
-	tipoCod: string;
+	tipoCod: number;
 	copia: string;
 	puc: string;
-	// directorio: string; SE ESTA REPITIENDO ESTA VARIABLE
+	directorio: string;
 	archmae: string;
 	archter: string;
 	barras: string;
@@ -95,7 +95,7 @@ interface usuar {
 	menuSuc: string;
 	supDeventa: string;
 	loteFarm: string;
-	tipCaj: string;
+	tipCaj: number;
 	notaEntrega: string;
 	placa: string;
 	cuotas: string;
@@ -151,7 +151,7 @@ interface usuar {
 	terceVentana: string;
 	alertaCumple: string;
 	tiqueteRegalo: string;
-	contabDcto: string;
+	contabDcto: number;
 	demandaInduc: string;
 	interfazCorres: string;
 	prefijoUrg: string;
@@ -164,11 +164,11 @@ const usuar_schema = new Schema<usuar>({
       type: String,
       default: " "
     },
-    directorio: {
+    direct: {
       type: String,
       default: " "
     },
-    subdirectorio: {
+    subdirect: {
       type: String,
       default: " "
     },
@@ -303,8 +303,8 @@ const usuar_schema = new Schema<usuar>({
       default: " "
     },
     formatoRbo: {
-      type: String,
-      default: " "
+      type: Number,
+      default: 0,
     },
     separaCajaAlt: {
       type: String,
@@ -335,8 +335,8 @@ const usuar_schema = new Schema<usuar>({
       default: " "
     },
     tipoCod: {
-      type: String,
-      default: " "
+      type: Number,
+      default: 0
     },
     copia: {
       type: String,
@@ -346,10 +346,10 @@ const usuar_schema = new Schema<usuar>({
       type: String,
       default: " "
     },
-    // directorio: {
-    //   type: String,
-    //   default: " "
-    // },
+    directorio: {
+      type: String,
+      default: " "
+    },
     archmae: {
       type: String,
       default: " "
@@ -523,8 +523,8 @@ const usuar_schema = new Schema<usuar>({
       default: " "
     },
     tipCaj: {
-      type: String,
-      default: " "
+      type: Number,
+      default: 0
     },
     notaEntrega: {
       type: String,
@@ -747,8 +747,8 @@ const usuar_schema = new Schema<usuar>({
       default: " "
     },
     contabDcto: {
-      type: String,
-      default: " "
+      type: Number,
+      default: 0
     },
     demandaInduc: {
       type: String,

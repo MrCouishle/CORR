@@ -6,7 +6,7 @@ interface holding {
   ubicacion: string;
   direct: string;
   subdirect: string;
-  codigo: number;
+  codigo: number;//Es tipo number en migracion
   descripcion: string;
   activa: string;
 }

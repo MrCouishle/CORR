@@ -3,276 +3,198 @@ import mongoose, { Schema, model } from "mongoose";
 mongoose.pluralize(null);
 
 interface rescorr {
-  ubicacion: string;
-  direct: string;
-  subdirect: string;
-  llave_resp: {
-    ano_llave_resp: string;
-    cont_resp: string;
-  };
-  sw_radi_resp: string;
-  datos_resp: {
-    fecha_resp: {
-      ano_resp: string;
-      mes_resp: string;
-      dia_resp: string;
-    };
-    hora_resp: {
-      hr_resp: string;
-      mn_resp: string;
-    };
-    firma_resp: string;
-    llave_macro_resp: {
-      cl_macro_resp: string;
-      codigo_macro_resp: string;
-    };
-    asunto_resp: string;
-    tabla_resp: {
-      reng_resp: [];
-    };
-    respon_resp: string;
-    cargo_resp: string;
-  };
-  datos_radi_resp: {
-    llave_radi_resp: {
-      ano_radi_resp: string;
-      cont_radi_resp: string;
-    };
-    fecha_radi_resp: {
-      ano_radi2_resp: string;
-      es_radi_resp: string;
-      dia_radi_resp: string;
-    };
-    hora_radi_resp: {
-      hr_radi_resp: string;
-      mn_radi_resp: string;
-    };
-    nit_resp: string;
-    tipo_corres_resp: string;
-    descrip_resp: string;
-    ser_resp: string;
-    operdiri_resp: string;
-    dep_resp: string;
-    esta_resp: string;
-    cod_auxco_resp: string;
-    cod_unifun_resp: string;
-    proceden_resp: string;
-    oper_resp: string;
-    oper_modi_resp: string;
-    fecha_modi_resp: {
-      ano_modi_resp: string;
-      mes_modi_resp: string;
-      dia_modi_resp: string;
-    };
-    nro_fact_resp: string;
-    monto_resp: string;
-    nro_guia_resp: string;
-    per_rec_resp: string;
-    medio_resp: string;
-  };
-}
+    ubicacion: string;
+    direct: string;
+    subdirect: string;
+    codResp: {    
+      anoLlave: {
+        type: Number,
+        default: 0
+      },
+      cont: {
+        type: Number,
+        default: 0
+      },
+    },
+    swRadi: string;
+    fecha: string;
+    firma: string;
+    clMacro: string;
+    codigoMacro: {
+      type: Number,
+      default: 0
+    },
+    asunto: string;
+    tabla: string;
+    respon: string;
+    cargo: string;
+    anoRadi: string;
+    contRadi: string;
+    fechaRadi: string;
+    nit: string;
+    tipoCorres: string;
+    descrip: string;
+    ser: string;
+    operdiri: string;
+    dep: string;
+    esta: string;
+    codAuxco: string;
+    codUnifun: string;
+    proceden: string;
+    oper: string;
+    operModi: string;
+    fechaModi: string;
+    numeroFact: string;
+    monto: string;
+    nroGuia: string;
+    perRec: string;
+    medio: string;
+  }
 
 const rescorr_schema = new Schema<rescorr>({
-  ubicacion: {
-    type: String,
-    required: true,
-  },
-  direct: {
-    type: String,
-    required: true,
-  },
-  subdirect: {
-    type: String,
-    required: true,
-  },
-  llave_resp: {
-    ano_llave_resp: {
+    ubicacion: {
       type: String,
-      required: true,
+      default: " "
     },
-    cont_resp: {
+    direct: {
       type: String,
-      required: true,
+      default: " "
     },
-  },
-  sw_radi_resp: {
-    type: String,
-    required: true,
-  },
-  datos_resp: {
-    fecha_resp: {
-      ano_resp: {
-        type: String,
-        required: true,
+    subdirect: {
+      type: String,
+      default: " "
+    },
+    codResp: {    
+      anoLlave: {
+        type: Number,
+        default: 0
       },
-      mes_resp: {
-        type: String,
-        required: true,
-      },
-      dia_resp: {
-        type: String,
-        required: true,
+      cont: {
+        type: Number,
+        default: 0
       },
     },
-    hora_resp: {
-      hr_resp: {
-        type: String,
-        required: true,
-      },
-      mn_resp: {
-        type: String,
-        required: true,
-      },
-    },
-    firma_resp: {
+    swRadi: {
       type: String,
-      required: true,
+      default: " "
     },
-    llave_macro_resp: {
-      cl_macro_resp: {
-        type: String,
-        required: true,
-      },
-      codigo_macro_resp: {
-        type: String,
-        required: true,
-      },
-    },
-    asunto_resp: {
+    fecha: {
       type: String,
-      required: true,
+      default: " "
     },
-    tabla_resp: {
-      reng_resp: [],
-    },
-    respon_resp: {
+    firma: {
       type: String,
-      required: true,
+      default: " "
     },
-    cargo_resp: {
+    clMacro: {
       type: String,
-      required: true,
+      default: " "
     },
-  },
-  datos_radi_resp: {
-    llave_radi_resp: {
-      ano_radi_resp: {
-        type: String,
-        required: true,
-      },
-      cont_radi_resp: {
-        type: String,
-        required: true,
-      },
+    codigoMacro: {
+      type: Number,
+      default: 0
     },
-    fecha_radi_resp: {
-      ano_radi2_resp: {
-        type: String,
-        required: true,
-      },
-      es_radi_resp: {
-        type: String,
-        required: true,
-      },
-      dia_radi_resp: {
-        type: String,
-        required: true,
-      },
-    },
-    hora_radi_resp: {
-      hr_radi_resp: {
-        type: String,
-        required: true,
-      },
-      mn_radi_resp: {
-        type: String,
-        required: true,
-      },
-    },
-    nit_resp: {
+    asunto: {
       type: String,
-      required: true,
+      default: " "
     },
-    tipo_corres_resp: {
+    tabla: {
       type: String,
-      required: true,
+      default: " "
     },
-    descrip_resp: {
+    respon: {
       type: String,
-      required: true,
+      default: " "
     },
-    ser_resp: {
+    cargo: {
       type: String,
-      required: true,
+      default: " "
     },
-    operdiri_resp: {
+    anoRadi: {
       type: String,
-      required: true,
+      default: " "
     },
-    dep_resp: {
+    contRadi: {
       type: String,
-      required: true,
+      default: " "
     },
-    esta_resp: {
+    fechaRadi: {
       type: String,
-      required: true,
+      default: " "
     },
-    cod_auxco_resp: {
+    nit: {
       type: String,
-      required: true,
+      default: " "
     },
-    cod_unifun_resp: {
+    tipoCorres: {
       type: String,
-      required: true,
+      default: " "
     },
-    proceden_resp: {
+    descrip: {
       type: String,
-      required: true,
+      default: " "
     },
-    oper_resp: {
+    ser: {
       type: String,
-      required: true,
+      default: " "
     },
-    oper_modi_resp: {
+    operdiri: {
       type: String,
-      required: true,
+      default: " "
     },
-    fecha_modi_resp: {
-      ano_modi_resp: {
-        type: String,
-        required: true,
-      },
-      mes_modi_resp: {
-        type: String,
-        required: true,
-      },
-      dia_modi_resp: {
-        type: String,
-        required: true,
-      },
-    },
-    nro_fact_resp: {
+    dep: {
       type: String,
-      required: true,
+      default: " "
     },
-    monto_resp: {
+    esta: {
       type: String,
-      required: true,
+      default: " "
     },
-    nro_guia_resp: {
+    codAuxco: {
       type: String,
-      required: true,
+      default: " "
     },
-    per_rec_resp: {
+    codUnifun: {
       type: String,
-      required: true,
+      default: " "
     },
-    medio_resp: {
+    proceden: {
       type: String,
-      required: true,
+      default: " "
     },
-  },
-});
+    oper: {
+      type: String,
+      default: " "
+    },
+    operModi: {
+      type: String,
+      default: " "
+    },
+    fechaModi: {
+      type: String,
+      default: " "
+    },
+    numeroFact: {
+      type: String,
+      default: " "
+    },
+    monto: {
+      type: String,
+      default: " "
+    },
+    nroGuia: {
+      type: String,
+      default: " "
+    },
+    perRec: {
+      type: String,
+      default: " "
+    },
+    medio: {
+      type: String,
+      default: " "
+    },
+  })
 
 rescorr_schema.index({ llave: 1 }, { unique: true });
 
