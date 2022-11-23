@@ -78,7 +78,12 @@ export const f8Depco = async (req: Request, res: Response) => {
         correo:1,
       })
       .match({
-          $or:[{codigo:{$regex:dato}}]
+          $or:[
+            {codigo:{$regex:dato}},
+            {descripcion:{$regex:dato, $options:"i"}},
+            {responsable:{$regex:dato, $options:"i"}},
+            {oper:{$regex:dato, $options:"i"}},
+          ]
         })
       .skip(Number(desde))
       .limit(Number(cantidad));

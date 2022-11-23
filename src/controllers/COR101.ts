@@ -66,7 +66,10 @@ export const f8Serco = async (req: Request, res: Response) => {
     const { desde, cantidad } = req.params;
     let { dato } = req.query;
     const data = await serco_model
-      .find({ $or: [{ codigo: { $regex: dato, $options: "ix" } }] }, omitirId)
+      .find({ $or: [
+        { codigo: { $regex: dato, $options: "ix" } },
+        { descripcion: { $regex: dato, $options: "i" } },
+      ] }, omitirId)
       .skip(Number(desde))
       .limit(Number(cantidad));
     console.log(data.length);

@@ -74,7 +74,10 @@ export const getHolding = async (req: Request, res: Response) => {
           activa:1
         })
         .match({
-          $or:[{codigo:{$regex:dato}}]
+          $or:[
+            {codigo:{$regex:dato}},
+            {descripcion:{$regex:dato, $options:"i"}},
+          ]
         })
         .skip(Number(desde))
         .limit(Number(cantidad));

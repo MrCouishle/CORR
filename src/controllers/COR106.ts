@@ -68,7 +68,10 @@ export const getRemidep = async (req: Request, res: Response) => {
       let { dato } = req.query;
       console.log("Ya llegue 1");
       const data = await remidep_model
-        .find({ $or: [{ codigo: { $regex: dato, $options: "ix" } }] }, omitirId)
+        .find({ $or: [
+          { codigo: { $regex: dato, $options: "ix" } },
+          { descripcion: { $regex: dato, $options: "i" } }
+        ] }, omitirId)
         .skip(Number(desde))
         .limit(Number(cantidad));
       console.log(data.length);

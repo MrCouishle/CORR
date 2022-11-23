@@ -68,7 +68,10 @@ export const getCargops = async (req: Request, res: Response) => {
       const { desde, cantidad } = req.params;
       let { dato } = req.query;
       const data = await cargops_model
-        .find({ $or: [{ codigo: { $regex: dato, $options: "ix" } }] }, omitirId)
+        .find({ $or: [
+          { codigo: { $regex: dato, $options: "ix" } },
+          { descripcion: { $regex: dato, $options: "i" } },
+        ] }, omitirId)
         .skip(Number(desde))
         .limit(Number(cantidad));
       get_all_response(data, res);

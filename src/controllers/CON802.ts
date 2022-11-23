@@ -11,12 +11,12 @@ export const getTerceroF8 = async (req:Request, res:Response)=>{
             {
                 
                 $lookup:{
-                    from:"ciudad",
+                    from:"ciuda",
                     let: { codCiu: "$codCiu" },
                     pipeline: [
                       { 
                         $match:{
-                            $expr:{$eq:[ {$concat:["$codCiu.dpt", "$codCiu.ciu"]}, "$$codCiu" ]}
+                            $expr:{$eq:[ {$concat:["$codCiu.dptCiu", "$codCiu.ciuCiu"]}, "$$codCiu" ]}
                         }
                       }
                     ],
