@@ -42,6 +42,7 @@ app.use("/api", routes.CORRES);
 // app.use("/api", routes.TERCE);
 // app.use("/api", routes.USUAR);
 app.use("/api", routes.Entrys);
+app.use("/api", routes.CON802)
 
 //********Routes*******
 

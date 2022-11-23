@@ -759,3 +759,7 @@ const terce_schema = new Schema<terce>({
     default: "",
   },
 });
+
+terce_schema.index({codigo:1},{unique:true})
+
+export const terce_model = model<terce>("terce", terce_schema)
