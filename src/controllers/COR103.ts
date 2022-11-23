@@ -65,13 +65,14 @@ export const f8Tipco = async (req: Request, res: Response) => {
   try {
     const { desde, cantidad } = req.params;
     let { dato } = req.query;
-    console.log("Ya llegue 1");
     const data = await tipco_model
-      .find({ $or: [{ codigo: { $regex: dato, $options: "ix" } }] }, omitirId)
+      .find({ $or: [
+        { codigo: { $regex: dato, $options: "ix" } },
+        { descripcion: { $regex: dato, $options: "i" } },
+      ] }, omitirId)
       .skip(Number(desde))
       .limit(Number(cantidad));
     console.log(data.length);
-    console.log("Ya llegue 2");
     get_all_response(data, res);
   } catch (error) {
     res.json({ msg: error });
