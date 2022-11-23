@@ -6,16 +6,14 @@ interface macorr {
   ubicacion: string;
   direct: string;
   subdirect: string;
-  llave_macrocorr: {
-    cl_macrocorr: string;
-    codigo_macrocorr: string;
+  llave: {
+    cl: string;
+    codigo: number;
   };
-  detalle_macrocorr: string;
-  tabla_macrocorr: {
-    reng_macrocorr: [];
-  };
-  oper_macrocorr: string;
-  fech_oper_macrocorr: string;
+  detalle: string;
+  tabla: string;
+  oper: string;
+  fechOper: Date;
 }
 
 const macorr_schema = new Schema<macorr>({
@@ -31,29 +29,30 @@ const macorr_schema = new Schema<macorr>({
     type: String,
     required: true,
   },
-  llave_macrocorr: {
-    cl_macrocorr: {
+  llave: {
+    cl: {
       type: String,
       required: true,
     },
-    codigo_macrocorr: {
-      type: String,
+    codigo: {
+      type: Number,
       required: true,
     },
   },
-  detalle_macrocorr: {
+  detalle: {
     type: String,
     required: true,
   },
-  tabla_macrocorr: {
-    reng_macrocorr: [],
-  },
-  oper_macrocorr: {
+  tabla: {
     type: String,
     required: true,
   },
-  fech_oper_macrocorr: {
+  oper: {
     type: String,
+    required: true,
+  },
+  fechOper: {
+    type: Date,
     required: true,
   },
 });

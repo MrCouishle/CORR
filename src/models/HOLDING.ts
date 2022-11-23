@@ -6,7 +6,7 @@ interface holding {
   ubicacion: string;
   direct: string;
   subdirect: string;
-  codigo: number;
+  codigo: string;//Es tipo number en migracion
   descripcion: string;
   activa: string;
 }
@@ -25,7 +25,7 @@ const holding_schema = new Schema<holding>({
     default: "",
   },
   codigo: {
-    type: Number,
+    type: String,
     required: true,
     unique: true,
   },

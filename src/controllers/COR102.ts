@@ -66,9 +66,15 @@ export const f8Depco = async (req: Request, res: Response) => {
   try {
     const { desde, cantidad } = req.params;
     let { dato } = req.query;
-    console.log("Ya llegue 1");
     const data = await depco_model
-      .find({ $or: [{ codigo: { $regex: dato, $options: "ix" } }] }, omitirId)
+      .aggregate()
+      .project({
+        codigo:{$concat:[{$toString:["$codigo"]}]},
+        descripcion:1
+      })
+      .match({
+          $or:[{codigo:{$regex:dato}}]
+        })
       .skip(Number(desde))
       .limit(Number(cantidad));
     console.log(data.length);
