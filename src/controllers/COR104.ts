@@ -71,10 +71,20 @@ export const f8Auxtip = async (req: Request, res: Response) => {
     let { dato } = req.query;
     console.log("Ya llegue 1");
     const data = await auxtip_model
-      .aggregate()
+      .aggregate([
+        {
+          $lookup:{
+            from:"tipco",
+            localField:"codSerco",
+            foreignField:"codigo",
+            as:"tipco"
+          }
+        }
+      ])
       .project({
         codigo:{$concat:[{$toString:["$codigo"]}]},
         codSerco:1,
+        descripCodSerco:{$concat:[{"$arrayElemAt": ["$tipco.descripcion", 0]}]},
         descripcion:1
       })
       .match({
