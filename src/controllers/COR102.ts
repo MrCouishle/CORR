@@ -70,7 +70,12 @@ export const f8Depco = async (req: Request, res: Response) => {
       .aggregate()
       .project({
         codigo:{$concat:[{$toString:["$codigo"]}]},
-        descripcion:1
+        descripcion:1,
+        responsable:1,
+        oper:1,
+        codSerco:1,
+        cargo:1,
+        correo:1,
       })
       .match({
           $or:[{codigo:{$regex:dato}}]

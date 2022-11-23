@@ -12,7 +12,7 @@ interface corres {
   descrip: string;
   ser: string;
   operdiri: string;
-  dep: string;
+  dep: string;//Esto deberia ser tipo number
   fol: string;
   fold: string;
   esta: number;
@@ -41,8 +41,8 @@ interface corres {
     { operdiri1: string },
     { operdiri1: string }
   ];
-  anoRes: number;
-  contResPon: number;
+  anoRes: number;//Esto deberia ser parte de una llave
+  contResPon: number;//Esto deberia ser parte de una llave
   errorRips: [
     { nroRips: number },
     { nroRips: number },
