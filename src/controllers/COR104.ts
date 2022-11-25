@@ -80,6 +80,7 @@ export const f8Auxtip = async (req: Request, res: Response) => {
             as:"tipco"
           }
         }
+        
       ])
       .project({
         codigo:{$concat:[{$toString:["$codigo"]}]},
@@ -88,7 +89,12 @@ export const f8Auxtip = async (req: Request, res: Response) => {
         descripcion:1
       })
       .match({
-        $or:[{codigo:{$regex:dato}}]
+        $or:[
+          {codigo:{$regex:dato}},
+          {descripcion:{$regex:dato, $options:"i"}}
+
+        ]
+        
       })
       .skip(Number(desde))
       .limit(Number(cantidad));

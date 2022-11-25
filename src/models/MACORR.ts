@@ -8,7 +8,7 @@ interface macorr {
   subdirect: string;
   llave: {
     cl: string;
-    codigo: number;
+    codigo: string;
   };
   detalle: string;
   tabla: string;
@@ -19,15 +19,15 @@ interface macorr {
 const macorr_schema = new Schema<macorr>({
   ubicacion: {
     type: String,
-    required: true,
+    default:" ",
   },
   direct: {
     type: String,
-    required: true,
+    default:" ",
   },
   subdirect: {
     type: String,
-    required: true,
+    default:" ",
   },
   llave: {
     cl: {
