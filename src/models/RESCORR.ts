@@ -17,7 +17,7 @@ interface rescorr {
       },
     },
     swRadi: string;
-    fecha: string;
+    fecha: Date;
     firma: string;
     clMacro: string;
     codigoMacro: {
@@ -30,20 +30,20 @@ interface rescorr {
     cargo: string;
     anoRadi: string;
     contRadi: string;
-    fechaRadi: string;
-    nit: string;
+    fechaRadi: Date;
+    nit: number;
     tipoCorres: string;
     descrip: string;
     ser: string;
     operdiri: string;
     dep: string;
     esta: string;
-    codAuxco: string;
+    codAuxco: number;
     codUnifun: string;
     proceden: string;
     oper: string;
     operModi: string;
-    fechaModi: string;
+    fechaModi: Date;
     numeroFact: string;
     monto: string;
     nroGuia: string;
@@ -79,8 +79,8 @@ const rescorr_schema = new Schema<rescorr>({
       default: " "
     },
     fecha: {
-      type: String,
-      default: " "
+      type: Date,
+      required:true
     },
     firma: {
       type: String,
@@ -119,12 +119,12 @@ const rescorr_schema = new Schema<rescorr>({
       default: " "
     },
     fechaRadi: {
-      type: String,
-      default: " "
+      type: Date,
+      required:true
     },
     nit: {
-      type: String,
-      default: " "
+      type: Number,
+      required:true
     },
     tipoCorres: {
       type: String,
@@ -151,8 +151,8 @@ const rescorr_schema = new Schema<rescorr>({
       default: " "
     },
     codAuxco: {
-      type: String,
-      default: " "
+      type: Number,
+      required:true
     },
     codUnifun: {
       type: String,
@@ -171,8 +171,8 @@ const rescorr_schema = new Schema<rescorr>({
       default: " "
     },
     fechaModi: {
-      type: String,
-      default: " "
+      type: Date,
+      required:true
     },
     numeroFact: {
       type: String,

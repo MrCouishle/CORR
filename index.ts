@@ -44,6 +44,8 @@ app.use("/api", routes.MACORR);
 // app.use("/api", routes.USUAR);
 app.use("/api", routes.Entrys);
 app.use("/api", routes.CON802)
+app.use("/api", routes.LISTADORESCORR)
+
 
 //********Routes*******
 
