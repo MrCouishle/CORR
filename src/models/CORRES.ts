@@ -105,7 +105,9 @@ const corres_schema = new Schema<corres>({
     type:Object,
     unique:true
   },
-  fecha: Date,
+  fecha: {
+    type:Date,
+  },
   nit: {
     type: Number,
     default: 0,
@@ -162,8 +164,12 @@ const corres_schema = new Schema<corres>({
     type: Number,
     default: 0,
   },
-  fechaFact: Date,
-  fechaEntre: Date,
+  fechaFact: {
+    type:Date,
+  },
+  fechaEntre: {
+    type:Date,
+  },
   nroGuia: {
     type: String,
     default: "",

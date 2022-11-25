@@ -75,7 +75,7 @@ export const getCargops = async (req: Request, res: Response) => {
         .skip(Number(desde))
         .limit(Number(cantidad));
       get_all_response(data, res);
-    } catch (error) {
+    } catch (error) { 
       res.json({ msg: error });
     }
   };
