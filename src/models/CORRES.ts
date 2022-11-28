@@ -12,7 +12,7 @@ interface corres {
   descrip: string;
   ser: string;
   operdiri: string;
-  dep: string;//Esto deberia ser tipo number
+  dep: string; //Esto es tipo number en DEPCO, en cobol se maneja asi pero es raro
   fol: string;
   fold: string;
   esta: number;
@@ -41,8 +41,10 @@ interface corres {
     { operdiri1: string },
     { operdiri1: string }
   ];
-  anoRes: number;//Esto deberia ser parte de una llave
-  contResPon: number;//Esto deberia ser parte de una llave
+  llaveResp: {
+    anoRes: number;
+    contResPon: number;
+  };
   errorRips: [
     { nroRips: number },
     { nroRips: number },
@@ -88,7 +90,7 @@ const corres_schema = new Schema<corres>({
   direct: {
     type: String,
     default: "",
-  }, 
+  },
   subdirect: {
     type: String,
     default: "",
@@ -96,17 +98,17 @@ const corres_schema = new Schema<corres>({
   llave: {
     anoLlave: {
       type: Number,
-      required:true,
+      required: true,
     },
     cont: {
       type: Number,
-      required:true
+      required: true,
     },
-    type:Object,
-    unique:true
+    type: Object,
+    unique: true,
   },
   fecha: {
-    type:Date,
+    type: Date,
   },
   nit: {
     type: Number,
@@ -141,16 +143,16 @@ const corres_schema = new Schema<corres>({
     default: "",
   },
   esta: {
-    type:Number,
-    default:0
+    type: Number,
+    default: 0,
   },
   anex: {
     type: String,
     default: "",
   },
   tipoAnexo: {
-    type:Number,
-    default:0
+    type: Number,
+    default: 0,
   },
   otroAnexo: {
     type: String,
@@ -165,10 +167,10 @@ const corres_schema = new Schema<corres>({
     default: 0,
   },
   fechaFact: {
-    type:Date,
+    type: Date,
   },
   fechaEntre: {
-    type:Date,
+    type: Date,
   },
   nroGuia: {
     type: String,
@@ -270,13 +272,15 @@ const corres_schema = new Schema<corres>({
       },
     },
   ],
-  anoRes: {
-    type: Number,
-    default: 0,
-  },
-  contResPon: {
-    type: Number,
-    default: 0,
+  llaveResp: {
+    anoRes: {
+      type: Number,
+      default: 0,
+    },
+    contResPon: {
+      type: Number,
+      default: 0,
+    },
   },
   errorRips: [
     {
@@ -425,9 +429,8 @@ const corres_schema = new Schema<corres>({
     type: Number,
     default: 0,
   },
-}); 
+});
 
 //corres_schema.index({ llave: 1 }, { unique: true });
 
 export const corres_model = model<corres>("corres", corres_schema);
- 
