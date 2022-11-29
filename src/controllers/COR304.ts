@@ -8,7 +8,7 @@ export const listadoControlRespuestas = async (req: Request, res: Response) => {
   try {
     const { nit, dep, tipo_corres, jor, proceden, manejo, fechaIni, fechaFin } =
       req.body;
-
+    console.log(req.body);
     let nitB = {};
     let depB = {};
     let tipo_corresB = {};
@@ -16,7 +16,7 @@ export const listadoControlRespuestas = async (req: Request, res: Response) => {
     let procedenB = {};
     let manejoB = {};
 
-    if (nit != "**") nitB = { nit: Number(nit) };
+    if (nit != "99") nitB = { nit: Number(nit) };
     if (dep != "**") depB = { dep: dep };
     if (tipo_corres != "**") tipo_corresB = { tipoCorres: Number(tipo_corres) };
     if (jor != "**") {
