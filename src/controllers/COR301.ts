@@ -12,7 +12,7 @@ import { corres_model } from "../models/CORRES";
 
 export const getImpresionCorr = async (req: Request, res: Response) => {
   try {
-    const { nit, dep, tipoCorr, fechaIni, fechaFin, jornada, proceden, manejo } = req.body;
+    const { nit, dep, tipoCorr, fechaIni, fechaFin, jornada, proceden, manejo, estado } = req.body;
     console.log("Este es el body de COR301", req.body);
 
     let nitt = {};
@@ -21,6 +21,7 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
     let jornadaa = {};
     let procedenn = {};
     let manejoo = {};
+    let estadoo = {};
 
     if (nit != "99") nitt = { nit: Number(nit) };
     if (dep != "**") depp = { dep: dep };
@@ -32,6 +33,7 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
     }
     if (proceden != "**") procedenn = { proceden: Number(proceden) };
     if (manejo != "**") manejoo = { manejo: Number(manejo) };
+    if (estado != "**") estadoo = { estado: Number(estado)};
 
     const data = await corres_model
       .aggregate([
@@ -155,8 +157,40 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
         fechaFact: 1,
         fechaEntre: 1,
         oper: 1,
-        manejo: 1,
-        proceden: 1,
+        manejo: { 
+          $cond:
+              {
+                if: {
+                $eq:["$manejo",1]},
+                then:"INFORMATIVO",
+                else:"RESOLUTIVO",
+                }
+            },
+        proceden: {
+          $concat: [
+            {
+              $cond: {
+                if: { $eq: [{ $arrayElemAt: ["$corres.proceden", 0] }, 1] },
+                then: "EXTERNO",
+                else: "",
+              },
+            },
+            {
+              $cond: {
+                if: { $eq: [{ $arrayElemAt: ["$corres.proceden", 0] }, 2] },
+                then: "INTERNO",
+                else: "",
+              },
+            },
+            {
+              $cond: {
+                if: { $gt: [{ $arrayElemAt: ["$corres.proceden", 0] },  2] },
+                then: "NO EXISTE",
+                else: "",
+              },
+            },
+          ],
+        },
         llaveResp: {
           $let: {
             vars: {},

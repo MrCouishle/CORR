@@ -161,18 +161,17 @@ export const listadoControlRespuestas = async (req: Request, res: Response) => {
               },
             },
           ],
-          // $let: {
-          //   vars: {},
-          //   in: { $add: [{ $arrayElemAt: ["$corres.proceden", 0] }] },
-          // },
         },
         hour: { $hour: "$fecha" },
-        manejo: {
-          $let: {
-            vars: {},
-            in: { $add: [{ $arrayElemAt: ["$corres.manejo", 0] }] },
-          },
-        },
+        manejo: { 
+          $cond:
+              {
+                if: {
+                $eq:["$manejo",1]},
+                then:"INFORMATIVO",
+                else:"RESOLUTIVO",
+                }
+            },
       })
       .match({
         $and: [
