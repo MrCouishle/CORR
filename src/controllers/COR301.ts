@@ -21,6 +21,7 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
     let jornadaa = {};
     let procedenn = {};
     let manejoo = {};
+    // let pruebita 2
 
     if (nit != "99") nitt = { nit: Number(nit) };
     if (dep != "**") depp = { dep: dep };
