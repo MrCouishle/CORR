@@ -1,9 +1,6 @@
-// import { ciudadModel } from "../models/contabilidad/CON110H";
-import { Response } from "express";
-// import { departamentoModel, paisModel } from "../models/contabilidad/CON110Hpais";
-// import { confi_model } from "../models/nomina/CONFI";
+import { Response, Request, NextFunction } from "express";
+import jwt from "jsonwebtoken";
 
-/* MODELS 💡 */
 
 export const maxlength = (num: Number) => `({PATH}): {VALUE} sobrepasa el máximo de caracteres permitido (${num})`;
 export const minlength = (num: Number) => `({PATH}): {VALUE} el minimo de caracteres permitido es (${num})`;
@@ -226,3 +223,39 @@ export async function validar_catidad(model:any) {
     return error
   }
 }
+
+export const validarJwt = (req: Request, res: Response, next: NextFunction) => {
+  const token = req.header("x_token");
+  if (!token) {
+    console.log("Se intento ingresar sin token");
+    return res.status(401).json({
+      msg: "No tienes acceso.",
+    });
+  }
+
+  try {
+    jwt.verify(token, `${process.env.SECRETKEY}`);
+    return next();
+  } catch (error) {
+    return res.status(401).json({
+      msg: "Acceso denegado, no tiene token correcto",
+    });
+  }
+};
+
+export const generarJwt = ( uid = "")=>{
+  return new Promise ((resolve, reject)=>{
+      const payload = {uid};
+      jwt.sign( payload, `${process.env.SECRETKEY}`, {
+          expiresIn: '24h'
+      }, (err, token)=>{
+          if (err) {
+              console.log(err)
+              reject('No se genero el token');
+          }else{
+              resolve(token);
+          }
+      })
+  })
+
+};
