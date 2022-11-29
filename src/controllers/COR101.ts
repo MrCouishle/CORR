@@ -54,7 +54,7 @@ export const deleteSerco = async (req: Request, res: Response) => {
 export const getSercoId = async (req: Request, res: Response) => {
   try {
     const { codigo } = req.params
-    const data = await serco_model.findOne({codigo: codigo}, omitirId);
+    const data = await serco_model.findOne({ $regex: codigo, $options: "i" }, omitirId);
     get_response("serco", data, codigo, res);
   } catch (error) {
     res.json({ msg: error });
@@ -69,7 +69,15 @@ export const f8Serco = async (req: Request, res: Response) => {
       .find({ $or: [
         { codigo: { $regex: dato, $options: "ix" } },
         { descripcion: { $regex: dato, $options: "i" } },
-      ] }, omitirId)
+      ] }, {
+        codigo:{ $replaceAll: { input: "$codigo", find: " ", replacement: "" } },
+        descripcion:1,
+        operCre:1,
+        fechaCre:1,
+        operMod:1,
+        fechaMod:1,
+        _id:0
+      })
       .skip(Number(desde))
       .limit(Number(cantidad));
     console.log(data.length);

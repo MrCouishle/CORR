@@ -23,7 +23,7 @@ export const listadoControlRespuestas = async (req: Request, res: Response) => {
       if (jor == "M") jorB = { hour: { $lte: 11 } };
       else jorB = { hour: { $gte: 12 } };
     }
-    if (proceden != "**") procedenB = { proceden: Number(proceden) };
+    if (proceden != "**") procedenB = { procedenR: Number(proceden) };
     if (manejo != "**") manejoB = { manejo: Number(manejo) };
 
     const data = await rescorr_model
@@ -131,11 +131,40 @@ export const listadoControlRespuestas = async (req: Request, res: Response) => {
             in: { $add: [{ $arrayElemAt: ["$corres.fechaFact", 0] }] },
           },
         },
-        proceden: {
+        procedenR:{
           $let: {
             vars: {},
             in: { $add: [{ $arrayElemAt: ["$corres.proceden", 0] }] },
           },
+        },
+        proceden: {
+          $concat: [
+            {
+              $cond: {
+                if: { $eq: [{ $arrayElemAt: ["$corres.proceden", 0] }, 1] },
+                then: "EXTERNO",
+                else: "",
+              },
+            },
+            {
+              $cond: {
+                if: { $eq: [{ $arrayElemAt: ["$corres.proceden", 0] }, 2] },
+                then: "INTERNO",
+                else: "",
+              },
+            },
+            {
+              $cond: {
+                if: { $gt: [{ $arrayElemAt: ["$corres.proceden", 0] },  2] },
+                then: "NO EXISTE",
+                else: "",
+              },
+            },
+          ],
+          // $let: {
+          //   vars: {},
+          //   in: { $add: [{ $arrayElemAt: ["$corres.proceden", 0] }] },
+          // },
         },
         hour: { $hour: "$fecha" },
         manejo: {
@@ -153,8 +182,8 @@ export const listadoControlRespuestas = async (req: Request, res: Response) => {
           jorB,
           procedenB,
           manejoB,
-          { fecha: { $gte: new Date (fechaIni) } },
-          { fecha: { $lte: new Date (fechaFin) } },
+          { fecha: { $gte: new Date(fechaIni) } },
+          { fecha: { $lte: new Date(fechaFin) } },
         ],
       });
     get_all_response(data, res);

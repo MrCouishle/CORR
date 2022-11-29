@@ -55,7 +55,10 @@ export const getUnifun = async (req: Request, res: Response) => {
   export const getUnifunId = async (req: Request, res: Response) => {
     try {
       const { codigo } = req.params
-      const data = await unifun_model.findOne({codigo: codigo}, omitirId);
+      const data = await unifun_model.findOne({codigo:{$regex:codigo, $options:"i"}}, {
+        codigo:{ $replaceAll: { input: "$codigo", find: " ", replacement: "" } },
+        descripcion:1
+      });
       get_response("unifun", data, codigo, res);
     } catch (error) {
       res.json({ msg: error });
@@ -71,7 +74,11 @@ export const getUnifun = async (req: Request, res: Response) => {
         .find({ $or: [
           { codigo: { $regex: dato, $options: "ix" }},
           { descripcion: { $regex: dato, $options: "ix" }}
-        ] }, omitirId)
+        ] }, {
+          
+          codigo:{ $replaceAll: { input: "$codigo", find: " ", replacement: "" } },
+          descripcion:1
+        })
         .skip(Number(desde))
         .limit(Number(cantidad));
       console.log(data.length);
