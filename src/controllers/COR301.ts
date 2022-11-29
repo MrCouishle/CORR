@@ -9,7 +9,7 @@ import {
   omitirId,
 } from "../global/global";
 import { corres_model } from "../models/CORRES";
-
+// Pruebita
 export const getImpresionCorr = async (req: Request, res: Response) => {
   try {
     const { nit, dep, tipoCorr, fechaIni, fechaFin, jornada, proceden, manejo, estado } = req.body;
