@@ -37,7 +37,7 @@ const restr_schema = new Schema<restr>({
   },
   llaveRest: {
     type: String,
-    default:""
+    unique:true
   },
   opc: {
     type: []
