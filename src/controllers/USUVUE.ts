@@ -60,6 +60,16 @@ export const getusuvue = async (req: Request, res: Response) => {
   }
 };
 
+export const getUsuvueLlave = async (req:Request, res:Response) => {
+  try {
+    const { llaveOper } = req.params
+    const data = await usuvue_model.findOne({llaveOper: llaveOper}, omitirId);
+    get_response("usuvue", data, llaveOper, res);
+  } catch(error){
+    res.json({ msg:error });
+  }
+};
+
 export const f8Usuvue = async (req: Request, res: Response) => {
   try {
     const { desde, cantidad } = req.params;
