@@ -12,7 +12,16 @@ import { corres_model } from "../models/CORRES";
 // Pruebita
 export const getImpresionCorr = async (req: Request, res: Response) => {
   try {
-    const { nit, dep, tipoCorr, fechaIni, fechaFin, jornada, proceden, manejo, estado } = req.body;
+    const {
+      nit,
+      dep,
+      tipoCorr,
+      fechaIni,
+      fechaFin,
+      jornada,
+      proceden,
+      manejo,
+    } = req.body;
     console.log("Este es el body de COR301", req.body);
 
     let nitt = {};
@@ -21,19 +30,19 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
     let jornadaa = {};
     let procedenn = {};
     let manejoo = {};
-    let estadoo = {};
 
     if (nit != "99") nitt = { nit: Number(nit) };
     if (dep != "**") depp = { dep: dep };
     if (tipoCorr != "**") tipoCorrr = { tipoCorres: tipoCorr };
     if (jornada != "**") {
       if (jornada == "M")
-        jornadaa = { hour: { $lt: 12 } }; //$lt para que tome valores de 12 hacia atras, si le pongo la e tomaria el 12
+        jornadaa = {
+          hour: { $lt: 12 },
+        }; //$lt para que tome valores de 12 hacia atras, si le pongo la e tomaria el 12
       else jornadaa = { hour: { $gte: 12 } };
     }
     if (proceden != "**") procedenn = { proceden: Number(proceden) };
     if (manejo != "**") manejoo = { manejo: Number(manejo) };
-    if (estado != "**") estadoo = { estado: Number(estado)};
 
     const data = await corres_model
       .aggregate([
@@ -148,7 +157,9 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
         },
         descripAuxco: { $concat: [{ $arrayElemAt: ["$aux.descripcion", 0] }] },
         descripSerco: { $concat: [{ $arrayElemAt: ["$serc.descripcion", 0] }] },
-        responsableDep: { $concat: [{ $arrayElemAt: ["$depc.responsable", 0] }] },
+        responsableDep: {
+          $concat: [{ $arrayElemAt: ["$depc.responsable", 0] }],
+        },
         correoRespDep: { $concat: [{ $arrayElemAt: ["$depc.correo", 0] }] },
         fol: 1,
         fold: 1,
@@ -157,39 +168,28 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
         fechaFact: 1,
         fechaEntre: 1,
         oper: 1,
-        manejo: { 
-          $cond:
-              {
-                if: {
-                $eq:["$manejo",1]},
-                then:"INFORMATIVO",
-                else:"RESOLUTIVO",
-                }
-            },
-        proceden: {
-          $concat: [
-            {
-              $cond: {
-                if: { $eq: [{ $arrayElemAt: ["$corres.proceden", 0] }, 1] },
-                then: "EXTERNO",
-                else: "",
-              },
-            },
-            {
-              $cond: {
-                if: { $eq: [{ $arrayElemAt: ["$corres.proceden", 0] }, 2] },
-                then: "INTERNO",
-                else: "",
-              },
-            },
-            {
-              $cond: {
-                if: { $gt: [{ $arrayElemAt: ["$corres.proceden", 0] },  2] },
-                then: "NO EXISTE",
-                else: "",
-              },
-            },
-          ],
+        manejo: 1,
+        manejoR: {
+          $cond: {
+            if: { $lt: ["$manejo", 2] },
+            then: "INFORMATIVO",
+            else: "RESOLUTIVO",
+          },
+          //   $switch:{
+          //     branches:[
+          //       {case:{"manejo":1}, then:"INFORMATIVO"},
+          //       {case:{"manejo":2}, then:"RESOLUTIVO"}
+          //     ],
+          //     default:"Sin definir"
+          // },
+        },
+        proceden: 1,
+        procedenR: {
+          $cond: {
+            if: { $lt: ["$proceden", 2] },
+            then: "EXTERNO",
+            else: "INTERNO",
+          },
         },
         llaveResp: {
           $let: {
@@ -209,7 +209,9 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
             in: { $add: [{ $arrayElemAt: ["$rescorr.fecha", 0] }] },
           },
         },
-        // fehcaVenRes:{},Esta fecha en cobol parece ser la misma fecha de corres
+        // fehcaVenRes:{
+
+        // },
         cargo: { $concat: [{ $arrayElemAt: ["$depc.cargo", 0] }] },
         medioIng: 1,
       })
@@ -229,7 +231,7 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
     get_all_response(data, res);
     // console.log("RES en la validacion de COR301", res);
     console.log("LENGTH en la validacion de COR301", data.length);
-    console.log("DATA en la validacion de COR301", data);
+    // console.log("DATA en la validacion de COR301", data);
   } catch (error) {
     console.log(error);
     res.json({ msg: error });
