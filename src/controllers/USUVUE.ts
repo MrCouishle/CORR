@@ -70,15 +70,31 @@ export const cambiarContra = async (req: Request, res: Response) => {
   try {
     const { nueva_pass, pass, llave } = req.params;
 
-    const user = await usuvue_model.findOne({$and:[{llaveOper:llave},{clave:pass}]})
+    const user = await usuvue_model.findOne({
+      $and: [{ llaveOper: llave }, { clave: pass }],
+    });
 
-    if(user){
-      const data = await usuvue_model.updateOne({ llaveRest: llave },{$set: {clave: nueva_pass,}});
-      edit_response("usuvue", data, llave, res)
+    if (user) {
+      const data = await usuvue_model.updateOne(
+        { llaveRest: llave },
+        { $set: { clave: nueva_pass } }
+      );
+      edit_response("usuvue", data, llave, res);
+    } else {
     }
-
-
   } catch (error) {}
+};
+
+export const getUsuvueLlave = async (req: Request, res: Response) => {
+  try {
+    const { llaveOper } = req.params;
+
+    const data = await usuvue_model.findOne({ llaveOper: llaveOper }, omitirId);
+
+    get_response("usuvue", data, llaveOper, res);
+  } catch (error) {
+    res.json({ msg: error });
+  }
 };
 
 export const f8Usuvue = async (req: Request, res: Response) => {
