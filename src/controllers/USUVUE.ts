@@ -48,3 +48,20 @@ export const getusuvue = async (req: Request, res: Response) => {
     res.json({ msg: error });
   }
 };
+
+export const f8Usuvue = async (req: Request, res: Response) => {
+  try {
+    const { desde, cantidad } = req.params;
+    let { dato } = req.query;
+    const data = await usuvue_model
+    .find ({ $or: [
+      { llaveOper: { $regex: dato,  $options: "ix"} },
+      {nombre: { $regex: dato, $options: "i"} }
+    ]}, omitirId)
+    .skip(Number(desde))
+    .limit(Number(cantidad));
+    get_all_response(data, res);
+  } catch (error) {
+    res.json({ msg:error });
+  }
+}
