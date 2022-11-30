@@ -1,6 +1,7 @@
 import express from 'express'
-import { getusuvue } from '../controllers/USUVUE'
+import { f8Usuvue, getusuvue } from '../controllers/USUVUE'
 
 export const route_usuvue = express.Router()
 
 route_usuvue.get("/usuvue/:llaveResp/:clave", getusuvue);
+route_usuvue.get("/f8&usuvue/:desde/:cantidad", f8Usuvue);
