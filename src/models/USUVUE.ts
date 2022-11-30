@@ -2,12 +2,11 @@ import mongoose, { Schema, model } from "mongoose";
 
 mongoose.pluralize(null);
 
-interface restr {
+interface usuvue {
   ubicacion: string;
   direct: string;
   subdirect: string;
-  llaveRest: string;
-  opc: [];
+  llaveOper: string;
   clave: string;
   nombre: string;
   fecha: Date;
@@ -22,7 +21,7 @@ interface restr {
   vend: string;
 }
 
-const restr_schema = new Schema<restr>({
+const usuvue_schema = new Schema<usuvue>({
     ubicacion: {
         type: String,
         default:""
@@ -35,12 +34,9 @@ const restr_schema = new Schema<restr>({
     type: String,
     default:""
   },
-  llaveRest: {
+  llaveOper: {
     type: String,
     unique:true
-  },
-  opc: {
-    type: []
   },
   clave: {
     type: String,
@@ -88,6 +84,6 @@ const restr_schema = new Schema<restr>({
   },
 })
 
-restr_schema.index({ llaveRest: 1 }, { unique: true });
+usuvue_schema.index({ llaveRest: 1 }, { unique: true });
 
-export const restr_model = model<restr>("restr", restr_schema);
+export const usuvue_model = model<usuvue>("usuvue", usuvue_schema);

@@ -36,7 +36,7 @@ app.use("/api", routes.CARGOPS);
 app.use("/api", routes.CORRES);
 app.use("/api", routes.CORRESINFOR)
 app.use("/api", routes.MACORR);
-app.use("/api", routes.RESTR);
+app.use("/api", routes.USUVUE);
 // app.use("/api", routes.ACTIV);
 // app.use("/api", routes.CIUDA);
 // app.use("/api", routes.CORRES);
