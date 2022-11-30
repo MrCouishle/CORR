@@ -36,19 +36,10 @@ export const getusuvue = async (req: Request, res: Response) => {
                   llaveOper: llaveResp
                 }
               },
-             ])
-            //  .project(
-            //   {
-            //     _id:0,
-            //     res2:{
-            //       $slice: ["$res",{ $size: "$res" }],
-            //     },
-                
-                
-            //   }
-            // )
-            console.log(data)
-            res.json({data, token, changePassword:true})
+             ]).project({
+              clave:0
+             })
+            res.json({data:data[0], token, changePassword:true})
         }else res.json({data2, token})
       } else res.json({ msg: "USER" });
     } else {
