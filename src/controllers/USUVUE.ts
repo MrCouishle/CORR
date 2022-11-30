@@ -6,44 +6,42 @@ export const getusuvue = async (req: Request, res: Response) => {
   try {
     const { llaveResp, clave } = req.params;
     console.log(llaveResp, clave);
-    const data2 = await usuvue_model.findOne({ llaveOper: llaveResp });
-    if (data2?.llaveOper) {
-      if (data2.clave == atob(clave)) {
-          const token = await generarJwt(data2.llaveOper)
+    const data = await usuvue_model.aggregate([
+      {
+        $lookup: {
+          from: "restr",
+          let: { llave: "$llaveOper"},
+          pipeline: [
+            {
+              $match: {
+                $expr: { $eq: ["$llaveRest.oper", "$$llave"] },
+              },
+            },{
+              $project:{
+                _id:0,
+                opc: {$concat:[{$replaceAll: { input: "$llaveRest.opc", find: " ", replacement: ""}}]},
+              }
+            },
+          ],
+          as: "restr",
+        },
+      },
+      {
+        $match:{
+          llaveOper: llaveResp
+        }
+      },
+     ])
+    if (data[0]) {
+      if (data[0].clave == atob(clave)) {
+          const token = await generarJwt(data[0].llaveOper)
         if(atob(clave) === "NUEVO123"){
-            const data = await usuvue_model.aggregate([
-              {
-                $lookup: {
-                  from: "restr",
-                  let: { llave: "$llaveOper"},
-                  pipeline: [
-                    {
-                      $match: {
-                        $expr: { $eq: ["$llaveRest.oper", "$$llave"] },
-                      },
-                    },{
-                      $project:{
-                        _id:0,
-                        opc: {$concat:[{$replaceAll: { input: "$llaveRest.opc", find: " ", replacement: ""}}]},
-                      }
-                    },
-                  ],
-                  as: "restr",
-                },
-              },
-              {
-                $match:{
-                  llaveOper: llaveResp
-                }
-              },
-             ]).project({
-              clave:0
-             })
+            delete data[0].clave
             res.json({data:data[0], token, changePassword:true})
-        }else res.json({data2, token})
+        }else res.json({data, token})
       } else res.json({ msg: "USER" });
     } else {
-      get_response("usuvue", data2, "", res);
+      get_response("usuvue", data, "", res);
     }
   } catch (error) {
     console.log(error)
