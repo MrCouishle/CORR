@@ -12,6 +12,7 @@ import {route_informeCorres} from "./COR301";
 import { route_listadoRespuesta } from "./COR304";
 import {route_macorr} from "./COR402";
 import {route_usuvue} from "./USUVUE";
+import { router_favoritos } from "./FAVORITOS";
 // import {route_activ} from "./";
 // import {route_ciuda} from "./";
 // import {route_corres} from "./";
@@ -34,6 +35,7 @@ export const CORRESINFOR = route_informeCorres;
 export const LISTADORESCORR = route_listadoRespuesta;
 export const MACORR = route_macorr;
 export const USUVUE = route_usuvue;
+export const FAVORITOS = router_favoritos
 // export const ACTIV = route_activ;
 // export const CIUDA = route_ciuda;
 // export const CORRES = route_corres;

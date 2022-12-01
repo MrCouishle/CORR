@@ -7,11 +7,16 @@ import {
   edit_response,
 } from "../global/global";
 import { usuvue_model } from "../models/USUVUE";
+import bcrypt from 'bcrypt'
 
 export const getusuvue = async (req: Request, res: Response) => {
   try {
-    const { llaveResp, clave } = req.params;
+    let clave : any
+    let llaveResp : any
+    llaveResp = req.query.llave;
+    clave = req.query.clave;
     console.log(llaveResp, clave);
+    if(!clave) clave="TlVFVk8xMjM="
     const data = await usuvue_model.aggregate([
       {
         $lookup: {
@@ -50,7 +55,8 @@ export const getusuvue = async (req: Request, res: Response) => {
       },
     ]);
     if (data[0]) {
-      if (data[0].clave == atob(clave)) {
+
+      if (data[0].clave == atob(clave) || await bcrypt.compare(atob(clave), data[0].clave)) {
         const token = await generarJwt(data[0].llaveOper);
         if (atob(clave) === "NUEVO123") {
           delete data[0].clave;
@@ -69,28 +75,30 @@ export const getusuvue = async (req: Request, res: Response) => {
 export const cambiarContra = async (req: Request, res: Response) => {
   try {
     const { nueva_pass, pass, llave } = req.params;
-
+    console.log(nueva_pass, pass, llave)
     const user = await usuvue_model.findOne({
-      $and: [{ llaveOper: llave }, { clave: pass }],
+      $and: [{ llaveOper: llave }, { clave: atob(pass) }],
     });
-
+    
     if (user) {
+      const new_password = await bcrypt.hash(nueva_pass,10)      
       const data = await usuvue_model.updateOne(
         { llaveRest: llave },
-        { $set: { clave: nueva_pass } }
-      );
+        { $set: { clave: new_password } }
+        );
       edit_response("usuvue", data, llave, res);
     } else {
+      res.json({msg:"error perro"})
     }
-  } catch (error) {}
+  } catch (error) {
+    res.json({msg:error})
+  }
 };
 
 export const getUsuvueLlave = async (req: Request, res: Response) => {
   try {
     const { llaveOper } = req.params;
-
     const data = await usuvue_model.findOne({ llaveOper: llaveOper }, omitirId);
-
     get_response("usuvue", data, llaveOper, res);
   } catch (error) {
     res.json({ msg: error });

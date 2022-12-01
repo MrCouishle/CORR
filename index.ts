@@ -46,6 +46,7 @@ app.use("/api", routes.USUVUE);
 app.use("/api", routes.Entrys);
 app.use("/api", routes.CON802)
 app.use("/api", routes.LISTADORESCORR)
+app.use("/api", routes.FAVORITOS)
 
 //********Routes*******
 

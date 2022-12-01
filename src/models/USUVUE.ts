@@ -44,6 +44,7 @@ const usuvue_schema = new Schema<usuvue>({
   },
   nombre: {
     type: String,
+    required:true,
     default:""
   },
   fecha: {

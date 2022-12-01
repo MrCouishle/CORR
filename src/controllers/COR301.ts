@@ -22,7 +22,6 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
       proceden,
       manejo,
     } = req.body;
-    console.log("Este es el body de COR301", req.body);
 
     let nitt = {};
     let depp = {};
@@ -230,7 +229,6 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
       });
     get_all_response(data, res);
     // console.log("RES en la validacion de COR301", res);
-    console.log("LENGTH en la validacion de COR301", data.length);
     // console.log("DATA en la validacion de COR301", data);
   } catch (error) {
     console.log(error);
