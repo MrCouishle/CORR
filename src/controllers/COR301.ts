@@ -21,6 +21,7 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
       jornada,
       proceden,
       manejo,
+      estado
     } = req.body;
     console.log("Este es el body de COR301", req.body);
 
@@ -30,6 +31,7 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
     let jornadaa = {};
     let procedenn = {};
     let manejoo = {};
+    let estadoo = {};
 
     if (nit != "99") nitt = { nit: Number(nit) };
     if (dep != "**") depp = { dep: dep };
@@ -43,6 +45,7 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
     }
     if (proceden != "**") procedenn = { proceden: Number(proceden) };
     if (manejo != "**") manejoo = { manejo: Number(manejo) };
+    if (estado != "**") estadoo = { estado: Number(estado) };
 
     const data = await corres_model
       .aggregate([
@@ -119,6 +122,19 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
         anoLlave: { $concat: [{ $toString: ["$llave.anoLlave"] }] },
         fecha: 1,
         esta: 1,
+        estaR:{
+          $switch:{
+            branches:[
+              {case: {$eq: ["$esta", 1]}, then: "EN TRAMITE"},
+              {case: {$eq: ["$esta", 2]}, then: "VENCIDA"},
+              {case: {$eq: ["$esta", 3]}, then: "RESUELTA"},
+              {case: {$eq: ["$esta", 4]}, then: "RESUELTA"},//Se consulto con encargado de correspondencia daniel, el numero 4 es resuelta tambien, igual que el 6 lo toman como resuelta.
+              {case: {$eq: ["$esta", 5]}, then: "PRORROGA"},
+              {case: {$eq: ["$esta", 6]}, then: "ANULADO"}
+            ],
+            default:"SIN DEFINIR"
+          }
+        },
         hour: { $hour: "$fecha" },
         minute: { $minute: "$fecha" },
         descrip: 1,
@@ -226,6 +242,7 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
           jornadaa,
           procedenn,
           manejoo,
+          estadoo
         ],
       });
     get_all_response(data, res);
