@@ -29,6 +29,14 @@ const config_schema = new Schema<config>({
   },
 });
 
+config_schema.pre("save", async function (next) {
+
+  const data = await config_model.findOne({})
+
+  if(data) next( new Error("Ya tiene configuracion"))
+  else next()
+  
+})
 
 config_schema.index({ips:1}, {unique:true})
 

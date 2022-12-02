@@ -14,6 +14,7 @@ import {route_macorr} from "./COR402";
 import {route_usuvue} from "./USUVUE";
 import { router_favoritos } from "./FAVORITOS";
 import { router_config } from "./CONFIG";
+import { router_modulos } from "./MODULOS";
 // import {route_activ} from "./";
 // import {route_ciuda} from "./";
 // import {route_corres} from "./";
@@ -38,6 +39,7 @@ export const MACORR = route_macorr;
 export const USUVUE = route_usuvue;
 export const FAVORITOS = router_favoritos
 export const CONFIG = router_config
+export const MODULOS = router_modulos
 // export const ACTIV = route_activ;
 // export const CIUDA = route_ciuda;
 // export const CORRES = route_corres;

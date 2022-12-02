@@ -255,9 +255,9 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
             in: { $add: [{ $arrayElemAt: ["$rescorr.fecha", 0] }] },
           },
         },
-        fehcaVenRes:{
+        // fehcaVenRes:{
 
-        },
+        // },
         cargo: { $concat: [{ $arrayElemAt: ["$depc.cargo", 0] }] },
         medioIng: 1,
       })

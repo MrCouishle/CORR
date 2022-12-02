@@ -5,21 +5,6 @@ interface modul {
   modulos: [];
 }
 
-const modulos = new Schema({
-  cod: {
-    type: String,
-    required: true,
-  },
-  descripcion: {
-    type: String,
-    required: true,
-  },
-  estado: {
-    type: Boolean,
-    default: false,
-  },
-});
-
 const modul_schema = new Schema<modul>({
   contab: {
     type: String,
