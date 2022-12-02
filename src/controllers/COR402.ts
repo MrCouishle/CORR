@@ -96,6 +96,7 @@ export const f8Macorr = async (req: Request, res: Response) => {
       })
       .match({
         $or:[
+          {detalle:{$regex:dato, $options:"ix"}},
           {oper:{$regex:dato, $options:"ix"}}
         ]
       })
