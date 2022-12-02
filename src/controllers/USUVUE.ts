@@ -108,9 +108,12 @@ export const f8Usuvue = async (req: Request, res: Response) => {
             { llaveOper: { $regex: dato, $options: "ix" } },
             { nombre: { $regex: dato, $options: "i" } },
           ],
-        },
-        omitirId
-      )
+        },{
+          subdirect:0,
+          direct:0,
+          ubicacion:0,
+          clave:0
+        })
       .skip(Number(desde))
       .limit(Number(cantidad));
     get_all_response(data, res);
