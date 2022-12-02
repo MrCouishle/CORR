@@ -72,7 +72,6 @@ export const f8Tipco = async (req: Request, res: Response) => {
       ] }, omitirId)
       .skip(Number(desde))
       .limit(Number(cantidad));
-    console.log(data.length);
     get_all_response(data, res);
   } catch (error) {
     res.json({ msg: error });

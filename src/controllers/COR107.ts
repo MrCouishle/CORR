@@ -65,7 +65,6 @@ export const getHolding = async (req: Request, res: Response) => {
     try {
       const { desde, cantidad } = req.params;
       let { dato } = req.query;
-      console.log("Ya llegue 1");
       const data = await holding_model
         .aggregate()
         .project({
@@ -81,8 +80,6 @@ export const getHolding = async (req: Request, res: Response) => {
         })
         .skip(Number(desde))
         .limit(Number(cantidad));
-      console.log(data.length);
-      console.log("Ya llegue 2");
       get_all_response(data, res);
     } catch (error) {
       res.json({ msg: error });

@@ -9,8 +9,14 @@ interface config {
 
 const config_schema = new Schema<config>({
   ips: {
-    type: Object,
-    required: true,
+    ipPublica:{
+        type:String,
+        required:true
+    },
+    ipLocal:{
+        type:String,
+        required:true
+    }
   },
   ubicacion: [],
   fechaCrea: {

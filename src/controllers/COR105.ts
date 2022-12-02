@@ -19,7 +19,6 @@ export const getUnifun = async (req: Request, res: Response) => {
   };
 
   export const postUnifun = async (req: Request, res: Response) => {
-    console.log(req.body);
     try {
       new unifun_model(req.body).save((err) => {
         if (err) res.json({ msg: err.message });
@@ -81,8 +80,6 @@ export const getUnifun = async (req: Request, res: Response) => {
         })
         .skip(Number(desde))
         .limit(Number(cantidad));
-      console.log(data.length);
-      console.log("Ya llegue 2");
       get_all_response(data, res);
     } catch (error) {
       res.json({ msg: error });

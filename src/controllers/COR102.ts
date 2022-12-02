@@ -37,7 +37,6 @@ export const putDepco = async (req: Request, res: Response) => {
     const data = await depco_model.updateOne({codigo: codigo}, body, { runValidators: true });
     edit_response("depco", data, codigo, res);
   } catch (error) {
-    console.log("hlis");
     res.json({ msg: error });
   }
 };

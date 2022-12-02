@@ -19,7 +19,6 @@ export const getCargops = async (req: Request, res: Response) => {
   };
 
   export const postCargops = async (req: Request, res: Response) => {
-    console.log(req.body);
     try {
       new cargops_model(req.body).save((err) => {
         if (err) res.json({ msg: err.message });
@@ -34,7 +33,6 @@ export const getCargops = async (req: Request, res: Response) => {
     try {
       const {codigo} = req.params;
       const body = req.body;
-      console.log(req.body);
       delete body.codigo;
       const data = await cargops_model.updateOne({codigo: codigo}, body, { runValidators: true });
       edit_response("cargops", data, codigo, res);

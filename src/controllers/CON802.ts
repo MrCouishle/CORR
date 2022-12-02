@@ -65,7 +65,6 @@ export const getTerceroF8 = async (req:Request, res:Response)=>{
         .skip(Number(desde))
         .limit(Number(cantidad))
 
-        console.log(data.length)
 
         get_all_response(data, res)
     } catch (error) {

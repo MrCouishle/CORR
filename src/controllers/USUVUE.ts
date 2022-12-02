@@ -61,7 +61,7 @@ export const getusuvue = async (req: Request, res: Response) => {
         if (atob(clave) === "NUEVO123") {
           delete data[0].clave;
           res.json({ data: data[0], token, changePassword: true });
-        } else res.json({ data, token });
+        } else res.json({ data:data[0], token });
       } else res.json({ msg: "USER" });
     } else {
       get_response("usuvue", data, "", res);
@@ -77,16 +77,22 @@ export const cambiarContra = async (req: Request, res: Response) => {
     const { nueva_pass, pass, llave } = req.params;
     console.log(nueva_pass, pass, llave)
     const user = await usuvue_model.findOne({
-      $and: [{ llaveOper: llave }, { clave: atob(pass) }],
+      $and: [{ llaveOper: llave }],
     });
     
     if (user) {
-      const new_password = await bcrypt.hash(nueva_pass,10)      
-      const data = await usuvue_model.updateOne(
-        { llaveRest: llave },
-        { $set: { clave: new_password } }
-        );
-      edit_response("usuvue", data, llave, res);
+      if(await bcrypt.compare(atob(pass), user.clave) || user.clave == atob(pass) ){
+        const new_password = await bcrypt.hash(atob(nueva_pass),10)      
+        console.log(llave)
+        const data = await usuvue_model.updateOne(
+          { llaveOper: llave },
+          { $set: { clave: new_password } }
+          );
+          console.log(data)
+        edit_response("usuvue", data, llave, res);
+      }else{
+        res.json({msg:"contraseña incorrecta"})
+      }
     } else {
       res.json({msg:"error perro"})
     }
