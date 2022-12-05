@@ -75,7 +75,7 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
     }
     if (proceden != "**") procedenn = { proceden: Number(proceden) };
     if (manejo != "**") manejoo = { manejo: Number(manejo) };
-    if (estado != "**") estadoo = { estado: Number(estado) };
+    if (estado != "**" && estado != null ) {estadoo = { estado: Number(estado)} };
 
     const data = await corres_model
       .aggregate([
@@ -275,23 +275,13 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
           estadoo
         ],
       });
+
     get_all_response(data, res);
     // console.log("RES en la validacion de COR301", res);
+    console.log("LENGTH en la validacion de COR301", data.length);
     // console.log("DATA en la validacion de COR301", data);
   } catch (error) {
     console.log(error);
     res.json({ msg: error });
   }
 };
-
-// export const postValidarDatos = async (req: Request, res: Response) => {
-//   console.log(req.body);
-//   let { nit, codigoDepco } = req.body;
-//   let body: any;
-//   if (nit == 99) body = {};
-//   else body = { nit };
-//   if(codigoDepco=="***") bodyDe = {}
-//   const res_terce = await terce_model.find(body);
-//   const res_depco = await depco_model.find(body);
-//   res.json(res_terce);
-// };
