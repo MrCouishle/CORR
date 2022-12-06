@@ -49,6 +49,8 @@ app.use("/api", routes.LISTADORESCORR);
 app.use("/api", routes.FAVORITOS);
 app.use("/api", routes.CONFIG);
 app.use("/api", routes.MODULOS);
+app.use("/api", routes.MODULOS);
+app.use("/api", routes.DNHABIL);
 
 //********Routes*******
 
