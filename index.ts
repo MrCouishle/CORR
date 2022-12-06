@@ -34,7 +34,7 @@ app.use("/api", routes.REMIDEP);
 app.use("/api", routes.HOLDING);
 app.use("/api", routes.CARGOPS);
 app.use("/api", routes.CORRES);
-app.use("/api", routes.CORRESINFOR)
+app.use("/api", routes.CORRESINFOR);
 app.use("/api", routes.MACORR);
 app.use("/api", routes.USUVUE);
 // app.use("/api", routes.ACTIV);
@@ -43,12 +43,12 @@ app.use("/api", routes.USUVUE);
 // app.use("/api", routes.RESCORR);
 // app.use("/api", routes.TERCE);
 // app.use("/api", routes.USUAR);
-app.use("/api", routes.Entrys);
-app.use("/api", routes.CON802)
-app.use("/api", routes.LISTADORESCORR)
-app.use("/api", routes.FAVORITOS)
-app.use("/api", routes.CONFIG)
-app.use("/api", routes.MODULOS)
+
+app.use("/api", routes.CON802);
+app.use("/api", routes.LISTADORESCORR);
+app.use("/api", routes.FAVORITOS);
+app.use("/api", routes.CONFIG);
+app.use("/api", routes.MODULOS);
 
 //********Routes*******
 
