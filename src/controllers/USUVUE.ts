@@ -74,14 +74,12 @@ export const getusuvue = async (req: Request, res: Response) => {
 
 export const cambiarContra = async (req: Request, res: Response) => {
   try {
-    const { nueva_pass, pass, llave } = req.params;
-    console.log(nueva_pass, pass, llave)
+    const { nueva_pass,llave } = req.params;
     const user = await usuvue_model.findOne({
       $and: [{ llaveOper: llave }],
     });
     
     if (user) {
-      if(await bcrypt.compare(atob(pass), user.clave) || user.clave == atob(pass) ){
         const new_password = await bcrypt.hash(atob(nueva_pass),10)      
         console.log(llave)
         const data = await usuvue_model.updateOne(
@@ -90,9 +88,7 @@ export const cambiarContra = async (req: Request, res: Response) => {
           );
           console.log(data)
         edit_response("usuvue", data, llave, res);
-      }else{
-        res.json({msg:"contraseña incorrecta"})
-      }
+      
     } else {
       res.json({msg:"error perro"})
     }

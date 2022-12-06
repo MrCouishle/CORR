@@ -20,7 +20,7 @@ const modulo_model = new Schema<modulo>({
     type: Boolean,
     default: false,
   },
-});
+}, {versionKey:false});
 
 
 export const modulos_schema = model<modulo>("modulos", modulo_model)

@@ -52,45 +52,13 @@ export const editar_modulo = async (req: Request, res: Response) => {
 
     if(! data.acknowledged === false){
 
-        const data2 = await modul_model.updateMany(
-            {},
-            {
-              $pull: {
-                modulos: {
-                  cod: modulo?.cod,
-                  descripcion: modulo?.descripcion,
-                  estado: false,
-                },
-              },
-            }
-          );
-    
-          const data3 = await modul_model.updateMany(
-            {},
-            {
-              $pull: {
-                modulos: {
-                  cod: modulo?.cod,
-                  descripcion: modulo?.descripcion,
-                  estado: true,
-                },
-              },
-            }
-          );
-
-          const data = await modul_model.updateMany(
-            {},
-            {
-              $push: {
-                modulos: {
-                  cod: modulo?.cod,
-                  descripcion: modulo?.descripcion,
-                  estado: req.body.estado,
-                },
-              },
-            }
-          );
-
+      const data  = await modul_model.updateMany({
+        "modulos.cod":cod
+      },{
+        $set:{
+          "modulos.$.descripcion": req.body.descripcion
+        }
+      })
     }
 
     edit_response("modulo", data, cod, res);

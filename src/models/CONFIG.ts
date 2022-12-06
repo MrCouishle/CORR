@@ -27,7 +27,7 @@ const config_schema = new Schema<config>({
     type: Date,
     required: true,
   },
-});
+}, {versionKey:false});
 
 config_schema.pre("save", async function (next) {
 

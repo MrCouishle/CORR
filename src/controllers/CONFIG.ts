@@ -63,10 +63,45 @@ export const edit_config = async (req: Request, res: Response) => {
 
 export const get_config = async (req: Request, res: Response) => {
   try {
-    // const data = await config_model.aggregate([
-    //     {
-           
-    //     }
-    // ])
-  } catch (error) {}
+    const data = await config_model.aggregate([
+        {
+           $lookup:{
+            from: "modul",
+            foreignField:"contab",
+            localField:"ubicacion.contab",
+            as:"contab"
+           }
+        }
+    ]).project({
+      _id:0
+    })
+    res.json(data[0])
+  } catch (error) {
+    console.log(error)
+    res.json({msg:error})
+  }
 };
+
+
+export const editar_estado_modulos = async(req:Request, res: Response)=>{
+  try {
+    const {modulo, contab, estado} = req.params
+
+    let estadoP = true
+
+    if(estado == "true") estadoP = true
+    else estadoP = false
+
+    const data = await modul_model.updateOne({contab:contab, "modulos.cod":modulo},{
+      $set:{
+        "modulos.$.estado": estadoP
+      }
+    })
+
+    res.json(data)
+  } catch (error) {
+    console.log(error)
+    res.json({msg:error})
+  }
+}
+

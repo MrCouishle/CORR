@@ -15,6 +15,6 @@ const modul_schema = new Schema<modul>({
     type:[],
     required:true
   },
-});
+}, {versionKey:false});
 
 export const modul_model = model<modul>("modul", modul_schema);

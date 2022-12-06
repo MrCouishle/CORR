@@ -24,4 +24,4 @@ const modul2 = new Schema<modul2>({
   nominas: {
     
   }
-})
+},{versionKey:false})
