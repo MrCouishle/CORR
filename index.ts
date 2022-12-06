@@ -3,7 +3,7 @@ import express, { Request, Response, NextFunction } from "express";
 import * as routes from "./src/routes/index";
 require("dotenv").config();
 
-const PORT = process.env.PORT || 9000;
+const PORT = process.env.PORT || 9001;
 const app = express();
 
 app.use((req: Request, res: Response, next: NextFunction) => {
@@ -43,7 +43,7 @@ app.use("/api", routes.USUVUE);
 // app.use("/api", routes.RESCORR);
 // app.use("/api", routes.TERCE);
 // app.use("/api", routes.USUAR);
-
+app.use("/api", routes.CORR864);
 app.use("/api", routes.CON802);
 app.use("/api", routes.LISTADORESCORR);
 app.use("/api", routes.FAVORITOS);
