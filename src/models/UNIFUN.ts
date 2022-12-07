@@ -34,6 +34,6 @@ const unifun_schema = new Schema<unifun>({
   },
 });
 
-unifun_schema.index({ cosigo: 1 }, { unique: true });
+unifun_schema.index({ codigo: 1 }, { unique: true });
 
 export const unifun_model = model<unifun>("unifun", unifun_schema);

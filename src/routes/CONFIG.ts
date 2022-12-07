@@ -1,5 +1,5 @@
 import express from 'express'
-import { agregar_contabilidad, create_config, editar_estado_modulos, edit_config, eliminar_contabilidad, get_config } from '../controllers/CONFIG'
+import { agregar_contabilidad, agregar_modulos_mod, create_config, editar_estado_modulos, edit_config, eliminar_contabilidad, eliminar_modulos_mod, get_config } from '../controllers/CONFIG'
 
 export const router_config = express.Router()
 
@@ -11,4 +11,5 @@ router_config.get("/config", get_config)
 
 router_config.put("/editar_estado_modulos/:modulo/:contab/:estado", editar_estado_modulos)
 
-
+router_config.put("/agregar_modulos_mod/:contab/:modulo", agregar_modulos_mod)
+router_config.delete("/eliminar_modulos_mod/:contab/:modulo", eliminar_modulos_mod)

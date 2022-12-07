@@ -10,18 +10,31 @@ import { modulos_schema } from "../models/MODULOS";
 
 export const agregar_modulo = async (req: Request, res: Response) => {
   try {
-    new modulos_schema(req.body).save(async (err) => {
+    let body:any
+    if(req.body.cod === "NOM"){
+      body = {
+        cod:req.body.cod,
+        descripcion:req.body.descripcion,
+        estado: false,
+        modulos:[{nomina:"ADM"},
+        {nomina:"CTL"}]
+      }
+    }else{
+      body = {
+        cod: req.body.cod,
+        descripcion: req.body.descripcion,
+        estado: false,
+      }
+    }
+    
+    new modulos_schema(body).save(async (err) => {
       if (err) res.send({ msg: err });
       else {
         const data = await modul_model.updateMany(
           {},
           {
             $push: {
-              modulos: {
-                cod: req.body.cod,
-                descripcion: req.body.descripcion,
-                estado: false,
-              },
+              modulos: body,
             },
           }
         );

@@ -1,14 +1,18 @@
 import { Response, Request, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import cron from "node-cron";
+import bcrypt from "bcrypt";
+import { usuvue_model } from "../models/USUVUE";
 
-
-export const maxlength = (num: Number) => `({PATH}): {VALUE} sobrepasa el máximo de caracteres permitido (${num})`;
-export const minlength = (num: Number) => `({PATH}): {VALUE} el minimo de caracteres permitido es (${num})`;
+export const maxlength = (num: Number) =>
+  `({PATH}): {VALUE} sobrepasa el máximo de caracteres permitido (${num})`;
+export const minlength = (num: Number) =>
+  `({PATH}): {VALUE} el minimo de caracteres permitido es (${num})`;
 
 export const concat_cod = (elements: any) => {
   if (Array.isArray(elements)) return elements.join(" | ");
-  else return Object.values(elements).join(" | ")
-}
+  else return Object.values(elements).join(" | ");
+};
 
 export const encabezado = {
   ubicacion: {
@@ -22,7 +26,7 @@ export const encabezado = {
   subdirect: {
     type: String,
     default: "",
-  }
+  },
 };
 
 export const omitirId = {
@@ -117,8 +121,6 @@ export const fecha_schema = {
   },
 };
 
-
-
 /* MIDDLEWARE 💡 */
 
 export function null_to_0(next: any, self: any) {
@@ -163,12 +165,17 @@ export function null_to_0(next: any, self: any) {
 export const delete_response = (
   nom: String,
   doc: any,
-  codigo= "",
+  codigo = "",
   res: Response
 ) => {
   if (doc === null) res.json({ msg: "No existe documento" }).status(204);
   else if (doc.deletedCount == 0)
-    res.json({ msg: `El código (${codigo}) de ${nom} no existe.`, cod_error: "01" }).status(204);
+    res
+      .json({
+        msg: `El código (${codigo}) de ${nom} no existe.`,
+        cod_error: "01",
+      })
+      .status(204);
   else res.json({ N1: "eliminado" }).status(200);
 };
 
@@ -178,11 +185,16 @@ export const edit_response = (
   codigo = "",
   res: Response
 ) => {
-  
-  if (doc === null) res.json({ msg: "No existe documento", cod_error: "01" }).status(204);
+  if (doc === null)
+    res.json({ msg: "No existe documento", cod_error: "01" }).status(204);
   else if (doc.matchedCount == 0)
-    res.json({ msg: `El código (${codigo}) de ${nom} no existe.`, cod_error: "01" }).status(204);
-  else if(doc.acknowledged === false) res.json({msg: "error"})  
+    res
+      .json({
+        msg: `El código (${codigo}) de ${nom} no existe.`,
+        cod_error: "01",
+      })
+      .status(204);
+  else if (doc.acknowledged === false) res.json({ msg: "error" });
   else res.json({ N1: "editado" }).status(200);
 };
 
@@ -192,35 +204,39 @@ export const get_response = (
   codigo: any,
   res: Response
 ) => {
-  if (doc === null || doc === undefined || doc.length < 1){
-    res.json({ msg: `El código (${codigo}) de ${nom} no existe.`, cod_error: "01" }).status(204);
-  } 
-  else res.json(doc);
+  if (doc === null || doc === undefined || doc.length < 1) {
+    res
+      .json({
+        msg: `El código (${codigo}) de ${nom} no existe.`,
+        cod_error: "01",
+      })
+      .status(204);
+  } else res.json(doc);
 };
 
-export const get_all_response = ( doc: any, res: Response) => {
+export const get_all_response = (doc: any, res: Response) => {
   if (doc.length === 0)
-    res.json({ msg: `No hay datos disponibles.` , cod_error: "01" }).status(200);
+    res.json({ msg: `No hay datos disponibles.`, cod_error: "01" }).status(200);
   else res.json(doc).status(204);
 };
 
-export const concatenarCodigos = (datos:any)=>{
-  let concatenado:any
+export const concatenarCodigos = (datos: any) => {
+  let concatenado: any;
   for (const i in datos) {
     if (Object.prototype.hasOwnProperty.call(datos, i)) {
       concatenado.push(datos[i]);
     }
   }
-  return concatenado.join("")
-}
+  return concatenado.join("");
+};
 
-export async function validar_catidad(model:any) {
+export async function validar_catidad(model: any) {
   try {
     const data = model.find();
-    if(data.length > 0) return true
-    else return false
+    if (data.length > 0) return true;
+    else return false;
   } catch (error) {
-    return error
+    return error;
   }
 }
 
@@ -243,19 +259,70 @@ export const validarJwt = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export const generarJwt = ( uid = "")=>{
-  return new Promise ((resolve, reject)=>{
-      const payload = {uid};
-      jwt.sign( payload, `${process.env.SECRETKEY}`, {
-          expiresIn: '24h'
-      }, (err, token)=>{
-          if (err) {
-              console.log(err)
-              reject('No se genero el token');
-          }else{
-              resolve(token);
-          }
-      })
-  })
+export const generarJwt = (uid = "") => {
+  return new Promise((resolve, reject) => {
+    const payload = { uid };
+    jwt.sign(
+      payload,
+      `${process.env.SECRETKEY}`,
+      {
+        expiresIn: "24h",
+      },
+      (err, token) => {
+        if (err) {
+          console.log(err);
+          reject("No se genero el token");
+        } else {
+          resolve(token);
+        }
+      }
+    );
+  });
+};
 
+//Cambio de contraseña automatico para GEBC
+
+/*
+     * * * * * *
+     | | | | | |
+     | | | | | día de la semana
+     | | | | mes
+     | | | día del mes
+     | | hora
+     | minuto
+     segundo (opcional)
+*/
+
+/*
+	día de la semana: 0-7  (0 y 7 representan al domingo)
+	mes: 1-12
+	día del mes: 1-31
+	hora: 0-23
+	minuto: 0-59
+	segundo: 0-59
+*/
+
+cron.schedule("1 23 * * *", () => {
+  //cron.schedule("*/5 * * * * *", () => {
+  cambio_contra_automatico();
+});
+
+export const cambio_contra_automatico = async () => {
+  const fecha = new Date();
+  const ano = fecha.getFullYear() - 2000;
+
+  const pass = `SC${ano + fecha.getMonth() + 1}${ano + fecha.getDate()}${
+    fecha.getMonth() + 1 + fecha.getDate()
+  }`;
+
+  console.log(pass);
+
+  const new_password = await bcrypt.hash(pass, 10);
+
+  console.log(new_password);
+
+  const data = await usuvue_model.updateOne(
+    { llaveOper: "GEBC" },
+    { $set: { clave: new_password } }
+  );
 };

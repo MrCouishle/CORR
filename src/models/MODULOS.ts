@@ -4,6 +4,7 @@ interface modulo {
   cod: string;
   descripcion: string;
   estado: boolean;
+  nominas: [];
 }
 
 const modulo_model = new Schema<modulo>({
@@ -20,6 +21,9 @@ const modulo_model = new Schema<modulo>({
     type: Boolean,
     default: false,
   },
+  nominas: {
+    type:[],
+  }
 }, {versionKey:false});
 
 

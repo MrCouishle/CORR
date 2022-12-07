@@ -22,6 +22,7 @@ const modul2 = new Schema<modul2>({
     required:true
   },
   nominas: {
-    
+    type:[],
+    required:true
   }
 },{versionKey:false})

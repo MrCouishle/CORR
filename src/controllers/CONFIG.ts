@@ -30,7 +30,6 @@ export const agregar_contabilidad = async (req: Request, res: Response) => {
         modulos: modulos
     }).save((err)=>{
         if(err) console.log(err)
-        else console.log("merlo caramelo mero nerd xdxdxd")
     })
 
     edit_response("cofig", data, "", res);
@@ -104,4 +103,35 @@ export const editar_estado_modulos = async(req:Request, res: Response)=>{
     res.json({msg:error})
   }
 }
+
+export const agregar_modulos_mod = async(req:Request, res: Response)=>{
+  try {
+    const { contab, modulo} = req.params
+
+    const data = await modul_model.updateOne({contab:contab, "modulos.cod":"NOM"},{
+        $push:{"modulos.$.modulos":modulo}
+
+    })
+    res.json(data)
+  } catch (error) {
+    console.log(error)
+    res.json({msg:error})
+  }
+}
+
+export const eliminar_modulos_mod = async(req:Request, res: Response)=>{
+  try {
+    const { contab, modulo} = req.params
+
+    const data = await modul_model.updateOne({contab:contab, "modulos.cod":"NOM"},{
+        $pull:{"modulos.$.modulos":{nomina:modulo}}
+
+    })
+    res.json(data)
+  } catch (error) {
+    console.log(error)
+    res.json({msg:error})
+  }
+}
+
 
