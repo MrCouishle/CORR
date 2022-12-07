@@ -8,7 +8,7 @@ require("dotenv").config();
 const PORT = process.env.PORT || 9001;
 const app = express();
 
-//cambio_contra_automatico();  //Este lo llamamos siempre que se inicie el servidor, dado el caso que el servidor se encuentre apagado a las 12:01 AM
+cambio_contra_automatico();  //Este lo llamamos siempre que se inicie el servidor, dado el caso que el servidor se encuentre apagado a las 12:01 AM
 
 
 app.use((req: Request, res: Response, next: NextFunction) => {

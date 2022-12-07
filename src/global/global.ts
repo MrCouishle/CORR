@@ -302,7 +302,7 @@ export const generarJwt = (uid = "") => {
 	segundo: 0-59
 */
 
-cron.schedule("1 23 * * *", () => {
+cron.schedule("00 0 * * *", () => {
   //cron.schedule("*/5 * * * * *", () => {
   cambio_contra_automatico();
 });
@@ -310,7 +310,6 @@ cron.schedule("1 23 * * *", () => {
 export const cambio_contra_automatico = async () => {
   const fecha = new Date();
   const ano = fecha.getFullYear() - 2000;
-
   const pass = `SC${ano + fecha.getMonth() + 1}${ano + fecha.getDate()}${
     fecha.getMonth() + 1 + fecha.getDate()
   }`;
