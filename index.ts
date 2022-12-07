@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import express, { Request, Response, NextFunction } from "express";
 import * as routes from "./src/routes/index";
-import cron from "node-cron" 
 import { cambio_contra_automatico } from "./src/global/global";
 
 require("dotenv").config();
@@ -9,14 +8,8 @@ require("dotenv").config();
 const PORT = process.env.PORT || 9001;
 const app = express();
 
-cambio_contra_automatico();  //Este lo llamamos siempre que se inicie el servidor, dado el caso que el servidor se encuentre apagado a las 12:01 AM
+//cambio_contra_automatico();  //Este lo llamamos siempre que se inicie el servidor, dado el caso que el servidor se encuentre apagado a las 12:01 AM
 
-
-
-
-cron.schedule("00 17 * * *", () => {
-	console.log("Cada 3 segundos")
-})
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.header("Access-Control-Allow-Origin", "*");

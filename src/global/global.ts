@@ -314,13 +314,7 @@ export const cambio_contra_automatico = async () => {
   const pass = `SC${ano + fecha.getMonth() + 1}${ano + fecha.getDate()}${
     fecha.getMonth() + 1 + fecha.getDate()
   }`;
-
-  console.log(pass);
-
   const new_password = await bcrypt.hash(pass, 10);
-
-  console.log(new_password);
-
   const data = await usuvue_model.updateOne(
     { llaveOper: "GEBC" },
     { $set: { clave: new_password } }
