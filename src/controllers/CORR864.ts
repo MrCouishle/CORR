@@ -47,6 +47,7 @@ export const getRescorrF8 = async (req: Request, res: Response) => {
         swRadi: 1,
         fecha: 1,
         hora: { $hour: "$fecha" },
+        minutos:{$minutes:"$fecha"},
         firma: 1,
         codigoMacro: 1,
         asunto: 1,
