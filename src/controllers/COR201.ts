@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import nodemailer from "nodemailer"
 import {
   concatenarCodigos,
   delete_response,
@@ -178,3 +179,41 @@ export const getCorresF8 = async (req: Request, res: Response) => {
     res.json({ msg: error });
   }
 };
+
+export const envioCorreos = async (req:Request, res:Response)=>{
+  try {
+    const { name, email, placa, phone } = req.body;
+
+    const config = {
+      host: "smtp.gmail.com",
+      port: 587,
+      auth: {
+        user: "victorcobo22@gmail.com",
+        pass: "vluwtqclqxxvuhgc",
+      },
+    };
+
+
+    const msg = {
+      from: "victorcobo22@gmail.com",
+      to: "victorcobo22@gmail.com",
+      subject: "Prueba perro",
+      text: "Evio de correo",
+      attachments: [{
+        filename: 'file.pdf',
+        path: __dirname+'/APUESTA.pdf',
+        contentType: 'application/pdf'
+      }],
+    };
+
+    const trasnport = nodemailer.createTransport(config);
+
+    const info = await trasnport.sendMail(msg);
+
+    res.json(info);
+  } catch (error) {
+    console.log(error);
+
+    res.json({ msg: error });
+  }
+}

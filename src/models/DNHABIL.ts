@@ -19,5 +19,9 @@ const dn_habil = new Schema<dia_no_habil>({
   }
 });
 
+// dn_habil.pre("aggregate", function(next){
+//   //this.queryHas('companyId')
+// })
+
 
 export const dia_no_habil_model = model<dia_no_habil>("dia_no_habil", dn_habil);

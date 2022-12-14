@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import cron from "node-cron";
 import bcrypt from "bcrypt";
 import { usuvue_model } from "../models/USUVUE";
+import {spawn} from "child_process"
 
 export const maxlength = (num: Number) =>
   `({PATH}): {VALUE} sobrepasa el máximo de caracteres permitido (${num})`;
@@ -307,6 +308,20 @@ cron.schedule("00 0 * * *", () => {
   cambio_contra_automatico();
 });
 
+export function diacriticSensitiveRegex(string: any) {
+  return string
+    .replace(/a/g, "[a,á,à,ä,â]")
+    .replace(/e/g, "[e,é,ë,è]")
+    .replace(/i/g, "[i,í,ï,ì]")
+    .replace(/o/g, "[o,ó,ö,ò]")
+    .replace(/u/g, "[u,ü,ú,ù]");
+}
+
+export const removeAccents = (str: any) => {
+  console.log(str);
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+};
+
 export const cambio_contra_automatico = async () => {
   const fecha = new Date();
   const ano = fecha.getFullYear() - 2000;
@@ -319,3 +334,23 @@ export const cambio_contra_automatico = async () => {
     { $set: { clave: new_password } }
   );
 };
+
+cron.schedule("30 10 * * *", () => {
+  let backupProcess = spawn("mongodump", [
+    "--host=localhost",
+    "--port=27017",
+    // "--username=diego",
+    // "--password=Diego09",
+    "--archive=C:/Backup",
+    //"--gzip",
+  ]);
+
+  backupProcess.on("exit", (code, signal) => {
+    if (code) console.log("Backup process exited with code ", code);
+    else if (signal)
+      console.error("Backup process was killed with singal ", signal);
+    else console.log("Successfully backedup the database");
+  });
+});
+
+
