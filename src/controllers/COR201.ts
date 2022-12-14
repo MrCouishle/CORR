@@ -98,7 +98,7 @@ export const getCorres = async (req: Request, res: Response) => {
       .match({
         llave: llave,
       });
-    get_response("corres", data, `${llave.anoLlave} / ${llave.cont}`, res);
+    get_response("corres", data[0], `${llave.anoLlave} / ${llave.cont}`, res);
   } catch (error) {
     res.json({ msg: error });
   }
