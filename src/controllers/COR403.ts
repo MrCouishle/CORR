@@ -83,15 +83,8 @@ export const f8Rescorr = async (req: Request, res: Response) => {
         },
         swRadi: 1,
         fecha: 1,
-        fechaR: {
-          $concat:[
-            {$toString: {$year:"$fecha"}},"-",
-            {$toString: {$month:"$fecha"}},"-",
-            {$toString: {$dayOfMonth:"$fecha"}}
-          ]
-        },
-        horaFehca:{ $hour: "$fecha" },
-        minutosFecha:{ $minute: "$fecha"},
+        fechaR: { $substr: ["$fecha", 0, 10] },
+        horaFecha: {$concat:[{$toString:{ $hour: "$fecha" }},":",{$toString:{ $minute: "$fecha" }}]},
         firma: 1,
         llaveMacro: {
           $concat: [
@@ -107,8 +100,7 @@ export const f8Rescorr = async (req: Request, res: Response) => {
           $concat: [{ $toString: ["$anoRadi"] }, { $toString: ["$contRadi"] }],
         },
         fechaRadi: 1,
-        horaRadi: { $hour: "$fechaRadi" },
-        minRadi: { $minute: "$fechaRadi" },
+        horaRadi: {$concat:[{$toString:{ $hour: "$fechaRadi" }},":",{$toString:{ $minute: "$fechaRadi" }}]},
         nit: {$concat:[
           {$toString:["$nit"]}
         ]},

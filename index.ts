@@ -4,7 +4,7 @@ import * as routes from "./src/routes/index";
 import { cambio_contra_automatico } from "./src/global/global";
 
 require("dotenv").config();
-mongoose.set('strictQuery', true);
+mongoose.set('strictQuery', true);//Esto oculta una alerta de mongo en consola, quitar si es necesario.
 const PORT = process.env.PORT || 9001;
 const app = express();
 
