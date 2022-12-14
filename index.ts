@@ -4,7 +4,7 @@ import * as routes from "./src/routes/index";
 import { cambio_contra_automatico } from "./src/global/global";
 
 require("dotenv").config();
-
+mongoose.set('strictQuery', true);
 const PORT = process.env.PORT || 9001;
 const app = express();
 
@@ -42,10 +42,10 @@ app.use("/api", routes.CORRES);
 app.use("/api", routes.CORRESINFOR);
 app.use("/api", routes.MACORR);
 app.use("/api", routes.USUVUE);
+app.use("/api", routes.RESCORR);
 // app.use("/api", routes.ACTIV);
 // app.use("/api", routes.CIUDA);
 // app.use("/api", routes.CORRES);
-// app.use("/api", routes.RESCORR);
 // app.use("/api", routes.TERCE);
 // app.use("/api", routes.USUAR);
 app.use("/api", routes.CORR864);
