@@ -41,7 +41,7 @@ export const getCorres = async (req: Request, res: Response) => {
           $project: {
             _id: 0,
             fecha: { $substr: ["$fecha", 0, 10] },
-            horaFecha: {$concat:[{$toString:{ $hour: "$fecha" }},":",{$toString:{ $minute: "$fecha" }}]},
+            hora: { $concat: [{ $toString: { $hour: "$fecha" } }, ":", { $toString: { $minute: "$fecha" } }] },
             fechaCau: { $substr: ["$fechaCau", 0, 10] },
             fechaEntre: { $substr: ["$fechaEntre", 0, 10] },
             fechaFact: { $substr: ["$fechaFact", 0, 10] },
