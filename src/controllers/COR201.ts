@@ -184,7 +184,8 @@ export const getCorresF8 = async (req: Request, res: Response) => {
       ])
       .project({
         _id: 0,
-        llave: {
+        llave:1,
+        llaveR: {
           $concat: [{ $toString: ["$llave.anoLlave"] }, { $toString: ["$llave.cont"] }],
         },
         fecha: 1,
