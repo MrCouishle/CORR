@@ -30,77 +30,110 @@ export const putCorres = async (req: Request, res: Response) => {
 
 export const getCorres = async (req: Request, res: Response) => {
   try {
+    const { anoLlave, cont } = req.params;
+
     const llave = {
-      anoLlave: Number(req.params.anoLlave),
-      cont: Number(req.params.cont),
-    };
-    // const data = await corres_model.findOne({ llave }, omitirId);
+      anoLlave:Number(anoLlave),
+      cont:Number(cont)
+    }
     const data = await corres_model
       .aggregate([
         {
-          $project: {
-            _id: 0,
-            fecha: { $substr: ["$fecha", 0, 10] },
-            hora: { $concat: [{ $toString: { $hour: "$fecha" } }, ":", { $toString: { $minute: "$fecha" } }] },
-            fechaCau: { $substr: ["$fechaCau", 0, 10] },
-            fechaEntre: { $substr: ["$fechaEntre", 0, 10] },
-            fechaFact: { $substr: ["$fechaFact", 0, 10] },
-            fechaModi: { $substr: ["$fechaModi", 0, 10] },
-            fechaPag: { $substr: ["$fechaPag", 0, 10] },
-            ubicacion: 1,
-            direct: 1,
-            subdirect: 1,
-            llave: 1,
-            tablaOper: 1,
-            errorRips: 1,
-            llaveResp: 1,
-            codAux: 1,
-            nit: 1,
-            tipoCorres: 1,
-            descrip: 1,
-            ser: 1,
-            operdiri: 1,
-            dep: 1,
-            fol: 1,
-            fold: 1,
-            esta: 1,
-            anex: 1,
-            tipoAnexo: 1,
-            otroAnexo: 1,
-            nroFact: 1,
-            monto: 1,
-            nroGuia: 1,
-            persentre: 1,
-            observ: 1,
-            tablaDep: 1,
-            descripcion: 1,
-            nroEnvio: 1,
-            proceden: 1,
-            deptoremi: 1,
-            manejo: 1,
-            holding: 1,
-            centroCos: 1,
-            ciudad: 1,
-            cargoOps: 1,
-            loteCau: 1,
-            comprobCau: 1,
-            lotePag: 1,
-            comprobPag: 1,
-            oper: 1,
-            operModi: 1,
-            diasTipco: 1,
-            medioIng: 1,
-            contAtnt1: 1,
-            contAtnt2: 1,
-            contAtnt3: 1,
+          $lookup: {
+            from: "terce",
+            localField: "nit",
+            foreignField: "codigo",
+            as: "ter",
+          },
+        },
+        {
+          $lookup: {
+            from: "tipco",
+            let: { tipoCorres: { $toString: "$tipoCorres" } },
+            pipeline: [
+              {
+                $match: {
+                  $expr: { $eq: ["$codigo", "$$tipoCorres"] },
+                },
+              },
+            ],
+            as: "tipc",
           },
         },
       ])
-      .match({
-        llave: llave,
-      });
-    get_response("corres", data[0], `${llave.anoLlave} / ${llave.cont}`, res);
+      .project({
+        _id: 0,
+        llave: 1,
+        anoLlave: { $toString: ["$llave.anoLlave"] },
+        contLlave: { $toString: ["$llave.cont"] },
+        fecha: { $substr: ["$fecha", 0, 10] },
+        hora: { $concat: [{ $toString: { $hour: "$fecha" } }, ":", { $toString: { $minute: "$fecha" } }] },
+        minutos: { $minute: "$fecha" },
+        nit: { $toString: ["$nit"] },
+        tipoCorres: 1,
+        descripTipco: {
+          $concat: [{ $arrayElemAt: ["$tipc.descripcion", 0] }],
+        },
+        descrip: 1,
+        descripTer: { $concat: [{ $arrayElemAt: ["$ter.descrip", 0] }] },
+        ser: 1,
+        operdiri: 1,
+        dep: 1,
+        fol: 1,
+        fold: 1,
+        esta: 1,
+        descripEsta: {
+          $switch: {
+            branches: [
+              { case: { $eq: ["$esta", 1] }, then: "PENDIENTE LEER" },
+              { case: { $eq: ["$esta", 2] }, then: "LEÍDA SIN RESPUESTA" },
+              { case: { $eq: ["$esta", 3] }, then: "LEÍDA CON ÉXITO" },
+              { case: { $eq: ["$esta", 4] }, then: "RESPUESTA CONFIRMADA" },
+            ],
+            default: "SIN DESCRIPCION DE ESTADO",
+          },
+        },
+        anex: 1,
+        tipoAnexo: 1,
+        otroAnexo: 1,
+        nroFact: 1,
+        monto: 1,
+        fechaFact: { $substr: ["$fechaFact", 0, 10] },
+        fechaEntre: { $substr: ["$fechaEntre", 0, 10] },
+        nroGuia: 1,
+        persentre: 1,
+        observ: 1,
+        tablaDep: 1,
+        codAux: 1,
+        tablaOper: 1,
+        llaveResp: 1,
+        errorRips: 1,
+        nroEnvio: 1,
+        proceden: 1,
+        deptoremi: 1,
+        manejo: 1,
+        holding: 1,
+        centroCos: 1,
+        ciudad: 1,
+        cargoOps: 1,
+        llaveCausa: { $concat: ["$loteCau", "$comprobCau"] },
+        fechaCau: { $substr: ["$fechaCau", 0, 10] },
+        llavePago: { $concat: ["$lotePag", "$comprobPag"] },
+        fechaPag: { $concat: ["$lotePag", "$comprobPag"] },
+        oper: 1,
+        operModi: 1,
+        fechaModi: { $substr: ["$fechaModi", 0, 10] },
+        diasTipco: 1,
+        medioIng: 1,
+        contAtnt1: 1,
+        contAtnt2: 1,
+        contAtnt3: 1,
+      })
+      .match({llave:llave})
+
+    get_response("res", data[0], llave, res)
   } catch (error) {
+    console.log(error);
     res.json({ msg: error });
   }
 };
