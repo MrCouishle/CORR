@@ -33,9 +33,9 @@ export const getCorres = async (req: Request, res: Response) => {
     const { anoLlave, cont } = req.params;
 
     const llave = {
-      anoLlave:Number(anoLlave),
-      cont:Number(cont)
-    }
+      anoLlave: Number(anoLlave),
+      cont: Number(cont),
+    };
     const data = await corres_model
       .aggregate([
         {
@@ -129,9 +129,9 @@ export const getCorres = async (req: Request, res: Response) => {
         contAtnt2: 1,
         contAtnt3: 1,
       })
-      .match({llave:llave})
+      .match({ llave: llave });
 
-    get_response("res", data[0], llave, res)
+    get_response("res", data[0], llave, res);
   } catch (error) {
     console.log(error);
     res.json({ msg: error });
@@ -184,12 +184,9 @@ export const getCorresF8 = async (req: Request, res: Response) => {
       ])
       .project({
         _id: 0,
-        llave:1,
-        llaveR: {
-          $concat: [{ $toString: ["$llave.anoLlave"] }, { $toString: ["$llave.cont"] }],
-        },
+        llave: 1,
         fecha: 1,
-        nit: { $concat: [{ $toString: ["$nit"] }] },
+        nit: 1,
         tipoCorres: 1,
         descrip_tipco: { $concat: [{ $arrayElemAt: ["$tipco.descripcion", 0] }] },
         descrip: 1,

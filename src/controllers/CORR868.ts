@@ -34,19 +34,14 @@ export const getCorresF8 = async (req: Request, res: Response) => {
       ])
       .project({
         _id: 0,
-        llave: {
-          $concat: [
-            { $toString: ["$llave.anoLlave"] },
-            { $toString: ["$llave.cont"] },
-          ],
-        },
+        llave: 1,
         anoLlave: { $toString: ["$llave.anoLlave"] },
         contLlave: { $toString: ["$llave.cont"] },
         fecha: { $substr: ["$fecha", 0, 10] },
         fechaR: { $substr: ["$fecha", 0, 10] },
-        horaFecha: {$concat:[{$toString:{ $hour: "$fecha" }},":",{$toString:{ $minute: "$fecha" }}]},
+        hora: { $concat: [{ $toString: { $hour: "$fecha" } }, ":", { $toString: { $minute: "$fecha" } }] },
         minutos: { $minute: "$fecha" },
-        nit: { $toString: ["$nit"] },
+        nit: { $concat: [{ $toString: ["$nit"] }] },
         tipoCorres: 1,
         descripTipco: {
           $concat: [{ $arrayElemAt: ["$tipc.descripcion", 0] }],
@@ -107,17 +102,16 @@ export const getCorresF8 = async (req: Request, res: Response) => {
         contAtnt3: 1,
       })
       .match({
-        $or:[
-          {nit:{$regex:dato, $options:"i"}},
-          {descripEsta:{$regex:dato, $options:"i"}},
-          {descripTipco:{$regex:dato, $options:"i"}},
-          {llave:{$regex:dato, $options:"i"}},
-          {oper:{$regex:dato, $options:"i"}}
-        ]
+        $or: [
+          { nit: { $regex: dato, $options: "i" } },
+          { descripEsta: { $regex: dato, $options: "i" } },
+          { descripTipco: { $regex: dato, $options: "i" } },
+          { llave: { $regex: dato, $options: "i" } },
+          { oper: { $regex: dato, $options: "i" } },
+        ],
       })
       .skip(Number(desde))
       .limit(Number(cantidad));
-
     get_all_response(data, res);
   } catch (error) {
     console.log(error);
@@ -156,10 +150,7 @@ export const getCorres = async (req: Request, res: Response) => {
       .project({
         _id: 0,
         llave: {
-          $concat: [
-            { $toString: ["$llave.anoLlave"] },
-            { $toString: ["$llave.cont"] },
-          ],
+          $concat: [{ $toString: ["$llave.anoLlave"] }, { $toString: ["$llave.cont"] }],
         },
         anoLlave: { $toString: ["$llave.anoLlave"] },
         contLlave: { $toString: ["$llave.cont"] },
@@ -226,9 +217,9 @@ export const getCorres = async (req: Request, res: Response) => {
         contAtnt2: 1,
         contAtnt3: 1,
       })
-      .match({llave:{$regex:llave, $options:"i"}})
+      .match({ llave: { $regex: llave, $options: "i" } });
 
-    get_response("res", data[0], llave, res)
+    get_response("res", data[0], llave, res);
   } catch (error) {
     console.log(error);
     res.json({ msg: error });
