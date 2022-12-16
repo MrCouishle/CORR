@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 9001;
 const app = express();
 
 cambio_contra_automatico();
-copia_segurdad()
+//copia_segurdad()
 //Este lo llamamos siempre que se inicie el servidor, dado el caso que el servidor se encuentre apagado a las 12:01 AM
 
 

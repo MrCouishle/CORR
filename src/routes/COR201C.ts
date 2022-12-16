@@ -1,12 +1,18 @@
 import express from "express";
-import {getTerce} from "../controllers/COR201C";
+import {
+  getTerce,
+  postTerce,
+  putTerce,
+  deleteTerce,
+  getTerceId,
+} from "../controllers/COR201C";
 import { JwtValidator_ } from "../helpers/validators";
 
 export const route_terce = express.Router();
 
 route_terce.get("/terce", getTerce);
-// route_serco.post("/serco", postSerco);
-// route_serco.put("/serco/:codigo", putSerco);
-// route_serco.delete("/serco/:codigo", deleteSerco);
-// route_serco.get("/f8&serco/:desde/:cantidad", f8Serco);
-// route_serco.get("/serco/:codigo", getSercoId);
+route_terce.post("/terce", postTerce);
+route_terce.put("/terce/:codigo", putTerce);
+route_terce.delete("/terce/:codigo", deleteTerce);
+route_terce.get("/terce/:codigo", getTerceId);
+// route_terce.get("/f8&terce/:desde/:cantidad", f8Terce);
