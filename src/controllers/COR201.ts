@@ -309,24 +309,22 @@ export const envioCorreos = async (req: Request, res: Response) => {
     res.json({ msg: error });
   }
 };
-
-export const ultCorres = async (req:Request, res:Response) => {
+export const ultCorres = async (req: Request, res: Response) => {
   try {
     const data = await corres_model
-    // .find().sort({_id:-1}).limit(1)
-    .find({},{
-      _id:0,
-      llave:1,
-      llaveR:{ $concat:[{$toString:"$llave.anoLlave"},{$toString:"$llave.cont"}]},
-      fecha:1,
-      fechaR:{ $substr: ["$fecha", 0, 10] },
-      hora:{ $concat: [{ $toString: { $hour: "$fecha" } }, ":", { $toString: { $minute: "$fecha" } }] },
-    })
-    .sort({_id:-1})
-    .limit(1)
+      .find({
+        _id: 0,
+        llave: 1,
+        llaveR: { $concat: [{ $toString: "$llave.anoLlave" }, { $toString: "$llave.cont" }] },
+        fecha: 1,
+        fechaR: { $substr: ["$fecha", 0, 10] },
+        hora: { $concat: [{ $toString: { $hour: "$fecha" } }, ":", { $toString: { $minute: "$fecha" } }] },
+      })
+      .sort({ _id: -1 })
+      .limit(1);
     get_all_response(data, res);
   } catch (error) {
-    console.log(error);
-    res.json({msg:error});
+    console.error(error);
+    res.json({ msg: error });
   }
-}
+};

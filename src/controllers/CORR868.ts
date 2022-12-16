@@ -35,7 +35,7 @@ export const getCorresF8 = async (req: Request, res: Response) => {
       .project({
         _id: 0,
         llave: 1,
-        llave2:{$concat:["$llave.anoLlave", "$llave.cont"] },
+        llaveBusqueda: { $concat: [{ $toString: ["$llave.anoLlave"] }, { $toString: ["$llave.cont"] }] },
         anoLlave: { $toString: ["$llave.anoLlave"] },
         contLlave: { $toString: ["$llave.cont"] },
         fecha: { $substr: ["$fecha", 0, 10] },
@@ -107,15 +107,16 @@ export const getCorresF8 = async (req: Request, res: Response) => {
           { nit: { $regex: dato, $options: "i" } },
           { descripEsta: { $regex: dato, $options: "i" } },
           { descripTipco: { $regex: dato, $options: "i" } },
-          { llave2: { $regex: dato, $options: "i" } },
+          { llaveBusqueda: { $regex: dato, $options: "i" } },
           { oper: { $regex: dato, $options: "i" } },
         ],
       })
       .skip(Number(desde))
       .limit(Number(cantidad));
+    
     get_all_response(data, res);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.json({ msg: error });
   }
 };
