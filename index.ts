@@ -42,6 +42,7 @@ app.use("/api", routes.HOLDING);
 app.use("/api", routes.CARGOPS);
 app.use("/api", routes.CORRES);
 app.use("/api", routes.CORRESINFOR);
+app.use("/api", routes.CORRPRU);
 app.use("/api", routes.MACORR);
 app.use("/api", routes.USUVUE);
 app.use("/api", routes.RESCORR);
