@@ -8,10 +8,11 @@ import {
   get_response,
   omitirId,
 } from "../global/global";
-import { corres_model } from "../models/CORRES";
-
-export const getImpresionCorr = async (req: Request, res: Response) => {
+import { corrpru_model } from "../models/CORRPRU";
+// Pruebita
+export const getImp1M = async (req: Request, res: Response) => {
   try {
+    const { desde, cantidad } = req.params
     const {
       nit,
       dep,
@@ -32,37 +33,6 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
     let manejoo = {};
     let estadoo = {};
     
-  //   const festivos = [[10],[],[21],[14,15],[30],[20,27],[4,20],[15],[],[17],[7,14],[8]]; //CUANDO SE LLEGUE AL 2023 QUITAR ESTA LINEA
-  //   // const festivos = [[9],[],[20],[6,7],[1,22],[12,19],[3,20],[7,21],[],[16],[6,13],[8,25]]; ESTE ARRAY ES PARA EL 2023
-  //   function calculoEntrega (festivos, diaIni, diasEntrega ){
-  //     let diaPropuesto = new Date (diaIni.getFullYear(), diaIni.getMonth(), diaIni.getDate());
-  //     let i = 1;
-
-  //     while (diasEntrega > 0) {
-  //       let festivo = false;
-  //       diaPropuesto = new Date (diaIni.getFullYear(), diaIni.getMonth(), diaIni.getDate() + 1);
-  //       if (diaPropuesto.getDay() > 0 && diaPropuesto.getDay() < 6){
-  //       let m = diaPropuesto.getMonth();
-  //       let dia = diaPropuesto.getDate();
-
-  //       for (let d in festivos[m]){
-  //         if (dia === festivos[m][d]){
-  //           festivo = true;
-  //           break;
-  //         }
-  //       }
-  //       if(!festivo){
-  //         diasEntrega--;
-  //       }
-  //     }
-  //     i++
-  //   }
-  //   return diaPropuesto;
-  
-  //   const diasFinal = calculoEntrega(diaIni,10,festivos);
-  //   console.log(`Dia inicial: ${diaIni.toString()}`);
-  //   console.log(`Dia final: ${diasFinal.toString()}`);
-  // }
     if (nit != "99") nitt = { nit: Number(nit) };
     if (dep != "**") depp = { dep: dep };
     if (tipoCorr != "**") tipoCorrr = { tipoCorres: tipoCorr };
@@ -77,7 +47,7 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
     if (manejo != "**") manejoo = { manejo: Number(manejo) };
     if (estado != "**" && estado != null ) {estadoo = { estado: Number(estado)} };
 
-    const data = await corres_model
+    const data = await corrpru_model
       .aggregate([
         {
           $lookup: {
@@ -221,13 +191,6 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
             then: "INFORMATIVO",
             else: "RESOLUTIVO",
           },
-          //   $switch:{
-          //     branches:[
-          //       {case:{$eq:["manejo":1]}, then:"INFORMATIVO"},
-          //       {case:{$eq:["manejo":2]}, then:"RESOLUTIVO"}
-          //     ],
-          //     default:"Sin definir"
-          // }, funciona igual pero con un switch
         },
         proceden: 1,
         procedenR: {
@@ -255,9 +218,6 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
             in: { $add: [{ $arrayElemAt: ["$rescorr.fecha", 0] }] },
           },
         },
-        // fehcaVenRes:{
-
-        // },
         cargo: { $concat: [{ $arrayElemAt: ["$depc.cargo", 0] }] },
         medioIng: 1,
       })
@@ -267,19 +227,19 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
           nitt,
           depp,
           tipoCorrr,
-          { fecha: { $gte: new Date(fechaIni) } },
-          { fecha: { $lte: new Date(fechaFin) } },
+          // { fecha: { $gte: new Date(fechaIni) } },
+          // { fecha: { $lte: new Date(fechaFin) } },
           jornadaa,
           procedenn,
           manejoo,
           estadoo
         ],
-      });
-
+      })
+      .skip(Number(desde))
+      .limit(Number(cantidad));
     get_all_response(data, res);
-    // console.log("RES en la validacion de COR301", res);
-    console.log("LENGTH en la validacion de COR301", data.length);
-    // console.log("DATA en la validacion de COR301", data);
+    console.log("LENGTH en la respuesta de CORRPRU", data.length);
+    
   } catch (error) {
     console.log(error);
     res.json({ msg: error });
