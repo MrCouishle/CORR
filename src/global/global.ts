@@ -3,7 +3,8 @@ import jwt from "jsonwebtoken";
 import cron from "node-cron";
 import bcrypt from "bcrypt";
 import { usuvue_model } from "../models/USUVUE";
-import {spawn} from "child_process"
+import { spawn } from "child_process";
+const fs = require("fs");
 
 export const maxlength = (num: Number) =>
   `({PATH}): {VALUE} sobrepasa el máximo de caracteres permitido (${num})`;
@@ -303,9 +304,10 @@ export const generarJwt = (uid = "") => {
 	segundo: 0-59
 */
 
-cron.schedule("00 0 * * *", () => {
+cron.schedule("1 0 * * *", () => {
   //cron.schedule("*/5 * * * * *", () => {
   cambio_contra_automatico();
+  copia_segurdad();
 });
 
 export function diacriticSensitiveRegex(string: any) {
@@ -335,22 +337,38 @@ export const cambio_contra_automatico = async () => {
   );
 };
 
-cron.schedule("30 10 * * *", () => {
+export const copia_segurdad = () => {
+  console.log("Creando copia de seguridad...");
+
+  let fecha = new Date();
+  const archivoName = `${fecha.getFullYear()}-${fecha.getMonth()}-${fecha.getDate()}`;
+
   let backupProcess = spawn("mongodump", [
     "--host=localhost",
     "--port=27017",
+    "--db=scPros",
     // "--username=diego",
     // "--password=Diego09",
-    "--archive=C:/Backup",
-    //"--gzip",
+    `--out=C:/BACKUP_MONGO_CORRESPONDENCIA/${archivoName}/dump`,
+    "--gzip",
   ]);
 
   backupProcess.on("exit", (code, signal) => {
-    if (code) console.log("Backup process exited with code ", code);
+    if (code) console.log("Error al genrera backup, codigo: ", code);
     else if (signal)
-      console.error("Backup process was killed with singal ", signal);
-    else console.log("Successfully backedup the database");
+      console.error("El proceso de backup tuvo un error: ", signal);
+    else {
+      fs.writeFile(
+        `C:/BACKUP_MONGO_CORRESPONDENCIA/${archivoName}/restaurar.bat`,
+        "mongorestore --uri mongodb://localhost:27017 --gzip --drop",
+        function (err: any) {
+          if (err) {
+            return console.log(err);
+          }
+          console.log("Bat restaurador generado con exito");
+        }
+      );
+      console.log("Backup generado con exito");
+    }
   });
-});
-
-
+};

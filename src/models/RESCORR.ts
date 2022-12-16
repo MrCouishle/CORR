@@ -194,8 +194,7 @@ const rescorr_schema = new Schema<rescorr>({
       type: String,
       default: " "
     },
-  })
-
-rescorr_schema.index({ llave: 1 }, { unique: true });
+  });
+rescorr_schema.index({ codResp: 1 }, { unique: true });
 
 export const rescorr_model = model<rescorr>("rescorr", rescorr_schema);

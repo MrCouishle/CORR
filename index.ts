@@ -1,14 +1,16 @@
 import mongoose from "mongoose";
 import express, { Request, Response, NextFunction } from "express";
 import * as routes from "./src/routes/index";
-import { cambio_contra_automatico } from "./src/global/global";
+import { cambio_contra_automatico, copia_segurdad } from "./src/global/global";
 
 require("dotenv").config();
 mongoose.set('strictQuery', true);//Esto oculta una alerta de mongo en consola, quitar si es necesario.
 const PORT = process.env.PORT || 9001;
 const app = express();
 
-cambio_contra_automatico();  //Este lo llamamos siempre que se inicie el servidor, dado el caso que el servidor se encuentre apagado a las 12:01 AM
+cambio_contra_automatico();
+//copia_segurdad()
+//Este lo llamamos siempre que se inicie el servidor, dado el caso que el servidor se encuentre apagado a las 12:01 AM
 
 
 app.use((req: Request, res: Response, next: NextFunction) => {
@@ -45,10 +47,10 @@ app.use("/api", routes.MACORR);
 app.use("/api", routes.USUVUE);
 app.use("/api", routes.RESCORR);
 app.use("/api", routes.USUAR);
+app.use("/api", routes.TERCE);
 // app.use("/api", routes.ACTIV);
 // app.use("/api", routes.CIUDA);
 // app.use("/api", routes.CORRES);
-// app.use("/api", routes.TERCE);
 app.use("/api", routes.CORR864);
 app.use("/api", routes.CORR868);
 app.use("/api", routes.CORR869);
