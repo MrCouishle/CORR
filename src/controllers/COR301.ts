@@ -275,6 +275,12 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
           estadoo
         ],
       });
+      console.log("Antes");
+      for (let i = 0; i <2; i++) {
+        res;
+      console.log("entre");
+      }
+      console.log("despues");
 
     get_all_response(data, res);
     // console.log("RES en la validacion de COR301", res);
