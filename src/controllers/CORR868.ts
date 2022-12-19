@@ -6,17 +6,19 @@ import { corres_model } from "../models/CORRES";
 export const getCorresF8 = async (req: Request, res: Response) => {
   try {
     const { desde, cantidad } = req.params;
-    const { dato, columna, anoLlave, cont } = req.query;
+    const { dato, columna } = req.query;
 
     let body:any
     body = {[`${columna}`]: { $regex: dato, $options: "i" }}
     if (!dato) body = {}
 
     if (columna === "llave") {
+
       const llave = {
-        anoLlave:Number(anoLlave),
-        cont:Number(cont)
+        anoLlave:Number(dato?.toString().slice(0,4)),
+        cont:Number(dato?.toString().slice(4, dato?.toString().length))
       }
+      console.log(dato?.toString().slice(0,4))
       body = {llave:llave}
     }
 
