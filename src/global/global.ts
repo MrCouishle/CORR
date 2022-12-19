@@ -3,8 +3,9 @@ import jwt from "jsonwebtoken";
 import cron from "node-cron";
 import bcrypt from "bcrypt";
 import { usuvue_model } from "../models/USUVUE";
-import { spawn } from "child_process";
+import { spawn, exec } from "child_process";
 const fs = require("fs");
+var rimraf = require("rimraf");
 
 export const maxlength = (num: Number) =>
   `({PATH}): {VALUE} sobrepasa el máximo de caracteres permitido (${num})`;
@@ -304,9 +305,11 @@ export const generarJwt = (uid = "") => {
 	segundo: 0-59
 */
 
-cron.schedule("1 0 * * *", () => {
+cron.schedule("59 23 * * *", () => {
   //cron.schedule("*/5 * * * * *", () => {
-  cambio_contra_automatico();
+  setTimeout(() => {
+    cambio_contra_automatico();
+  }, 61000);
   copia_segurdad();
 });
 
@@ -335,6 +338,7 @@ export const cambio_contra_automatico = async () => {
     { llaveOper: "GEBC" },
     { $set: { clave: new_password } }
   );
+  console.log("Cambia contra")
 };
 
 export const copia_segurdad = () => {
@@ -368,6 +372,19 @@ export const copia_segurdad = () => {
           console.log("Bat restaurador generado con exito");
         }
       );
+     
+        let zip_clave = exec(`7z a C:\\BACKUP_MONGO_CORRESPONDENCIA\\${archivoName}\\backup.7z -pprosoft -mhe C:\\BACKUP_MONGO_CORRESPONDENCIA\\${archivoName}\\dump C:\\BACKUP_MONGO_CORRESPONDENCIA\\${archivoName}\\restaurar.bat`, (error, stdout, stderr) =>{
+          if(error){
+            console.log("Error al generar .zip")
+            console.log(error)
+            return
+          }
+          console.log("ZIP Generado con exito")
+          rimraf(`C:\\BACKUP_MONGO_CORRESPONDENCIA\\${archivoName}\\dump`, function () { console.log("done"); });
+          fs.unlinkSync(`C:\\BACKUP_MONGO_CORRESPONDENCIA\\${archivoName}\\restaurar.bat`)
+        })
+        //console.log(zip_clave)
+    
       console.log("Backup generado con exito");
     }
   });
