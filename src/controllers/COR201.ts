@@ -60,6 +60,20 @@ export const getCorres = async (req: Request, res: Response) => {
             as: "tipc",
           },
         },
+        {
+          $lookup: {
+            from: "remidep",
+            let: { deptoremi: { $toString: "$deptoremi" } },
+            pipeline: [
+              {
+                $match: {
+                  $expr: { $eq: ["$codigo", "$$deptoremi"] },
+                },
+              },
+            ],
+            as: "remidep",
+          },
+        },
       ])
       .project({
         _id: 0,
@@ -92,6 +106,9 @@ export const getCorres = async (req: Request, res: Response) => {
             ],
             default: "SIN DESCRIPCION DE ESTADO",
           },
+        },
+        descripDeptoremi: {
+          $concat: [{ $arrayElemAt: ["$tipc.descripcion", 0] }],
         },
         anex: 1,
         tipoAnexo: 1,
@@ -317,14 +334,15 @@ export const ultCorres = async (req: Request, res: Response) => {
         {
           _id: 0,
           llave: 1,
+          fecha: 1,
           llaveR: { $concat: [{ $toString: "$llave.anoLlave" }, { $toString: "$llave.cont" }] },
-          fecha: { $substr: ["$fecha", 0, 10] },
+          fechaR: { $substr: ["$fecha", 0, 10] },
           hora: { $concat: [{ $toString: { $hour: "$fecha" } }, ":", { $toString: { $minute: "$fecha" } }] },
         }
       )
       .sort({ _id: -1 })
       .limit(1);
-    get_all_response(data, res);
+    get_all_response(data[0], res);
   } catch (error) {
     console.error(error);
     res.json({ msg: error });

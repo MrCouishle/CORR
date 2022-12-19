@@ -31,6 +31,20 @@ export const getCorresF8 = async (req: Request, res: Response) => {
             as: "tipc",
           },
         },
+        {
+          $lookup: {
+            from: "remidep",
+            let: { deptoremi: { $toString: "$deptoremi" } },
+            pipeline: [
+              {
+                $match: {
+                  $expr: { $eq: ["$codigo", "$$deptoremi"] },
+                },
+              },
+            ],
+            as: "remidep",
+          },
+        },
       ])
       .project({
         _id: 0,
@@ -45,6 +59,9 @@ export const getCorresF8 = async (req: Request, res: Response) => {
         nit: { $concat: [{ $toString: ["$nit"] }] },
         tipoCorres: 1,
         descripTipco: {
+          $concat: [{ $arrayElemAt: ["$remidep.descripcion", 0] }],
+        },
+        descripDeptoremi: {
           $concat: [{ $arrayElemAt: ["$tipc.descripcion", 0] }],
         },
         descrip: 1,
@@ -113,7 +130,7 @@ export const getCorresF8 = async (req: Request, res: Response) => {
       })
       .skip(Number(desde))
       .limit(Number(cantidad));
-    
+
     get_all_response(data, res);
   } catch (error) {
     console.error(error);
