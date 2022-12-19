@@ -10,6 +10,7 @@ export const getCorresF8 = async (req: Request, res: Response) => {
 
     let body:any
     body = {[`${columna}`]: { $regex: dato, $options: "i" }}
+    if (!dato) body = {}
 
     if (columna === "llave") {
       const llave = {
