@@ -6,7 +6,23 @@ import { corres_model } from "../models/CORRES";
 export const getCorresF8 = async (req: Request, res: Response) => {
   try {
     const { desde, cantidad } = req.params;
-    const { dato } = req.query;
+    const { dato, columna } = req.query;
+
+    let body:any
+    body = {[`${columna}`]: { $regex: dato, $options: "i" }}
+    if (!dato) body = {}
+
+    if (columna === "llave") {
+
+      const llave = {
+        anoLlave:Number(dato?.toString().slice(0,4)),
+        cont:Number(dato?.toString().slice(4, dato?.toString().length))
+      }
+      console.log(dato?.toString().slice(0,4))
+      body = {llave:llave}
+    }
+
+
     const data = await corres_model
       .aggregate([
         {
@@ -49,12 +65,24 @@ export const getCorresF8 = async (req: Request, res: Response) => {
       .project({
         _id: 0,
         llave: 1,
-        llaveBusqueda: { $concat: [{ $toString: ["$llave.anoLlave"] }, { $toString: ["$llave.cont"] }] },
+        llaveBusqueda: {
+          $concat: [
+            { $toString: ["$llave.anoLlave"] },
+            { $toString: ["$llave.cont"] },
+          ],
+        },
         anoLlave: { $toString: ["$llave.anoLlave"] },
         contLlave: { $toString: ["$llave.cont"] },
         fecha: { $substr: ["$fecha", 0, 10] },
         fechaR: { $substr: ["$fecha", 0, 10] },
-        hora: { $concat: [{ $toString: { $hour: "$fecha" } }, ":", { $toString: { $minute: "$fecha" } }] },
+        hora: {
+          $concat: [
+            { $toString: { $hour: "$fecha" } },
+            ":",
+            { $toString: { $minute: "$fecha" } },
+          ],
+        },
+        minutos: { $minute: "$fecha" },
         nit: { $concat: [{ $toString: ["$nit"] }] },
         tipoCorres: 1,
         descripTipco: {
@@ -118,15 +146,7 @@ export const getCorresF8 = async (req: Request, res: Response) => {
         contAtnt2: 1,
         contAtnt3: 1,
       })
-      .match({
-        $or: [
-          { nit: { $regex: dato, $options: "i" } },
-          { descripEsta: { $regex: dato, $options: "i" } },
-          { descripTipco: { $regex: dato, $options: "i" } },
-          { llaveBusqueda: { $regex: dato, $options: "i" } },
-          { oper: { $regex: dato, $options: "i" } },
-        ],
-      })
+      .match(body)
       .skip(Number(desde))
       .limit(Number(cantidad));
 
@@ -168,7 +188,10 @@ export const getCorres = async (req: Request, res: Response) => {
       .project({
         _id: 0,
         llave: {
-          $concat: [{ $toString: ["$llave.anoLlave"] }, { $toString: ["$llave.cont"] }],
+          $concat: [
+            { $toString: ["$llave.anoLlave"] },
+            { $toString: ["$llave.cont"] },
+          ],
         },
         anoLlave: { $toString: ["$llave.anoLlave"] },
         contLlave: { $toString: ["$llave.cont"] },
