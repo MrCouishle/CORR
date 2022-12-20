@@ -150,7 +150,9 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
         _id: 0,
         cont: { $concat: [{ $toString: ["$llave.cont"] }] },
         anoLlave: { $concat: [{ $toString: ["$llave.anoLlave"] }] },
-        fecha: 1,
+        fecha:1,
+        fechaR: {$substr: ["$fecha",0,10]},
+        hora: { $concat: [{ $toString: {$hour: "$fecha"}}, ":", { $toString: {$minute:"$fecha"}}]},
         esta: 1,
         estaR:{
           $switch:{
@@ -165,8 +167,6 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
             default:"SIN DEFINIR"
           }
         },
-        hour: { $hour: "$fecha" },
-        minute: { $minute: "$fecha" },
         descrip: 1,
         nit: 1,
         descripTer: { $concat: [{ $arrayElemAt: ["$ter.descrip", 0] }] },
@@ -216,26 +216,23 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
         oper: 1,
         manejo: 1,
         manejoR: {
-          $cond: {
-            if: { $lt: ["$manejo", 2] },
-            then: "INFORMATIVO",
-            else: "RESOLUTIVO",
+            $switch:{
+              branches:[
+                {case:{$eq:["$manejo",1]}, then:"INFORMATIVO"},
+                {case:{$eq:["$manejo",2]}, then:"RESOLUTIVO"}
+              ],
+              default:"SIN DEFINIR"
           },
-          //   $switch:{
-          //     branches:[
-          //       {case:{$eq:["manejo":1]}, then:"INFORMATIVO"},
-          //       {case:{$eq:["manejo":2]}, then:"RESOLUTIVO"}
-          //     ],
-          //     default:"Sin definir"
-          // }, funciona igual pero con un switch
         },
         proceden: 1,
         procedenR: {
-          $cond: {
-            if: { $lt: ["$proceden", 2] },
-            then: "EXTERNO",
-            else: "INTERNO",
-          },
+          $switch:{
+            branches:[
+              {case:{$eq:["$proceden",1]}, then:"EXTERNO"},
+              {case:{$eq:["$proceden",2]}, then:"INTERNO"}
+            ],
+            default:"SIN DEFINIR"
+        },
         },
         llaveResp: {
           $let: {

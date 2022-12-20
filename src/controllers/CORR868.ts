@@ -55,7 +55,6 @@ export const getCorresF8 = async (req: Request, res: Response) => {
         fecha: { $substr: ["$fecha", 0, 10] },
         fechaR: { $substr: ["$fecha", 0, 10] },
         hora: { $concat: [{ $toString: { $hour: "$fecha" } }, ":", { $toString: { $minute: "$fecha" } }] },
-        minutos: { $minute: "$fecha" },
         nit: { $concat: [{ $toString: ["$nit"] }] },
         tipoCorres: 1,
         descripTipco: {
