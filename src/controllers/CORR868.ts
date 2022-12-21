@@ -8,20 +8,18 @@ export const getCorresF8 = async (req: Request, res: Response) => {
     const { desde, cantidad } = req.params;
     const { dato, columna } = req.query;
 
-    let body:any
-    body = {[`${columna}`]: { $regex: dato, $options: "i" }}
-    if (!dato) body = {}
+    let body: any;
+    body = { [`${columna}`]: { $regex: dato, $options: "i" } };
+    if (!dato) body = {};
 
     if (columna === "llave") {
-
       const llave = {
-        anoLlave:Number(dato?.toString().slice(0,4)),
-        cont:Number(dato?.toString().slice(4, dato?.toString().length))
-      }
-      console.log(dato?.toString().slice(0,4))
-      body = {llave:llave}
+        anoLlave: Number(dato?.toString().slice(0, 4)),
+        cont: Number(dato?.toString().slice(4, dato?.toString().length)),
+      };
+      console.log(dato?.toString().slice(0, 4));
+      body = { llave: llave };
     }
-
 
     const data = await corres_model
       .aggregate([
@@ -61,32 +59,58 @@ export const getCorresF8 = async (req: Request, res: Response) => {
             as: "remidep",
           },
         },
+        {
+          $lookup: {
+            from: "auxtip",
+            localField: "codAux",
+            foreignField: "codigo",
+            as: "auxtip",
+          },
+        },
+        {
+          $lookup: {
+            from: "serco",
+            localField: "ser",
+            foreignField: "codigo",
+            as: "serco",
+          },
+        },
+        {
+          $lookup: {
+            from: "depco",
+            localField: "dep",
+            foreignField: "codigo",
+            as: "depco",
+          },
+        },
       ])
       .project({
         _id: 0,
         llave: 1,
         llaveBusqueda: {
-          $concat: [
-            { $toString: ["$llave.anoLlave"] },
-            { $toString: ["$llave.cont"] },
-          ],
+          $concat: [{ $toString: ["$llave.anoLlave"] }, { $toString: ["$llave.cont"] }],
         },
         anoLlave: { $toString: ["$llave.anoLlave"] },
         contLlave: { $toString: ["$llave.cont"] },
         fecha: { $substr: ["$fecha", 0, 10] },
         fechaR: { $substr: ["$fecha", 0, 10] },
         hora: {
-          $concat: [
-            { $toString: { $hour: "$fecha" } },
-            ":",
-            { $toString: { $minute: "$fecha" } },
-          ],
+          $concat: [{ $toString: { $hour: "$fecha" } }, ":", { $toString: { $minute: "$fecha" } }],
         },
         minutos: { $minute: "$fecha" },
         nit: { $concat: [{ $toString: ["$nit"] }] },
         tipoCorres: 1,
+        responsableDep: {
+          $concat: [{ $arrayElemAt: ["$depco.responsable", 0] }],
+        },
         descripTipco: {
-          $concat: [{ $arrayElemAt: ["$remidep.descripcion", 0] }],
+          $concat: [{ $arrayElemAt: ["$tipc.descripcion", 0] }],
+        },
+        descripSer: {
+          $concat: [{ $arrayElemAt: ["$serco.descripcion", 0] }],
+        },
+        descripAux: {
+          $concat: [{ $arrayElemAt: ["$auxtip.descripcion", 0] }],
         },
         descripDeptoremi: {
           $concat: [{ $arrayElemAt: ["$tipc.descripcion", 0] }],
@@ -188,10 +212,7 @@ export const getCorres = async (req: Request, res: Response) => {
       .project({
         _id: 0,
         llave: {
-          $concat: [
-            { $toString: ["$llave.anoLlave"] },
-            { $toString: ["$llave.cont"] },
-          ],
+          $concat: [{ $toString: ["$llave.anoLlave"] }, { $toString: ["$llave.cont"] }],
         },
         anoLlave: { $toString: ["$llave.anoLlave"] },
         contLlave: { $toString: ["$llave.cont"] },

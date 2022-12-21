@@ -62,15 +62,47 @@ export const getCorres = async (req: Request, res: Response) => {
         },
         {
           $lookup: {
-            from: "remidep",
-            let: { deptoremi: { $toString: "$deptoremi" } },
+            from: "auxtip",
+            let: { codAux: { $toString: "$codAux" } },
             pipeline: [
               {
                 $match: {
-                  $expr: { $eq: ["$codigo", "$$deptoremi"] },
+                  $expr: { $eq: ["$codigo", "$$codAux"] },
                 },
               },
             ],
+            as: "auxtip",
+          },
+        },
+        {
+          $lookup: {
+            from: "auxtip",
+            localField: "codAux",
+            foreignField: "codigo",
+            as: "auxtip",
+          },
+        },
+        {
+          $lookup: {
+            from: "serco",
+            localField: "ser",
+            foreignField: "codigo",
+            as: "serco",
+          },
+        },
+        {
+          $lookup: {
+            from: "depco",
+            localField: "dep",
+            foreignField: "codigo",
+            as: "depco",
+          },
+        },
+        {
+          $lookup: {
+            from: "remidep",
+            localField: "deptoremi",
+            foreignField: "codigo",
             as: "remidep",
           },
         },
@@ -107,8 +139,17 @@ export const getCorres = async (req: Request, res: Response) => {
             default: "SIN DESCRIPCION DE ESTADO",
           },
         },
+        responsableDep: {
+          $concat: [{ $arrayElemAt: ["$depco.responsable", 0] }],
+        },
+        descripSer: {
+          $concat: [{ $arrayElemAt: ["$serco.descripcion", 0] }],
+        },
+        descripAux: {
+          $concat: [{ $arrayElemAt: ["$auxtip.descripcion", 0] }],
+        },
         descripDeptoremi: {
-          $concat: [{ $arrayElemAt: ["$tipc.descripcion", 0] }],
+          $concat: [{ $arrayElemAt: ["$remidep.descripcion", 0] }],
         },
         anex: 1,
         tipoAnexo: 1,
@@ -328,6 +369,7 @@ export const envioCorreos = async (req: Request, res: Response) => {
 };
 export const ultCorres = async (req: Request, res: Response) => {
   try {
+    // const data = await corres_model.find().sort({ $natural: -1 }).limit(1);
     const data = await corres_model
       .find(
         {},
