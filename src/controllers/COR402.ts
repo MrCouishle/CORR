@@ -88,7 +88,8 @@ export const f8Macorr = async (req: Request, res: Response) => {
     const data = await macorr_model
       .aggregate()
       .project({
-        llave:{$concat:["$llave.cl",{$toString:["$llave.codigo"]}]},
+        llave:1,
+        tipo:{$concat:["$llave.cl"]},
         detalle: 1,
         tabla:1,
         oper:1,
@@ -98,7 +99,8 @@ export const f8Macorr = async (req: Request, res: Response) => {
         $or:[
           {llave:{$regex:dato}},
           {detalle:{$regex:dato, $options:"ix"}},
-          {oper:{$regex:dato, $options:"ix"}}
+          {oper:{$regex:dato, $options:"ix"}},
+          {tipo:dato},
         ]
       })
       .skip(Number(desde))

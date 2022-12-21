@@ -310,7 +310,8 @@ cron.schedule("*/60 * * * *", () => {
 });
 
 cron.schedule("59 23 * * *", () => {
- setTimeout(() => {
+  setTimeout(() => {
+    limipar_backup()
     cambio_contra_automatico();
   }, 61000);
 });
@@ -348,6 +349,7 @@ export const copia_segurdad = () => {
   let fecha = new Date();
   const fechaActual = `${fecha.getFullYear()}-${fecha.getMonth()}-${fecha.getDate()}`;
   const horaActual = `${fecha.toLocaleTimeString("en-US").replace(":", ".").replace(":", ".").replace(" ", "")}`;
+
 
   let backupProcess = spawn("mongodump", [
     "--host=localhost",
@@ -403,7 +405,6 @@ export const copia_segurdad = () => {
 export const limipar_backup = ()=>{
 
 let files = [];
-let array = [];
 fs.readdir("C:/BACKUP_MONGO_CORRESPONDENCIA/", (err:any, result:any) => {
   if (err) {
     console.error(err);
