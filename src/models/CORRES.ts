@@ -12,7 +12,7 @@ interface corres {
   descrip: string;
   ser: string;
   operdiri: string;
-  dep: string; //Esto es tipo number en DEPCO, en cobol se maneja asi pero es raro
+  dep: number; //Esto es tipo number en DEPCO, en cobol se maneja asi pero es raro
   fol: string;
   fold: string;
   esta: number;
@@ -34,13 +34,7 @@ interface corres {
     { depTap: string; estaTab: number }
   ];
   codAux: number;
-  tablaOper: [
-    { operdiri1: string },
-    { operdiri1: string },
-    { operdiri1: string },
-    { operdiri1: string },
-    { operdiri1: string }
-  ];
+  tablaOper: [{ operdiri1: string }, { operdiri1: string }, { operdiri1: string }, { operdiri1: string }, { operdiri1: string }];
   llaveResp: {
     anoRes: number;
     contResPon: number;
@@ -131,8 +125,8 @@ const corres_schema = new Schema<corres>({
     default: "",
   },
   dep: {
-    type: String,
-    default: "",
+    type: Number,
+    default: 0,
   },
   fol: {
     type: String,
