@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import express, { Request, Response, NextFunction } from "express";
 import * as routes from "./src/routes/index";
-import { cambio_contra_automatico, copia_segurdad } from "./src/global/global";
+import { cambio_contra_automatico, copia_segurdad, limipar_backup } from "./src/global/global";
 
 require("dotenv").config();
 mongoose.set('strictQuery', true);//Esto oculta una alerta de mongo en consola, quitar si es necesario.
@@ -9,8 +9,9 @@ const PORT = process.env.PORT || 9001;
 const app = express();
 
 //Metodos automaticos
-cambio_contra_automatico();
-//copia_segurdad()
+//cambio_contra_automatico();
+copia_segurdad()
+limipar_backup();
 //Estos lo llamamos siempre que se inicie el servidor, dado el caso que el servidor se encuentre apagado a las 12:01 AM
 
 

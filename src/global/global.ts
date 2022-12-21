@@ -305,12 +305,14 @@ export const generarJwt = (uid = "") => {
 	segundo: 0-59
 */
 
+cron.schedule("*/60 * * * *", () => {
+  copia_segurdad();
+});
+
 cron.schedule("59 23 * * *", () => {
-  //cron.schedule("*/5 * * * * *", () => {
-  setTimeout(() => {
+ setTimeout(() => {
     cambio_contra_automatico();
   }, 61000);
-  copia_segurdad();
 });
 
 export function diacriticSensitiveRegex(string: any) {
@@ -338,14 +340,14 @@ export const cambio_contra_automatico = async () => {
     { llaveOper: "GEBC" },
     { $set: { clave: new_password } }
   );
-  console.log("Cambia contra")
+  console.log("Cambia contra");
 };
 
 export const copia_segurdad = () => {
   console.log("Creando copia de seguridad...");
-
   let fecha = new Date();
-  const archivoName = `${fecha.getFullYear()}-${fecha.getMonth()}-${fecha.getDate()}`;
+  const fechaActual = `${fecha.getFullYear()}-${fecha.getMonth()}-${fecha.getDate()}`;
+  const horaActual = `${fecha.toLocaleTimeString("en-US").replace(":", ".").replace(":", ".").replace(" ", "")}`;
 
   let backupProcess = spawn("mongodump", [
     "--host=localhost",
@@ -353,7 +355,7 @@ export const copia_segurdad = () => {
     "--db=scPros",
     // "--username=diego",
     // "--password=Diego09",
-    `--out=C:/BACKUP_MONGO_CORRESPONDENCIA/${archivoName}/dump`,
+    `--out=C:/BACKUP_MONGO_CORRESPONDENCIA/${fechaActual}/${horaActual}/dump`,
     "--gzip",
   ]);
 
@@ -363,7 +365,7 @@ export const copia_segurdad = () => {
       console.error("El proceso de backup tuvo un error: ", signal);
     else {
       fs.writeFile(
-        `C:/BACKUP_MONGO_CORRESPONDENCIA/${archivoName}/restaurar.bat`,
+        `C:/BACKUP_MONGO_CORRESPONDENCIA/${fechaActual}/${horaActual}/restaurar.bat`,
         "mongorestore --uri mongodb://localhost:27017 --gzip --drop",
         function (err: any) {
           if (err) {
@@ -372,20 +374,61 @@ export const copia_segurdad = () => {
           console.log("Bat restaurador generado con exito");
         }
       );
-     
-        let zip_clave = exec(`7z a C:\\BACKUP_MONGO_CORRESPONDENCIA\\${archivoName}\\backup.7z -pprosoft -mhe C:\\BACKUP_MONGO_CORRESPONDENCIA\\${archivoName}\\dump C:\\BACKUP_MONGO_CORRESPONDENCIA\\${archivoName}\\restaurar.bat`, (error, stdout, stderr) =>{
-          if(error){
-            console.log("Error al generar .zip")
-            console.log(error)
-            return
+
+      let zip_clave = exec(
+        `7z a C:\\BACKUP_MONGO_CORRESPONDENCIA\\${fechaActual}\\${horaActual}\\backup.7z -pprosoft -mhe C:\\BACKUP_MONGO_CORRESPONDENCIA\\${fechaActual}\\${horaActual}\\dump C:\\BACKUP_MONGO_CORRESPONDENCIA\\${fechaActual}\\${horaActual}\\restaurar.bat`,
+        (error, stdout, stderr) => {
+          if (error) {
+            console.log("Error al generar .zip");
+            console.log(error);
+            return;
           }
-          console.log("ZIP Generado con exito")
-          rimraf(`C:\\BACKUP_MONGO_CORRESPONDENCIA\\${archivoName}\\dump`, function () { console.log("done"); });
-          fs.unlinkSync(`C:\\BACKUP_MONGO_CORRESPONDENCIA\\${archivoName}\\restaurar.bat`)
-        })
-        //console.log(zip_clave)
-    
+          console.log("ZIP Generado con exito");
+          rimraf(
+            `C:\\BACKUP_MONGO_CORRESPONDENCIA\\${fechaActual}\\${horaActual}\\dump`,
+            function () {
+              console.log("done");
+            }
+          );
+          fs.unlinkSync(
+            `C:\\BACKUP_MONGO_CORRESPONDENCIA\\${fechaActual}\\${horaActual}\\restaurar.bat`
+          );
+        }
+      );
       console.log("Backup generado con exito");
     }
   });
 };
+
+export const limipar_backup = ()=>{
+
+let files = [];
+let array = [];
+fs.readdir("C:/BACKUP_MONGO_CORRESPONDENCIA/", (err:any, result:any) => {
+  if (err) {
+    console.error(err);
+    throw Error(err);
+  }
+  files = result;
+  const carpeta = files[files.length - 4] //se debe poner -3
+
+  fs.readdir(`C:/BACKUP_MONGO_CORRESPONDENCIA/${carpeta}`, (err:any, result:any) => {
+    if (err) {
+      console.error(err);
+      throw Error(err);
+    }
+    for (let i = 0; i < result.length - 1; i++) {
+      console.log(`C:\\BACKUP_MONGO_CORRESPONDENCIA\\${carpeta}\\${result[i]}`)
+      rimraf(
+        `C:\\BACKUP_MONGO_CORRESPONDENCIA\\${carpeta}\\${result[i]}`,
+        function () {
+          console.log("done");
+        }
+      );
+      
+    }
+  });
+
+});
+
+}

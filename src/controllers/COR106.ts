@@ -55,7 +55,6 @@ export const getRemidep = async (req: Request, res: Response) => {
   export const getRemidepId = async (req: Request, res: Response) => {
     try {
       const { codigo } = req.params
-      console.log(codigo)
       //const data = await remidep_model.findOne({codigo: {$regex:codigo, $options:"ix"}}, omitirId);
       const data = await remidep_model.aggregate([
         {
@@ -65,7 +64,7 @@ export const getRemidep = async (req: Request, res: Response) => {
             _id:0
           }
         }
-      ]).match({codigo: {$regex:codigo, $options:"ix"}})
+      ]).match({codigo: codigo})
 
       get_response("remidep", data[0], codigo, res);
     } catch (error) {
