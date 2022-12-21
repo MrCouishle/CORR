@@ -98,6 +98,14 @@ export const getCorres = async (req: Request, res: Response) => {
             as: "depco",
           },
         },
+        {
+          $lookup: {
+            from: "remidep",
+            localField: "deptoremi",
+            foreignField: "codigo",
+            as: "remidep",
+          },
+        },
       ])
       .project({
         _id: 0,
@@ -141,7 +149,7 @@ export const getCorres = async (req: Request, res: Response) => {
           $concat: [{ $arrayElemAt: ["$auxtip.descripcion", 0] }],
         },
         descripDeptoremi: {
-          $concat: [{ $arrayElemAt: ["$tipc.descripcion", 0] }],
+          $concat: [{ $arrayElemAt: ["$remidep.descripcion", 0] }],
         },
         anex: 1,
         tipoAnexo: 1,
