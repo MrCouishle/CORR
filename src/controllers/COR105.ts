@@ -55,6 +55,7 @@ export const deleteUnifun = async (req: Request, res: Response) => {
 export const getUnifunId = async (req: Request, res: Response) => {
   try {
     const { codigo } = req.params;
+    console.log(codigo)
     const data = await unifun_model.findOne(
       { codigo: codigo },
       {

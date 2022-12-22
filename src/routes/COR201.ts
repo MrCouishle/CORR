@@ -1,5 +1,24 @@
 import express from "express"
-import { deleteCorres, envioCorreos, getCorres, getCorresF8, postCorres, putCorres, ultCorres } from "../controllers/COR201";
+import { buscarPdf, buscarPdf_res, deleteCorres, envioCorreos, getCorres, getCorresF8, guardarPdf, guardarPdf_res, postCorres, putCorres, ultCorres } from "../controllers/COR201";
+
+import multer from 'multer'
+import path from "path";
+
+let storage  = multer.diskStorage({
+   destination:(req:any, file:any, cb:any) =>{
+      console.log("helouuu")
+
+    cb(null, "./pdf")
+   },
+   filename:(req:any, file:any, cb:any) =>{
+    console.log(req.params)
+    const filename = `${req.params.anoLlave}${req.params.cont}`
+    cb(null, filename + path.extname(file.originalname))
+   }
+
+})
+
+const upload = multer({storage})
 
 export const route_corres = express.Router();
 
@@ -10,3 +29,7 @@ route_corres.delete("/corres/:anoLlave/:cont", deleteCorres)
 route_corres.get("/getCorresF8/:desde/:cantidad", getCorresF8)
 route_corres.get("/enviocCorreo", envioCorreos)
 route_corres.get("/ultimaCorres", ultCorres);
+route_corres.post("/guardarPdf/:anoLlave/:cont", upload.single('file'), guardarPdf)
+route_corres.post("/guardarPdf_res/:anoLlave/:cont", upload.single('file'), guardarPdf_res)
+route_corres.get("/buscarPdf/:anoLlave/:cont",  buscarPdf)
+route_corres.get("/buscarPdf_res/:anoLlave/:cont", buscarPdf_res)

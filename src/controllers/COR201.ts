@@ -1,7 +1,17 @@
 import { Request, Response } from "express";
 import nodemailer from "nodemailer";
-import { concatenarCodigos, delete_response, edit_response, get_all_response, get_response, omitirId } from "../global/global";
+import {
+  concatenarCodigos,
+  delete_response,
+  edit_response,
+  get_all_response,
+  get_response,
+  omitirId,
+} from "../global/global";
+import fs from "fs";
 import { corres_model } from "../models/CORRES";
+import { pdf_model } from "../models/PDF";
+import { pdf_res_model } from "../models/pdf-res";
 
 //corres, terce, tipco
 
@@ -113,7 +123,13 @@ export const getCorres = async (req: Request, res: Response) => {
         anoLlave: { $toString: ["$llave.anoLlave"] },
         contLlave: { $toString: ["$llave.cont"] },
         fecha: { $substr: ["$fecha", 0, 10] },
-        hora: { $concat: [{ $toString: { $hour: "$fecha" } }, ":", { $toString: { $minute: "$fecha" } }] },
+        hora: {
+          $concat: [
+            { $toString: { $hour: "$fecha" } },
+            ":",
+            { $toString: { $minute: "$fecha" } },
+          ],
+        },
         minutos: { $minute: "$fecha" },
         nit: { $toString: ["$nit"] },
         tipoCorres: 1,
@@ -213,7 +229,6 @@ export const getCorresF8 = async (req: Request, res: Response) => {
   try {
     const { desde, cantidad } = req.params;
     const { dato } = req.query;
-    console.log(dato);
     //const data2 = await corres_model.find()
     const data = await corres_model
       .aggregate([
@@ -246,7 +261,9 @@ export const getCorresF8 = async (req: Request, res: Response) => {
         fecha: 1,
         nit: 1,
         tipoCorres: 1,
-        descrip_tipco: { $concat: [{ $arrayElemAt: ["$tipco.descripcion", 0] }] },
+        descrip_tipco: {
+          $concat: [{ $arrayElemAt: ["$tipco.descripcion", 0] }],
+        },
         descrip: 1,
         descrip_ter: { $concat: [{ $arrayElemAt: ["$terce.descrip", 0] }] },
         ser: 1,
@@ -321,7 +338,6 @@ export const getCorresF8 = async (req: Request, res: Response) => {
       })
       .skip(Number(desde))
       .limit(Number(cantidad));
-    console.log(data.length);
     get_all_response(data, res);
   } catch (error) {
     console.log(error);
@@ -367,6 +383,7 @@ export const envioCorreos = async (req: Request, res: Response) => {
     res.json({ msg: error });
   }
 };
+
 export const ultCorres = async (req: Request, res: Response) => {
   try {
     // const data = await corres_model.find().sort({ $natural: -1 }).limit(1);
@@ -377,9 +394,20 @@ export const ultCorres = async (req: Request, res: Response) => {
           _id: 0,
           llave: 1,
           fecha: 1,
-          llaveR: { $concat: [{ $toString: "$llave.anoLlave" }, { $toString: "$llave.cont" }] },
+          llaveR: {
+            $concat: [
+              { $toString: "$llave.anoLlave" },
+              { $toString: "$llave.cont" },
+            ],
+          },
           fechaR: { $substr: ["$fecha", 0, 10] },
-          hora: { $concat: [{ $toString: { $hour: "$fecha" } }, ":", { $toString: { $minute: "$fecha" } }] },
+          hora: {
+            $concat: [
+              { $toString: { $hour: "$fecha" } },
+              ":",
+              { $toString: { $minute: "$fecha" } },
+            ],
+          },
         }
       )
       .sort({ _id: -1 })
@@ -389,4 +417,65 @@ export const ultCorres = async (req: Request, res: Response) => {
     console.error(error);
     res.json({ msg: error });
   }
+};
+
+export const guardarPdf = async (req: Request, res: Response) => {
+  try {
+    const filename = `${req.params.anoLlave}${req.params.cont}`;
+    fs.readFile(`.\\pdf\\${filename}.pdf`, function (err, data) {
+      if (err) throw err;
+      const pdf = data.toString("base64"); //PDF WORKS
+
+      new pdf_model({ llave: filename, archivo: pdf }).save((err: any) => {
+        if (err) res.json(err);
+        else res.json({ N1: "guardado" });
+      });
+
+      fs.unlink(`.\\pdf\\${filename}.pdf`, (err) => {
+        if (err) throw err;
+      });
+    });
+  } catch (error) {}
+};
+
+export const guardarPdf_res = async (req: Request, res: Response) => {
+  try {
+    const filename = `${req.params.anoLlave}${req.params.cont}`;
+    fs.readFile(`.\\pdf\\${filename}.pdf`, function (err, data) {
+      if (err) throw err;
+      const pdf = data.toString("base64"); //PDF WORKS
+
+      new pdf_res_model({ llave: filename, archivo: pdf }).save((err: any) => {
+        if (err) res.json(err);
+        else res.json({ N1: "guardado" });
+      });
+
+      fs.unlink(`.\\pdf\\${filename}.pdf`, (err) => {
+        if (err) throw err;
+      });
+    });
+  } catch (error) {}
+};
+
+export const buscarPdf = async (req: Request, res: Response) => {
+  try {
+    const llave = `${req.params.anoLlave}${req.params.cont}`
+    const datos = await pdf_model.findOne({llave:llave});
+    res.contentType("application/pdf");
+    let base64 = ""
+    if(datos?.archivo) base64 = datos?.archivo.toString()
+    var pdf = Buffer.from(base64, 'base64')
+    res.send(pdf);
+  } catch (error) {}
+};
+export const buscarPdf_res = async (req: Request, res: Response) => {
+  try {
+    const llave = `${req.params.anoLlave}${req.params.cont}`
+    const datos = await pdf_res_model.findOne({llave:llave});
+    res.contentType("application/pdf");
+    let base64 = ""
+    if(datos?.archivo) base64 = datos?.archivo.toString()
+    var pdf = Buffer.from(base64, 'base64')
+    res.send(pdf);
+  } catch (error) {}
 };
