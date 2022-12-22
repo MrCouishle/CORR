@@ -4,7 +4,7 @@ import { JwtValidator_ } from "../helpers/validators";
 
 export const route_unifun = express.Router();
 
-route_unifun.get("/unifun", getUnifun);
+route_unifun.get("/unifunAll", getUnifun);
 route_unifun.post("/unifun", postUnifun);
 route_unifun.put("/unifun/:codigo", putUnifun);
 route_unifun.delete("/unifun/:codigo", deleteUnifun);

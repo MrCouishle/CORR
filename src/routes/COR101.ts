@@ -4,7 +4,7 @@ import { JwtValidator_ } from "../helpers/validators";
 
 export const route_serco = express.Router();
 
-route_serco.get("/serco", getSerco);
+route_serco.get("/sercoAll", getSerco);
 route_serco.post("/serco", postSerco);
 route_serco.put("/serco/:codigo", putSerco);
 route_serco.delete("/serco/:codigo", deleteSerco);

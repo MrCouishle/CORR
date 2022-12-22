@@ -4,7 +4,7 @@ import { JwtValidator_ } from "../helpers/validators";
 
 export const route_cargops = express.Router();
 
-route_cargops.get("/cargops", getCargops);
+route_cargops.get("/cargopsAll", getCargops);
 route_cargops.post("/cargops", postCargops);
 route_cargops.put("/cargops/:codigo", putCargops);
 route_cargops.delete("/cargops/:codigo", deleteCargops);

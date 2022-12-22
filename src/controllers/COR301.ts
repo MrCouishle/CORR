@@ -181,14 +181,14 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
             in: { $add: [{ $arrayElemAt: ["$tipc.dias", 0] }] },
           },
         },
-        fecha_vence: {
+        fechaVence: {
           $dateAdd: {
             startDate: "$fecha",
             unit: "day",
             amount: { $arrayElemAt: ["$tipc.dias", 0] },
           },
         },
-        dias_vence: {
+        diasVence: {
           $dateDiff: {
             startDate: new Date(),
             endDate: {
@@ -211,8 +211,10 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
         fold: 1,
         nroFact: 1,
         monto: 1,
-        fechaFact: 1,
-        fechaEntre: 1,
+        fecheFactR: { $substr:["$fechaFact",0,10]},
+        horaFechaFact: { $concat: [{ $toString: {$hour: "$fechaFact"}}, ":", { $toString: {$minute:"$fechaFact"}}]},
+        fecheEntreR: { $substr:["$fechaEntre",0,10]},
+        horaFechaEntre: { $concat: [{ $toString: {$hour: "$fechaEntre"}}, ":", { $toString: {$minute:"$fechaEntre"}}]},
         oper: 1,
         manejo: 1,
         manejoR: {
@@ -252,6 +254,8 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
             in: { $add: [{ $arrayElemAt: ["$rescorr.fecha", 0] }] },
           },
         },
+        fecheRespuestaR: { $substr:["$fechaRespuesta",0,10]},
+        // horaFechaRes: { $concat: [{ $toString: {$hour: "$rescorr.fecha"}}, ":", { $toString: {$minute:"$rescorr.fecha"}}]},
         // fehcaVenRes:{
 
         // },

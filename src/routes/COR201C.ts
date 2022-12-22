@@ -10,7 +10,7 @@ import { JwtValidator_ } from "../helpers/validators";
 
 export const route_terce = express.Router();
 
-route_terce.get("/terce", getTerce);
+route_terce.get("/terceAll", getTerce);
 route_terce.post("/terce", postTerce);
 route_terce.put("/terce/:codigo", putTerce);
 route_terce.delete("/terce/:codigo", deleteTerce);

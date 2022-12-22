@@ -4,7 +4,7 @@ import { JwtValidator_ } from "../helpers/validators";
 
 export const route_remidep = express.Router();
 
-route_remidep.get("/remidep", getRemidep);
+route_remidep.get("/remidepAll", getRemidep);
 route_remidep.post("/remidep", postRemidep);
 route_remidep.put("/remidep/:codigo", putRemidep);
 route_remidep.delete("/remidep/:codigo", deleteRemidep);
