@@ -459,23 +459,31 @@ export const guardarPdf_res = async (req: Request, res: Response) => {
 
 export const buscarPdf = async (req: Request, res: Response) => {
   try {
-    const llave = `${req.params.anoLlave}${req.params.cont}`
-    const datos = await pdf_model.findOne({llave:llave});
-    res.contentType("application/pdf");
-    let base64 = ""
-    if(datos?.archivo) base64 = datos?.archivo.toString()
-    var pdf = Buffer.from(base64, 'base64')
-    res.send(pdf);
+    const llave = `${req.params.anoLlave}${req.params.cont}`;
+    const datos = await pdf_model.findOne({ llave: llave });
+    if (datos) {
+      res.contentType("application/pdf");
+      let base64 = "";
+      if (datos?.archivo) base64 = datos?.archivo.toString();
+      var pdf = Buffer.from(base64, "base64");
+      res.send(pdf);
+    } else {
+      res.json({ msg: `El pdf solicitado no existe`, cod_error: "01" });
+    }
   } catch (error) {}
 };
 export const buscarPdf_res = async (req: Request, res: Response) => {
   try {
-    const llave = `${req.params.anoLlave}${req.params.cont}`
-    const datos = await pdf_res_model.findOne({llave:llave});
+    const llave = `${req.params.anoLlave}${req.params.cont}`;
+    const datos = await pdf_res_model.findOne({ llave: llave });
+    if (datos) {
     res.contentType("application/pdf");
-    let base64 = ""
-    if(datos?.archivo) base64 = datos?.archivo.toString()
-    var pdf = Buffer.from(base64, 'base64')
+    let base64 = "";
+    if (datos?.archivo) base64 = datos?.archivo.toString();
+    var pdf = Buffer.from(base64, "base64");
     res.send(pdf);
+  } else {
+    res.json({ msg: `El pdf solicitado no existe`, cod_error: "01" });
+  }
   } catch (error) {}
 };
