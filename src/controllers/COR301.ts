@@ -133,15 +133,15 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
         {
           $lookup: {
             from: "depco",
-            let: { codDep: { $toInt: "$dep" } },
+            let: { codigo: "$dep"  },
             pipeline: [
               {
                 $match: {
-                  $expr: { $eq: ["$codigo", "$$codDep"] },
+                  $expr: { $eq: ["$codigo", "$$codigo"] },
                 },
               },
             ],
-            as: "depco",
+            as: "depc",
           },
         },
       ])
@@ -149,11 +149,13 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
       .project({
         _id: 0,
         cont: { $concat: [{ $toString: ["$llave.cont"] }] },
+        // radicado: lpad("$cont",7,"0"),
         anoLlave: { $concat: [{ $toString: ["$llave.anoLlave"] }] },
         fecha:1,
         fechaR: {$substr: ["$fecha",0,10]},
         hora: { $concat: [{ $toString: {$hour: "$fecha"}}, ":", { $toString: {$minute:"$fecha"}}]},
         esta: 1,
+        dep:1,
         estaR:{
           $switch:{
             branches:[
