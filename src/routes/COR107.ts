@@ -4,7 +4,7 @@ import { JwtValidator_ } from "../helpers/validators";
 
 export const route_holding = express.Router();
 
-route_holding.get("/holding", getHolding);
+route_holding.get("/holdingAll", getHolding);
 route_holding.post("/holding", postHolding);
 route_holding.put("/holding/:codigo", putHolding);
 route_holding.delete("/holding/:codigo", deleteHolding);

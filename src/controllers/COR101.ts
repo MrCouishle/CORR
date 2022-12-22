@@ -54,7 +54,7 @@ export const deleteSerco = async (req: Request, res: Response) => {
 export const getSercoId = async (req: Request, res: Response) => {
   try {
     const { codigo } = req.params
-    const data = await serco_model.findOne({ codigo }, omitirId);
+    const data = await serco_model.findOne({ codigo:codigo }, omitirId);
     get_response("serco", data, codigo, res);
   } catch (error) {
     res.json({ msg: error });

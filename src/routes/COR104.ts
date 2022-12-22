@@ -4,7 +4,7 @@ import { JwtValidator_ } from "../helpers/validators";
 
 export const route_auxtip = express.Router();
 
-route_auxtip.get("/auxtip", getAuxtip);
+route_auxtip.get("/auxtipAll", getAuxtip);
 route_auxtip.post("/auxtip", postAuxtip);
 route_auxtip.put("/auxtip/:codigo", putAuxtip);
 route_auxtip.delete("/auxtip/:codigo", deleteAuxtip);

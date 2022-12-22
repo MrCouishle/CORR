@@ -3,7 +3,7 @@ import { deleteRescorr, getRescorr, postRescorr, putRescorr, f8Rescorr } from ".
 
 export const route_rescorr = express.Router();
 
-route_rescorr.get("/rescorr", getRescorr);
+route_rescorr.get("/rescorrAll", getRescorr);
 route_rescorr.post("/rescorr", postRescorr);
 route_rescorr.put("/rescorr/:anoLlave/:cont", putRescorr);
 route_rescorr.delete("/rescorr/:anoLlave/:cont", deleteRescorr);

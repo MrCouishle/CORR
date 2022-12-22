@@ -207,7 +207,7 @@ export const get_response = (
   codigo: any,
   res: Response
 ) => {
-  if (doc === null || doc === undefined || doc.length < 1) {
+  if (doc === "" ||doc === null || doc === undefined || doc.length < 1) {
     res
       .json({
         msg: `El código (${codigo}) de ${nom} no existe.`,

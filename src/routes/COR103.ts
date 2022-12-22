@@ -4,7 +4,7 @@ import { JwtValidator_ } from "../helpers/validators";
 
 export const route_tipco = express.Router();
 
-route_tipco.get("/tipco", getTipco);
+route_tipco.get("/tipcoAll", getTipco);
 route_tipco.post("/tipco", postTipco);
 route_tipco.put("/tipco/:codigo", putTipco);
 route_tipco.delete("/tipco/:codigo", deleteTipco);
