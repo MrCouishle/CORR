@@ -77,11 +77,11 @@ export const listadoControlRespuestas = async (req: Request, res: Response) => {
         {
           $lookup: {
             from: "depco",
-            let: { codDep: { $toInt: "$dep" } },
+            let: { codigo: { $toInt: ["$dep"] } },
             pipeline: [
               {
                 $match: {
-                  $expr: { $eq: ["$codigo", "$$codDep"] },
+                  $expr: { $eq: ["$codigo", "$$codigo"] },
                 },
               },
             ],
@@ -93,6 +93,8 @@ export const listadoControlRespuestas = async (req: Request, res: Response) => {
         _id: 0,
         contResPon: 1,
         fecha: 1,
+        fechaR: {$substr: ["$fecha",0,10]},
+        horaFecha: { $concat: [{ $toString: {$hour: "$fecha"}}, ":", { $toString: {$minute:"$fecha"}}]},
         descrip: 1,
         nit: 1,
         dep: 1,
@@ -131,36 +133,15 @@ export const listadoControlRespuestas = async (req: Request, res: Response) => {
             in: { $add: [{ $arrayElemAt: ["$corres.fechaFact", 0] }] },
           },
         },
-        procedenR:{
-          $let: {
-            vars: {},
-            in: { $add: [{ $arrayElemAt: ["$corres.proceden", 0] }] },
-          },
+        proceden:1,
+        procedenR: {
+          $switch:{
+            branches:[
+              {case:{$eq:["$proceden",1]}, then:"EXTERNO"},
+              {case:{$eq:["$proceden",2]}, then:"INTERNO"}
+            ],
+            default:"SIN DEFINIR"
         },
-        proceden: {
-          $concat: [
-            {
-              $cond: {
-                if: { $eq: [{ $arrayElemAt: ["$corres.proceden", 0] }, 1] },
-                then: "EXTERNO",
-                else: "",
-              },
-            },
-            {
-              $cond: {
-                if: { $eq: [{ $arrayElemAt: ["$corres.proceden", 0] }, 2] },
-                then: "INTERNO",
-                else: "",
-              },
-            },
-            {
-              $cond: {
-                if: { $gt: [{ $arrayElemAt: ["$corres.proceden", 0] },  2] },
-                then: "NO EXISTE",
-                else: "",
-              },
-            },
-          ],
         },
         hour: { $hour: "$fecha" },
         manejo: { 

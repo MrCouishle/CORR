@@ -5,7 +5,7 @@ import { cambio_contra_automatico, copia_segurdad, limipar_backup } from "./src/
 
 require("dotenv").config();
 mongoose.set('strictQuery', true);//Esto oculta una alerta de mongo en consola, quitar si es necesario.
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 9001;
 const app = express();
 
 //Metodos automaticos
