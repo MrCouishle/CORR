@@ -1,13 +1,6 @@
 import { Request, Response } from "express";
 import nodemailer from "nodemailer";
-import {
-  concatenarCodigos,
-  delete_response,
-  edit_response,
-  get_all_response,
-  get_response,
-  omitirId,
-} from "../global/global";
+import { concatenarCodigos, delete_response, edit_response, get_all_response, get_response, omitirId } from "../global/global";
 import fs from "fs";
 import { corres_model } from "../models/CORRES";
 import { pdf_model } from "../models/PDF";
@@ -124,11 +117,7 @@ export const getCorres = async (req: Request, res: Response) => {
         contLlave: { $toString: ["$llave.cont"] },
         fecha: { $substr: ["$fecha", 0, 10] },
         hora: {
-          $concat: [
-            { $toString: { $hour: "$fecha" } },
-            ":",
-            { $toString: { $minute: "$fecha" } },
-          ],
+          $concat: [{ $toString: { $hour: "$fecha" } }, ":", { $toString: { $minute: "$fecha" } }],
         },
         minutos: { $minute: "$fecha" },
         nit: { $toString: ["$nit"] },
@@ -347,36 +336,48 @@ export const getCorresF8 = async (req: Request, res: Response) => {
 
 export const envioCorreos = async (req: Request, res: Response) => {
   try {
-    const { name, email, placa, phone } = req.body;
+    const { server_email, remitente, clave, puerto, id, propietario, anoLlave, cont, destino, nom_empresa } = req.body;
 
-    const config = {
-      host: "smtp.gmail.com",
-      port: 587,
-      auth: {
-        user: "victorcobo22@gmail.com",
-        pass: "vluwtqclqxxvuhgc",
-      },
+    const llave = {
+      anoLlave: parseInt(anoLlave),
+      cont: parseInt(cont),
     };
+    const datos = await pdf_model.findOne({ llave: llave });
+    if (datos) {
+      let base64 = "";
+      if (datos?.archivo) base64 = datos?.archivo.toString();
 
-    const msg = {
-      from: "victorcobo22@gmail.com",
-      to: "victorcobo22@gmail.com",
-      subject: "Prueba perro",
-      text: "Evio de correo",
-      attachments: [
-        {
-          filename: "file.pdf",
-          path: __dirname + "/APUESTA.pdf",
-          contentType: "application/pdf",
+      const config = {
+        host: server_email,
+        port: parseInt(puerto),
+        auth: {
+          user: remitente,
+          pass: clave,
         },
-      ],
-    };
+      };
 
-    const trasnport = nodemailer.createTransport(config);
+      const msg = {
+        from: remitente,
+        to: destino,
+        subject: nom_empresa,
+        text: "La presente, adjunto archivos de correspondencia aun pendientes por revisar.",
+        attachments: [
+          {
+            filename: "file.pdf",
+            content: base64,
+            encoding: "base64",
+          },
+        ],
+      };
 
-    const info = await trasnport.sendMail(msg);
+      const trasnport = nodemailer.createTransport(config);
 
-    res.json(info);
+      const info = await trasnport.sendMail(msg);
+
+      res.json(info);
+    } else {
+      res.json({ msg: `El pdf solicitado no existe`, cod_error: "01" });
+    }
   } catch (error) {
     console.log(error);
 
@@ -395,18 +396,11 @@ export const ultCorres = async (req: Request, res: Response) => {
           llave: 1,
           fecha: 1,
           llaveR: {
-            $concat: [
-              { $toString: "$llave.anoLlave" },
-              { $toString: "$llave.cont" },
-            ],
+            $concat: [{ $toString: "$llave.anoLlave" }, { $toString: "$llave.cont" }],
           },
           fechaR: { $substr: ["$fecha", 0, 10] },
           hora: {
-            $concat: [
-              { $toString: { $hour: "$fecha" } },
-              ":",
-              { $toString: { $minute: "$fecha" } },
-            ],
+            $concat: [{ $toString: { $hour: "$fecha" } }, ":", { $toString: { $minute: "$fecha" } }],
           },
         }
       )
@@ -432,8 +426,7 @@ export const guardarPdf = async (req: Request, res: Response) => {
 
       new pdf_model({ llave: llave, archivo: pdf }).save((err: any) => {
         if (err) {
-          if (err.code)
-            res.json({ msg: `Ya existe la correspondencia`, cod_error: "00" });
+          if (err.code) res.json({ msg: `Ya existe la correspondencia`, cod_error: "00" });
           else res.json(err);
         } else res.json({ N1: "guardado" });
       });
@@ -458,8 +451,7 @@ export const guardarPdf_res = async (req: Request, res: Response) => {
 
       new pdf_res_model({ llave: llave, archivo: pdf }).save((err: any) => {
         if (err) {
-          if (err.code)
-            res.json({ msg: `Ya existe la correspondencia`, cod_error: "00" });
+          if (err.code) res.json({ msg: `Ya existe la correspondencia`, cod_error: "00" });
           else res.json(err);
         } else res.json({ N1: "guardado" });
       });
