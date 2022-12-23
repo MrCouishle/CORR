@@ -148,7 +148,7 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
 
       .project({
         _id: 0,
-        cont: { $concat: [{ $toString: ["$llave.cont"] }] },
+        cont: { $concat: [{ $toString: ["$llave.cont"] }, " -E"] },
         // radicado: lpad("$cont",7,"0"),
         anoLlave: { $concat: [{ $toString: ["$llave.anoLlave"] }] },
         fecha:1,
