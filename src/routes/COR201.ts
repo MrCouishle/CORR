@@ -6,8 +6,6 @@ import path from "path";
 
 let storage  = multer.diskStorage({
    destination:(req:any, file:any, cb:any) =>{
-      console.log("helouuu")
-
     cb(null, "./pdf")
    },
    filename:(req:any, file:any, cb:any) =>{
@@ -16,7 +14,7 @@ let storage  = multer.diskStorage({
     cb(null, filename + path.extname(file.originalname))
    }
 
-})
+});
 
 const upload = multer({storage})
 

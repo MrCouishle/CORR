@@ -347,36 +347,59 @@ export const getCorresF8 = async (req: Request, res: Response) => {
 
 export const envioCorreos = async (req: Request, res: Response) => {
   try {
-    const { name, email, placa, phone } = req.body;
+    const {
+      server_email,
+      remitente,
+      clave,
+      puerto,
+      id,
+      propietario,
+      anoLlave,
+      cont,
+      destino,
+      nom_empresa,
+    } = req.body;
 
-    const config = {
-      host: "smtp.gmail.com",
-      port: 587,
-      auth: {
-        user: "victorcobo22@gmail.com",
-        pass: "vluwtqclqxxvuhgc",
-      },
+    const llave = {
+      anoLlave: parseInt(anoLlave),
+      cont: parseInt(cont),
     };
+    const datos = await pdf_model.findOne({ llave: llave });
+    if (datos) {
+      let base64 = "";
+      if (datos?.archivo) base64 = datos?.archivo.toString();
 
-    const msg = {
-      from: "victorcobo22@gmail.com",
-      to: "victorcobo22@gmail.com",
-      subject: "Prueba perro",
-      text: "Evio de correo",
-      attachments: [
-        {
-          filename: "file.pdf",
-          path: __dirname + "/APUESTA.pdf",
-          contentType: "application/pdf",
+      const config = {
+        host: server_email,
+        port: parseInt(puerto),
+        auth: {
+          user: remitente,
+          pass: clave,
         },
-      ],
-    };
+      };
 
-    const trasnport = nodemailer.createTransport(config);
+      const msg = {
+        from: remitente,
+        to: destino,
+        subject: nom_empresa,
+        text: nom_empresa,
+        attachments: [
+          {
+            filename: "file.pdf",
+            content: base64,
+            encoding: "base64",
+          },
+        ],
+      };
 
-    const info = await trasnport.sendMail(msg);
+      const trasnport = nodemailer.createTransport(config);
 
-    res.json(info);
+      const info = await trasnport.sendMail(msg);
+
+      res.json(info);
+    } else {
+      res.json({ msg: `El pdf solicitado no existe`, cod_error: "01" });
+    }
   } catch (error) {
     console.log(error);
 
