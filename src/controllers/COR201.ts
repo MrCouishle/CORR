@@ -427,7 +427,10 @@ export const guardarPdf = async (req: Request, res: Response) => {
       const pdf = data.toString("base64"); //PDF WORKS
 
       new pdf_model({ llave: filename, archivo: pdf }).save((err: any) => {
-        if (err) res.json(err);
+        if (err) {
+          if(err.code) res.json({ msg: `Ya existe la correspondencia`, cod_error: "00" })
+          else res.json(err)
+        }
         else res.json({ N1: "guardado" });
       });
 
@@ -446,7 +449,10 @@ export const guardarPdf_res = async (req: Request, res: Response) => {
       const pdf = data.toString("base64"); //PDF WORKS
 
       new pdf_res_model({ llave: filename, archivo: pdf }).save((err: any) => {
-        if (err) res.json(err);
+        if (err) {
+          if(err.code) res.json({ msg: `Ya existe la correspondencia`, cod_error: "00" })
+          else res.json(err)
+        }
         else res.json({ N1: "guardado" });
       });
 
