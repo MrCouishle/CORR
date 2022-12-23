@@ -67,12 +67,12 @@ export const deleteMacorr = async (req: Request, res: Response) => {
 export const getMacorrId = async (req: Request, res: Response) => {
   try {
     const { cl, codigo } = req.params;
-    console.log(req.params)
+    console.log(req.params);
     const llave = {
       cl: cl,
       codigo: Number(codigo),
     };
-    console.log(llave)
+    console.log(llave);
     const data = await macorr_model.findOne({ llave: llave }, omitirId);
     get_response("macorr", data, `${llave.cl}${llave.codigo}`, res);
   } catch (error) {
@@ -83,31 +83,52 @@ export const getMacorrId = async (req: Request, res: Response) => {
 export const f8Macorr = async (req: Request, res: Response) => {
   try {
     const { desde, cantidad } = req.params;
-    let { dato } = req.query;
-    console.log(req.query)
+    let { dato, tipo } = req.query;
+
+    console.log(dato, tipo)
+
+    let body = {};
+
+    if (tipo) {
+      body = {
+        $and: [
+          { tipo: tipo },
+          {
+            $or: [
+              { llaveR: { $regex: dato } },
+              { detalle: { $regex: dato, $options: "ix" } },
+              { oper: { $regex: dato, $options: "ix" } },
+            ],
+          },
+        ],
+      };
+    } else {
+      body = {
+        $or: [
+          { llaveR: { $regex: dato } },
+          { detalle: { $regex: dato, $options: "ix" } },
+          { oper: { $regex: dato, $options: "ix" } },
+        ],
+      };
+    }
     const data = await macorr_model
       .aggregate()
       .project({
+        _id: 0,
         llave:1,
-        tipo:{$concat:["$llave.cl"]},
+        llaveR: {$concat: [{$toString:["$llave.cl"]},{$toString:["$llave.codigo"]}]},
+        tipo: { $concat: ["$llave.cl"] },
         detalle: 1,
-        tabla:1,
-        oper:1,
-        fechOper:1
+        tabla: 1,
+        oper: 1,
+        fechOper: 1,
       })
-      .match({
-        $or:[
-          {llave:{$regex:dato}},
-          {detalle:{$regex:dato, $options:"ix"}},
-          {oper:{$regex:dato, $options:"ix"}},
-          {tipo:dato},
-        ]
-      })
+      .match(body)
       .skip(Number(desde))
       .limit(Number(cantidad));
     get_all_response(data, res);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.json({ msg: error });
   }
 };
