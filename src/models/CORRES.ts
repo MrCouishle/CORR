@@ -54,7 +54,7 @@ interface corres {
   ];
   nroEnvio: number;
   proceden: number;
-  deptoremi: number;
+  deptoremi: string;
   manejo: number;
   holding: number;
   centroCos: string;
@@ -353,8 +353,8 @@ const corres_schema = new Schema<corres>({
     default: 0,
   },
   deptoremi: {
-    type: Number,
-    default: 0,
+    type: String,
+    default: "",
   },
   manejo: {
     type: Number,

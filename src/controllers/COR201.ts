@@ -104,11 +104,25 @@ export const getCorres = async (req: Request, res: Response) => {
         {
           $lookup: {
             from: "remidep",
-            localField: "deptoremi",
-            foreignField: "codigo",
+            let: { deptoremi: { $toString: "$deptoremi" } },
+            pipeline: [
+              {
+                $match: {
+                  $expr: { $eq: ["$codigo", "$$deptoremi"] },
+                },
+              },
+            ],
             as: "remidep",
           },
         },
+        // {
+        //   $lookup: {
+        //     from: "remidep",
+        //     localField: "deptoremi",
+        //     foreignField: "codigo",
+        //     as: "remidep",
+        //   },
+        // },
       ])
       .project({
         _id: 0,
@@ -337,7 +351,7 @@ export const getCorresF8 = async (req: Request, res: Response) => {
 export const envioCorreos = async (req: Request, res: Response) => {
   try {
     const { server_email, remitente, clave, puerto, id, propietario, anoLlave, cont, destino, nom_empresa } = req.body;
-
+    console.log("BODY send email", req.body);
     const llave = {
       anoLlave: parseInt(anoLlave),
       cont: parseInt(cont),
@@ -350,6 +364,7 @@ export const envioCorreos = async (req: Request, res: Response) => {
       const config = {
         host: server_email,
         port: parseInt(puerto),
+
         auth: {
           user: remitente,
           pass: clave,
