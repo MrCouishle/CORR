@@ -256,13 +256,25 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
             in: { $add: [{ $arrayElemAt: ["$rescorr.fecha", 0] }] },
           },
         },
-        fecheRespuestaR: { $substr:["$fechaRespuesta",0,10]},
         // horaFechaRes: { $concat: [{ $toString: {$hour: "$rescorr.fecha"}}, ":", { $toString: {$minute:"$rescorr.fecha"}}]},
         // fehcaVenRes:{
 
         // },
         cargo: { $concat: [{ $arrayElemAt: ["$depc.cargo", 0] }] },
         medioIng: 1,
+        medioIngR:{
+          $switch:{
+          branches:[
+            {case: {$eq: ["$medioIng", 1]}, then: "CORREO CERTIFICADO"},
+            {case: {$eq: ["$medioIng", 2]}, then: "E-MAIL"},
+            {case: {$eq: ["$medioIng", 3]}, then: "PERSONAL"},
+            {case: {$eq: ["$medioIng", 4]}, then: "PERSONAL ESCRITA"},//Se consulto con encargado de correspondencia daniel, el numero 4 es resuelta tambien, igual que el 6 lo toman como resuelta.
+            {case: {$eq: ["$medioIng", 5]}, then: "PERSONAL VERBAL"},
+            {case: {$eq: ["$medioIng", 6]}, then: "PÁGINA WEB"}
+          ],
+          default:"SIN DEFINIR"
+        }
+      },
       })
 
       .match({
