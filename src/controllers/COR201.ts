@@ -422,16 +422,20 @@ export const ultCorres = async (req: Request, res: Response) => {
 export const guardarPdf = async (req: Request, res: Response) => {
   try {
     const filename = `${req.params.anoLlave}${req.params.cont}`;
+    const llave = {
+      anoLlave: parseInt(req.params.anoLlave),
+      cont: parseInt(req.params.cont),
+    };
     fs.readFile(`.\\pdf\\${filename}.pdf`, function (err, data) {
       if (err) throw err;
       const pdf = data.toString("base64"); //PDF WORKS
 
-      new pdf_model({ llave: filename, archivo: pdf }).save((err: any) => {
+      new pdf_model({ llave: llave, archivo: pdf }).save((err: any) => {
         if (err) {
-          if(err.code) res.json({ msg: `Ya existe la correspondencia`, cod_error: "00" })
-          else res.json(err)
-        }
-        else res.json({ N1: "guardado" });
+          if (err.code)
+            res.json({ msg: `Ya existe la correspondencia`, cod_error: "00" });
+          else res.json(err);
+        } else res.json({ N1: "guardado" });
       });
 
       fs.unlink(`.\\pdf\\${filename}.pdf`, (err) => {
@@ -444,16 +448,20 @@ export const guardarPdf = async (req: Request, res: Response) => {
 export const guardarPdf_res = async (req: Request, res: Response) => {
   try {
     const filename = `${req.params.anoLlave}${req.params.cont}`;
+    const llave = {
+      anoLlave: parseInt(req.params.anoLlave),
+      cont: parseInt(req.params.cont),
+    };
     fs.readFile(`.\\pdf\\${filename}.pdf`, function (err, data) {
       if (err) throw err;
       const pdf = data.toString("base64"); //PDF WORKS
 
-      new pdf_res_model({ llave: filename, archivo: pdf }).save((err: any) => {
+      new pdf_res_model({ llave: llave, archivo: pdf }).save((err: any) => {
         if (err) {
-          if(err.code) res.json({ msg: `Ya existe la correspondencia`, cod_error: "00" })
-          else res.json(err)
-        }
-        else res.json({ N1: "guardado" });
+          if (err.code)
+            res.json({ msg: `Ya existe la correspondencia`, cod_error: "00" });
+          else res.json(err);
+        } else res.json({ N1: "guardado" });
       });
 
       fs.unlink(`.\\pdf\\${filename}.pdf`, (err) => {
@@ -465,7 +473,10 @@ export const guardarPdf_res = async (req: Request, res: Response) => {
 
 export const buscarPdf = async (req: Request, res: Response) => {
   try {
-    const llave = `${req.params.anoLlave}${req.params.cont}`;
+    const llave = {
+      anoLlave: parseInt(req.params.anoLlave),
+      cont: parseInt(req.params.cont),
+    };
     const datos = await pdf_model.findOne({ llave: llave });
     if (datos) {
       res.contentType("application/pdf");
@@ -480,16 +491,19 @@ export const buscarPdf = async (req: Request, res: Response) => {
 };
 export const buscarPdf_res = async (req: Request, res: Response) => {
   try {
-    const llave = `${req.params.anoLlave}${req.params.cont}`;
+    const llave = {
+      anoLlave: parseInt(req.params.anoLlave),
+      cont: parseInt(req.params.cont),
+    };
     const datos = await pdf_res_model.findOne({ llave: llave });
     if (datos) {
-    res.contentType("application/pdf");
-    let base64 = "";
-    if (datos?.archivo) base64 = datos?.archivo.toString();
-    var pdf = Buffer.from(base64, "base64");
-    res.send(pdf);
-  } else {
-    res.json({ msg: `El pdf solicitado no existe`, cod_error: "01" });
-  }
+      res.contentType("application/pdf");
+      let base64 = "";
+      if (datos?.archivo) base64 = datos?.archivo.toString();
+      var pdf = Buffer.from(base64, "base64");
+      res.send(pdf);
+    } else {
+      res.json({ msg: `El pdf solicitado no existe`, cod_error: "01" });
+    }
   } catch (error) {}
 };
