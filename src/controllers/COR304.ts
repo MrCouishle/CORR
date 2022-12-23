@@ -91,7 +91,7 @@ export const listadoControlRespuestas = async (req: Request, res: Response) => {
       ])
       .project({
         _id: 0,
-        contResPon: 1,
+        contResPon: { $concat: [{ $toString: ["$codResp.cont"] }," -S"]},
         fecha: 1,
         fechaR: {$substr: ["$fecha",0,10]},
         horaFecha: { $concat: [{ $toString: {$hour: "$fecha"}}, ":", { $toString: {$minute:"$fecha"}}]},
