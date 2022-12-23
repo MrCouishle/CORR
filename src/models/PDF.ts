@@ -1,18 +1,29 @@
 import { Schema, model } from "mongoose";
 
 interface pdf {
-    llave:String,
-    archivo:String
+  llave: Object;
+  archivo: String;
 }
 
-const pdf_schema = new Schema<pdf>({
-    llave:{
-        type:String,
-        unique:true
+const pdf_schema = new Schema<pdf>(
+  {
+    llave: {
+      anoLlave: {
+        type: Number,
+      },
+      cont: {
+        type: Number,
+      },
+      type: Object,
+      unique: true,
+      required: true,
     },
-    archivo:{
-        type:String,
-    }
-},{versionKey:false});
+    archivo: {
+      type: String,
+      required: true,
+    },
+  },
+  { versionKey: false }
+);
 
-export const pdf_model = model<pdf>("pdf", pdf_schema)
+export const pdf_model = model<pdf>("pdf", pdf_schema);
