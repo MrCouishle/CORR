@@ -4,6 +4,7 @@ import cron from "node-cron";
 import bcrypt from "bcrypt";
 import { usuvue_model } from "../models/USUVUE";
 import { spawn, exec } from "child_process";
+import { dia_no_habil_model } from "../models/DNHABIL";
 const fs = require("fs");
 var rimraf = require("rimraf");
 
@@ -207,7 +208,7 @@ export const get_response = (
   codigo: any,
   res: Response
 ) => {
-  if (doc === "" ||doc === null || doc === undefined || doc.length < 1) {
+  if (doc === "" || doc === null || doc === undefined || doc.length < 1) {
     res
       .json({
         msg: `El código (${codigo}) de ${nom} no existe.`,
@@ -311,7 +312,7 @@ cron.schedule("*/60 * * * *", () => {
 
 cron.schedule("59 23 * * *", () => {
   setTimeout(() => {
-    limipar_backup()
+    limipar_backup();
     cambio_contra_automatico();
   }, 61000);
 });
@@ -348,8 +349,11 @@ export const copia_segurdad = () => {
   console.log("Creando copia de seguridad...");
   let fecha = new Date();
   const fechaActual = `${fecha.getFullYear()}-${fecha.getMonth()}-${fecha.getDate()}`;
-  const horaActual = `${fecha.toLocaleTimeString("en-US").replace(":", ".").replace(":", ".").replace(" ", "")}`;
-
+  const horaActual = `${fecha
+    .toLocaleTimeString("en-US")
+    .replace(":", ".")
+    .replace(":", ".")
+    .replace(" ", "")}`;
 
   let backupProcess = spawn("mongodump", [
     "--host=localhost",
@@ -402,34 +406,66 @@ export const copia_segurdad = () => {
   });
 };
 
-export const limipar_backup = ()=>{
-
-let files = [];
-fs.readdir("C:/BACKUP_MONGO_CORRESPONDENCIA/", (err:any, result:any) => {
-  if (err) {
-    console.error(err);
-    throw Error(err);
-  }
-  files = result;
-  const carpeta = files[files.length - 4] //se debe poner -3
-
-  fs.readdir(`C:/BACKUP_MONGO_CORRESPONDENCIA/${carpeta}`, (err:any, result:any) => {
+export const limipar_backup = () => {
+  let files = [];
+  fs.readdir("C:/BACKUP_MONGO_CORRESPONDENCIA/", (err: any, result: any) => {
     if (err) {
       console.error(err);
       throw Error(err);
     }
-    for (let i = 0; i < result.length - 1; i++) {
-      console.log(`C:\\BACKUP_MONGO_CORRESPONDENCIA\\${carpeta}\\${result[i]}`)
-      rimraf(
-        `C:\\BACKUP_MONGO_CORRESPONDENCIA\\${carpeta}\\${result[i]}`,
-        function () {
-          console.log("done");
+    files = result;
+    const carpeta = files[files.length - 4]; //se debe poner -3
+
+    fs.readdir(
+      `C:/BACKUP_MONGO_CORRESPONDENCIA/${carpeta}`,
+      (err: any, result: any) => {
+        if (err) {
+          console.error(err);
+          throw Error(err);
         }
-      );
-      
-    }
+        for (let i = 0; i < result.length - 1; i++) {
+          console.log(
+            `C:\\BACKUP_MONGO_CORRESPONDENCIA\\${carpeta}\\${result[i]}`
+          );
+          rimraf(
+            `C:\\BACKUP_MONGO_CORRESPONDENCIA\\${carpeta}\\${result[i]}`,
+            function () {
+              console.log("done");
+            }
+          );
+        }
+      }
+    );
   });
+};
 
-});
+export const fechaVence = async (fechaCorres: Date) => {
+  try {
+    const ano = fechaCorres.getFullYear().toString();
 
-}
+    const festivos = await dia_no_habil_model.find({
+      $expr: { $eq: [{ $year: "$date" }, { $year: new Date(ano) }] },
+    });
+
+    let fechaLiminte: any;
+
+    let fehca = new Date(fechaCorres);
+
+
+    let contador = 0;
+
+    while (contador < 15) {
+      fehca.setDate(fehca.getDate() + 1);
+      if (
+        !festivos.find((festivos) => festivos.date === fehca) &&
+        fehca.getDay() != 5 &&
+        fehca.getDay() != 6
+      ) {
+        contador++;
+        fechaLiminte = fehca;
+      }
+    }
+
+    return fechaLiminte
+  } catch (error) {}
+};

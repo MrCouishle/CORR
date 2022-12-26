@@ -10,7 +10,7 @@ const app = express();
 
 //Metodos automaticos
 //cambio_contra_automatico();
-// copia_segurdad()
+//copia_segurdad()
 //limipar_backup();
 //Estos lo llamamos siempre que se inicie el servidor, dado el caso que el servidor se encuentre apagado a las 12:01 AM
 

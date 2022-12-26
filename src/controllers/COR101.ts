@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
-import { concatenarCodigos, delete_response, edit_response, get_all_response, get_response, omitirId } from "../global/global";
+import { concatenarCodigos, delete_response, edit_response, fechaVence, get_all_response, get_response, omitirId } from "../global/global";
 import { serco_model } from "../models/SERCO";
 
 export const getSerco = async (req: Request, res: Response) => {
   try {
     const data = await serco_model.find({}, omitirId);
+    fechaVence(new Date("2023-01-02T00:00:00.000Z"))
     get_all_response(data, res);
   } catch (error) {
     res.json({ msg: error });

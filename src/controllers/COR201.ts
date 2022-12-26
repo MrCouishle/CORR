@@ -363,7 +363,7 @@ export const envioCorreos = async (req: Request, res: Response) => {
         text: "La presente, adjunto archivos de correspondencia aun pendientes por revisar.",
         attachments: [
           {
-            filename: "file.pdf",
+            filename: `${llave.anoLlave}${llave.cont}.pdf`,
             content: base64,
             encoding: "base64",
           },
@@ -416,10 +416,12 @@ export const ultCorres = async (req: Request, res: Response) => {
 export const guardarPdf = async (req: Request, res: Response) => {
   try {
     const filename = `${req.params.anoLlave}${req.params.cont}`;
+
     const llave = {
       anoLlave: parseInt(req.params.anoLlave),
       cont: parseInt(req.params.cont),
     };
+    
     fs.readFile(`.\\pdf\\${filename}.pdf`, function (err, data) {
       if (err) throw err;
       const pdf = data.toString("base64"); //PDF WORKS
