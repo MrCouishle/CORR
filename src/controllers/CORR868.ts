@@ -59,6 +59,14 @@ export const getCorresF8 = async (req: Request, res: Response) => {
             as: "remidep",
           },
         },
+        // {
+        //   $lookup: {
+        //     from: "remidep",
+        //     localField: "deptoremi",
+        //     foreignField: "codigo",
+        //     as: "remidep",
+        //   },
+        // },
         {
           $lookup: {
             from: "auxtip",

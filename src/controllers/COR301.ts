@@ -154,7 +154,6 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
       .project({
         _id: 0,
         cont: { $concat: [{ $toString: ["$llave.cont"] }, " -E"] },
-        // radicado: lpad("$cont",7,"0"),
         anoLlave: { $concat: [{ $toString: ["$llave.anoLlave"] }] },
         fecha: 1,
         fechaR: { $substr: ["$fecha", 0, 10] },
@@ -200,6 +199,19 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
             unit: "day",
             amount: { $arrayElemAt: ["$tipc.dias", 0] },
           },
+        },
+        fechaVenceR: {
+          $substr: [
+            {
+              $dateAdd: {
+                startDate: "$fecha",
+                unit: "day",
+                amount: { $arrayElemAt: ["$tipc.dias", 0] },
+              },
+            },
+            0,
+            10,
+          ],
         },
         diasVence: {
           $dateDiff: {
@@ -274,11 +286,13 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
           },
         },
         fechaRespuesta: {
-          $let: {
+          $substr:[
+          {$let: {
             vars: {},
             in: { $add: [{ $arrayElemAt: ["$rescorr.fecha", 0] }] },
-          },
-        },
+          }},0,10
+          ],
+      },
         // horaFechaRes: { $concat: [{ $toString: {$hour: "$rescorr.fecha"}}, ":", { $toString: {$minute:"$rescorr.fecha"}}]},
         // fehcaVenRes:{
 
