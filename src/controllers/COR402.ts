@@ -121,7 +121,7 @@ export const f8Macorr = async (req: Request, res: Response) => {
         detalle: 1,
         tabla: 1,
         oper: 1,
-        fechOper: 1,
+        fechOper:{$substr:["$fechOper",0,10]}
       })
       .match(body)
       .skip(Number(desde))
