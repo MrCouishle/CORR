@@ -414,28 +414,30 @@ export const limipar_backup = () => {
       throw Error(err);
     }
     files = result;
-    const carpeta = files[files.length - 4]; //se debe poner -3
-
-    fs.readdir(
-      `C:/BACKUP_MONGO_CORRESPONDENCIA/${carpeta}`,
-      (err: any, result: any) => {
-        if (err) {
-          console.error(err);
-          throw Error(err);
+    if (files.length > 4) {
+      console.log("mello");
+      const carpeta = files[files.length - 4]; //se debe poner -3
+      fs.readdir(
+        `C:/BACKUP_MONGO_CORRESPONDENCIA/${carpeta}`,
+        (err: any, result: any) => {
+          if (err) {
+            console.error(err);
+            throw Error(err);
+          }
+          for (let i = 0; i < result.length - 1; i++) {
+            console.log(
+              `C:\\BACKUP_MONGO_CORRESPONDENCIA\\${carpeta}\\${result[i]}`
+            );
+            rimraf(
+              `C:\\BACKUP_MONGO_CORRESPONDENCIA\\${carpeta}\\${result[i]}`,
+              function () {
+                console.log("done");
+              }
+            );
+          }
         }
-        for (let i = 0; i < result.length - 1; i++) {
-          console.log(
-            `C:\\BACKUP_MONGO_CORRESPONDENCIA\\${carpeta}\\${result[i]}`
-          );
-          rimraf(
-            `C:\\BACKUP_MONGO_CORRESPONDENCIA\\${carpeta}\\${result[i]}`,
-            function () {
-              console.log("done");
-            }
-          );
-        }
-      }
-    );
+      );
+    }
   });
 };
 
@@ -451,7 +453,6 @@ export const fechaVence = async (fechaCorres: Date, diasTipc = 0) => {
 
     let fechaInicial = new Date(fechaCorres);
 
-
     let contadorDiasHabiles = 0;
 
     while (contadorDiasHabiles < diasTipc) {
@@ -466,6 +467,6 @@ export const fechaVence = async (fechaCorres: Date, diasTipc = 0) => {
       }
     }
 
-    return fechaLimite
+    return fechaLimite;
   } catch (error) {}
 };
