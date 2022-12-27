@@ -46,8 +46,14 @@ export const getRescorrF8 = async (req: Request, res: Response) => {
         contLlave: { $concat: [{ $toString: ["$codResp.cont"] }] },
         swRadi: 1,
         fecha: 1,
-        hora: { $hour: "$fecha" },
-        minutos: { $minute: "$fecha" },
+        fechaR: {$substr:["$fecha",0,10]},
+        hora: {
+          $concat: [
+            { $toString: { $hour: "$fecha" } },
+            ":",
+            { $toString: { $minute: "$fecha" } },
+          ],
+        },
         firma: 1,
         codigoMacro: 1,
         asunto: 1,
@@ -56,7 +62,8 @@ export const getRescorrF8 = async (req: Request, res: Response) => {
         cargo: 1,
         llaveRadi: { $concat: [{ $toString: ["$anoRadi"] }, "$contRadi"] },
         fechaRadi: 1,
-        horaRadi: { $hour: "$fechaRadi" },
+        fechaRadiR:{$substr:["$fechaRadi",0,10]},
+        horaRadi: { $concat: [{$hour: "$fechaRadi"},":",{$minute:"$fechaRadi"}] },
         nit: { $concat: [{ $toString: ["$nit"] }] }, //Para filtrar se convierte a string para que el regex funciones
         tipoCorres: 1,
         descripTipco: {
@@ -82,9 +89,19 @@ export const getRescorrF8 = async (req: Request, res: Response) => {
         codAuxco: 1,
         codUnifun: 1,
         proceden: 1,
+        procedenR: {
+          $switch: {
+            branches: [
+              { case: { $eq: ["$proceden", 1] }, then: "EXTERNO" },
+              { case: { $eq: ["$proceden", 2] }, then: "INTERNO" },
+            ],
+            default: "SIN DEFINIR",
+          },
+        },
         oper: 1,
         operModi: 1,
         fechaModi: 1,
+        horaModi:{$concat:[{$hour:"$fechaModi"},":",{$minute:"$fechaModi"}]},
         medio: 1,
         numeroFact: 1,
         nroGuia: 1,
