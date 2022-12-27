@@ -5,7 +5,6 @@ import { serco_model } from "../models/SERCO";
 export const getSerco = async (req: Request, res: Response) => {
   try {
     const data = await serco_model.find({}, omitirId);
-    fechaVence(new Date("2023-01-02T00:00:00.000Z"))
     get_all_response(data, res);
   } catch (error) {
     res.json({ msg: error });

@@ -330,7 +330,8 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
 
 
       for (let i = 0; i < data.length; i++) {
-        data[i].fechaVence = await fechaVence(data[i].fecha)
+        if(typeof data[i].diasTipc == "object") console.log(data[i].diasTipc)
+        data[i].fechaVence = await fechaVence(data[i].fecha, data[i].diasTipc)
         
       }
 

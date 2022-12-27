@@ -439,7 +439,7 @@ export const limipar_backup = () => {
   });
 };
 
-export const fechaVence = async (fechaCorres: Date) => {
+export const fechaVence = async (fechaCorres: Date, diasTipc = 0) => {
   try {
     const ano = fechaCorres.getFullYear().toString();
 
@@ -447,25 +447,25 @@ export const fechaVence = async (fechaCorres: Date) => {
       $expr: { $eq: [{ $year: "$date" }, { $year: new Date(ano) }] },
     });
 
-    let fechaLiminte: any;
+    let fechaLimite: any;
 
-    let fehca = new Date(fechaCorres);
+    let fechaInicial = new Date(fechaCorres);
 
 
-    let contador = 0;
+    let contadorDiasHabiles = 0;
 
-    while (contador < 15) {
-      fehca.setDate(fehca.getDate() + 1);
+    while (contadorDiasHabiles < diasTipc) {
+      fechaInicial.setDate(fechaInicial.getDate() + 1);
       if (
-        !festivos.find((festivos) => festivos.date === fehca) &&
-        fehca.getDay() != 5 &&
-        fehca.getDay() != 6
+        !festivos.find((festivos) => festivos.date === fechaInicial) &&
+        fechaInicial.getDay() != 5 &&
+        fechaInicial.getDay() != 6
       ) {
-        contador++;
-        fechaLiminte = fehca;
+        contadorDiasHabiles++;
+        fechaLimite = fechaInicial;
       }
     }
 
-    return fechaLiminte
+    return fechaLimite
   } catch (error) {}
 };
