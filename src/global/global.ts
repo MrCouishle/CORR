@@ -415,7 +415,6 @@ export const limipar_backup = () => {
     }
     files = result;
     if (files.length > 4) {
-      console.log("mello");
       const carpeta = files[files.length - 4]; //se debe poner -3
       fs.readdir(
         `C:/BACKUP_MONGO_CORRESPONDENCIA/${carpeta}`,
@@ -443,8 +442,8 @@ export const limipar_backup = () => {
 
 export const fechaVence = async (fechaCorres: Date, diasTipc = 0) => {
   try {
+    if(diasTipc == 0 || diasTipc == null) return 0 //Esta validacion no deberia ser necesaria, revisar migracion.
     const ano = fechaCorres.getFullYear().toString();
-
     const festivos = await dia_no_habil_model.find({
       $expr: { $eq: [{ $year: "$date" }, { $year: new Date(ano) }] },
     });
@@ -459,14 +458,61 @@ export const fechaVence = async (fechaCorres: Date, diasTipc = 0) => {
       fechaInicial.setDate(fechaInicial.getDate() + 1);
       if (
         !festivos.find((festivos) => festivos.date === fechaInicial) &&
-        fechaInicial.getDay() != 5 &&
-        fechaInicial.getDay() != 6
+        fechaInicial.getDay() != 6 &&
+        fechaInicial.getDay() != 0
       ) {
         contadorDiasHabiles++;
         fechaLimite = fechaInicial;
-      }
+      }    
     }
-
+    // console.log(fechaPrueba)
+    // console.log(fechaPrueba)
     return fechaLimite;
+  } catch (error) {}
+};
+
+export const diasHabilesTranscurridos = async (fechaLimite: Date) => {
+  try {
+    let fechaActual = new Date();
+    //console.log(fechaLimite)
+
+    const ano = fechaLimite.getFullYear().toString();
+    const festivos = await dia_no_habil_model.find({
+      $expr: { $eq: [{ $year: "$date" }, { $year: new Date(ano) }] },
+    });
+
+    //console.log("Fecha Actual", fechaActual)
+    //console.log("Fecha Limite", fechaLimite)
+
+    let dias = fechaLimite.getTime() - fechaActual.getTime() ;
+    dias = Math.round(dias / (1000 * 60 * 60 * 24));
+    let contadorDiasHabiles = 0
+    if (dias >= 0){
+      for (let i = 0; i < dias; i++) { 
+        fechaActual.setDate(fechaActual.getDate() + 1);
+        if (
+          !festivos.find((festivos) => festivos.date === fechaActual) &&
+          fechaActual.getDay() != 6 &&
+          fechaActual.getDay() != 0
+        ) {
+          contadorDiasHabiles++;
+        }
+      }
+      return contadorDiasHabiles
+    }else {
+      //console.log("Else")
+      dias = dias * -1
+      for (let i = 0; i < dias; i++) { 
+        fechaLimite.setUTCDate(fechaLimite.getDate() + 1);
+        if (
+          !festivos.find((festivos) => festivos.date === fechaLimite) &&
+          fechaLimite.getDay() != 6 &&
+          fechaLimite.getDay() != 0
+        ) {
+          contadorDiasHabiles++;
+        }
+      }
+      return contadorDiasHabiles - (contadorDiasHabiles * 2)
+    }
   } catch (error) {}
 };
