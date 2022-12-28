@@ -63,7 +63,7 @@ export const getRescorrF8 = async (req: Request, res: Response) => {
         llaveRadi: { $concat: [{ $toString: ["$anoRadi"] }, "$contRadi"] },
         fechaRadi: 1,
         fechaRadiR:{$substr:["$fechaRadi",0,10]},
-        horaRadi: { $concat: [{$hour: "$fechaRadi"},":",{$minute:"$fechaRadi"}] },
+        horaRadi: { $concat: [{ $toString: {$hour: "$fechaRadi"}},":",{ $toString: {$minute:"$fechaRadi"}}] },
         nit: { $concat: [{ $toString: ["$nit"] }] }, //Para filtrar se convierte a string para que el regex funciones
         tipoCorres: 1,
         descripTipco: {
@@ -101,7 +101,7 @@ export const getRescorrF8 = async (req: Request, res: Response) => {
         oper: 1,
         operModi: 1,
         fechaModi: 1,
-        horaModi:{$concat:[{$hour:"$fechaModi"},":",{$minute:"$fechaModi"}]},
+        horaModi:{$concat:[{$toString:{$hour:"$fechaModi"}},":",{$toString:{$minute:"$fechaModi"}}]},
         medio: 1,
         numeroFact: 1,
         nroGuia: 1,
