@@ -114,6 +114,7 @@ export const getCorresF8 = async (req: Request, res: Response) => {
         },
         descrip: 1,
         descripTer: { $concat: [{ $arrayElemAt: ["$ter.descrip", 0] }] },
+        correoTer: { $concat: [{ $arrayElemAt: ["$ter.email", 0] }] },
         ser: 1,
         operdiri: 1,
         dep: 1,
