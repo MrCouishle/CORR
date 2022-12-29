@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { get_all_response } from "../global/global";
 import { corres_model } from "../models/CORRES";
-//Corres, Serco
 
 export const getCorr869F8 = async (req: Request, res: Response) => {
   try {
@@ -22,17 +21,14 @@ export const getCorr869F8 = async (req: Request, res: Response) => {
       .project({
         _id: 0,
         llave: {
-          $concat: [
-            { $toString: ["$llave.anoLlave"] },
-            { $toString: ["$llave.cont"] },
-          ],
+          $concat: [{ $toString: ["$llave.anoLlave"] }, { $toString: ["$llave.cont"] }],
         },
         fecha: 1,
         hora: { $hour: "$fecha" },
         minutos: { $minute: "$fecha" },
         ser: 1,
         descripSerco: { $concat: [{ $arrayElemAt: ["$serc.descripcion", 0] }] },
-        esta: { $toString: ["$esta"]},
+        esta: { $toString: ["$esta"] },
         descripEsta: {
           $switch: {
             branches: [
@@ -48,12 +44,59 @@ export const getCorr869F8 = async (req: Request, res: Response) => {
       .match({
         $or: [
           { llave: { $regex: dato, $options: "i" } },
-          { esta: { $regex: dato, $options: "i"} },
+          { esta: { $regex: dato, $options: "i" } },
           { descripEsta: { $regex: dato, $options: "i" } },
         ],
       })
       .skip(Number(desde))
       .limit(Number(cantidad));
+
+    get_all_response(data, res);
+  } catch (error) {
+    console.log(error);
+    res.json({ msg: error });
+  }
+};
+export const getCorr869 = async (req: Request, res: Response) => {
+  try {
+    const { anioConsulta } = req.params;
+
+    const data = await corres_model
+      .aggregate([
+        {
+          $lookup: {
+            from: "serco",
+            localField: "ser",
+            foreignField: "codigo",
+            as: "serc",
+          },
+        },
+      ])
+
+      .project({
+        _id: 0,
+        llave: {
+          $concat: [{ $toString: ["$llave.anoLlave"] }, { $toString: ["$llave.cont"] }],
+        },
+        fecha: 1,
+        hora: { $hour: "$fecha" },
+        minutos: { $minute: "$fecha" },
+        ser: 1,
+        descripSerco: { $concat: [{ $arrayElemAt: ["$serc.descripcion", 0] }] },
+        esta: { $toString: ["$esta"] },
+        descripEsta: {
+          $switch: {
+            branches: [
+              { case: { $eq: ["$esta", 1] }, then: "PENDIENTE LEER" },
+              { case: { $eq: ["$esta", 2] }, then: "LEÍDA SIN RESPUESTA" },
+              { case: { $eq: ["$esta", 3] }, then: "LEÍDA CON ÉXITO" },
+              { case: { $eq: ["$esta", 4] }, then: "RESPUESTA CONFIRMADA" },
+            ],
+            default: "SIN DESCRIPCION DE ESTADO",
+          },
+        },
+      })
+      .match({ llave: anioConsulta });
 
     get_all_response(data, res);
   } catch (error) {

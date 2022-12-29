@@ -22,6 +22,7 @@ export const postCorres = async (req: Request, res: Response) => {
 export const putCorres = async (req: Request, res: Response) => {
   try {
     const llave = req.body.llave;
+    console.log("Datos", req.body);
     delete req.body.llave;
     const data = await corres_model.updateOne({ llave: llave }, req.body);
     edit_response("corres", data, `${llave.anoLlave} / ${llave.cont}`, res);
@@ -104,25 +105,11 @@ export const getCorres = async (req: Request, res: Response) => {
         {
           $lookup: {
             from: "remidep",
-            let: { deptoremi: { $toString: "$deptoremi" } },
-            pipeline: [
-              {
-                $match: {
-                  $expr: { $eq: ["$codigo", "$$deptoremi"] },
-                },
-              },
-            ],
+            localField: "deptoremi",
+            foreignField: "codigo",
             as: "remidep",
           },
         },
-        // {
-        //   $lookup: {
-        //     from: "remidep",
-        //     localField: "deptoremi",
-        //     foreignField: "codigo",
-        //     as: "remidep",
-        //   },
-        // },
       ])
       .project({
         _id: 0,
@@ -160,6 +147,9 @@ export const getCorres = async (req: Request, res: Response) => {
         },
         responsableDep: {
           $concat: [{ $arrayElemAt: ["$depco.responsable", 0] }],
+        },
+        correoDep: {
+          $concat: [{ $arrayElemAt: ["$depco.correo", 0] }],
         },
         descripSer: {
           $concat: [{ $arrayElemAt: ["$serco.descripcion", 0] }],
@@ -436,7 +426,7 @@ export const guardarPdf = async (req: Request, res: Response) => {
       anoLlave: parseInt(req.params.anoLlave),
       cont: parseInt(req.params.cont),
     };
-    
+
     fs.readFile(`.\\pdf\\${filename}.pdf`, function (err, data) {
       if (err) throw err;
       const pdf = data.toString("base64"); //PDF WORKS

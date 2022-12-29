@@ -48,25 +48,11 @@ export const getCorresF8 = async (req: Request, res: Response) => {
         {
           $lookup: {
             from: "remidep",
-            let: { deptoremi: { $toString: "$deptoremi" } },
-            pipeline: [
-              {
-                $match: {
-                  $expr: { $eq: ["$codigo", "$$deptoremi"] },
-                },
-              },
-            ],
+            localField: "deptoremi",
+            foreignField: "codigo",
             as: "remidep",
           },
         },
-        // {
-        //   $lookup: {
-        //     from: "remidep",
-        //     localField: "deptoremi",
-        //     foreignField: "codigo",
-        //     as: "remidep",
-        //   },
-        // },
         {
           $lookup: {
             from: "auxtip",
@@ -111,6 +97,9 @@ export const getCorresF8 = async (req: Request, res: Response) => {
         responsableDep: {
           $concat: [{ $arrayElemAt: ["$depco.responsable", 0] }],
         },
+        correoDep: {
+          $concat: [{ $arrayElemAt: ["$depco.correo", 0] }],
+        },
         descripTipco: {
           $concat: [{ $arrayElemAt: ["$tipc.descripcion", 0] }],
         },
@@ -121,7 +110,7 @@ export const getCorresF8 = async (req: Request, res: Response) => {
           $concat: [{ $arrayElemAt: ["$auxtip.descripcion", 0] }],
         },
         descripDeptoremi: {
-          $concat: [{ $arrayElemAt: ["$tipc.descripcion", 0] }],
+          $concat: [{ $arrayElemAt: ["$remidep.descripcion", 0] }],
         },
         descrip: 1,
         descripTer: { $concat: [{ $arrayElemAt: ["$ter.descrip", 0] }] },
@@ -153,7 +142,7 @@ export const getCorresF8 = async (req: Request, res: Response) => {
         persentre: 1,
         observ: 1,
         tablaDep: 1,
-        codAux: 1,
+        codAu1x: 1,
         tablaOper: 1,
         llaveResp: 1,
         errorRips: 1,
