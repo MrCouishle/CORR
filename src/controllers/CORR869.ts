@@ -59,8 +59,8 @@ export const getCorr869F8 = async (req: Request, res: Response) => {
 };
 export const getCorr869 = async (req: Request, res: Response) => {
   try {
-    const { anioConsulta } = req.params;
-
+    const { anio } = req.params;
+    console.log(req.params)
     const data = await corres_model
       .aggregate([
         {
@@ -78,12 +78,26 @@ export const getCorr869 = async (req: Request, res: Response) => {
         llave: {
           $concat: [{ $toString: ["$llave.anoLlave"] }, { $toString: ["$llave.cont"] }],
         },
-        fecha: 1,
-        hora: { $hour: "$fecha" },
-        minutos: { $minute: "$fecha" },
+        ano: {$concat: [{$toString:["$llave.anoLlave"]}]},
+        // fecha: 1,
+        fechaR:{$substr:["$fecha",0,10]},
+        hora: {$concat:[{ $toString:{$hour: "$fecha"} },":",{$toString:{$minute: "$fecha"} }]},
         ser: 1,
         descripSerco: { $concat: [{ $arrayElemAt: ["$serc.descripcion", 0] }] },
-        esta: { $toString: ["$esta"] },
+        esta:1,
+        estaR:{
+        $switch: {
+          branches: [
+            { case: { $eq: ["$esta", 1] }, then: "EN TRAMITE" },
+            { case: { $eq: ["$esta", 2] }, then: "VENCIDA" },
+            { case: { $eq: ["$esta", 3] }, then: "RESUELTA" },
+            { case: { $eq: ["$esta", 4] }, then: "RESUELTA" }, //Se consulto con encargado de correspondencia daniel, el numero 4 es resuelta tambien, igual que el 6 lo toman como resuelta.
+            { case: { $eq: ["$esta", 5] }, then: "PRORROGA" },
+            { case: { $eq: ["$esta", 6] }, then: "ANULADO" },
+          ],
+          default: "SIN DEFINIR",
+        },
+      },
         descripEsta: {
           $switch: {
             branches: [
@@ -96,7 +110,7 @@ export const getCorr869 = async (req: Request, res: Response) => {
           },
         },
       })
-      .match({ llave: anioConsulta });
+      .match({ ano : anio });
 
     get_all_response(data, res);
   } catch (error) {
