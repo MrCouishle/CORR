@@ -196,3 +196,89 @@ export const ultResCorr = async (req: Request, res: Response) => {
     res.json({ msg: error });
   }
 };
+
+export const getRescorrLlave= async (req:Request, res:Response) => {
+  try {
+    const {anoLlave, cont} = req.params;
+    console.log(req.params)
+    const codResp = {
+      anoLlave: Number(anoLlave),
+      cont: Number(cont),
+    };
+    console.log(codResp)
+    const data = await rescorr_model
+    .aggregate()
+    .project({
+      _id: 0,
+      codResp: 1,
+      swRadi: 1,
+      fecha: 1,
+      fechaR: { $substr: ["$fecha", 0, 10] },
+      horaFecha: {
+        $concat: [
+          { $toString: { $hour: "$fecha" } },
+          ":",
+          { $toString: { $minute: "$fecha" } },
+        ],
+      },
+      firma: 1,
+      llaveMacro: {
+        $concat: [
+          { $toString: ["$codigoMacro"] },
+          { $toString: ["$clMacro"] },
+        ],
+      },
+      asunto: 1,
+      tabla: 1,
+      respon: 1,
+      cargo: 1,
+      llaveRadi: {
+        $concat: [{ $toString: ["$anoRadi"] }, { $toString: ["$contRadi"] }],
+      },
+      fechaRadi: 1,
+      horaRadi: {
+        $concat: [
+          { $toString: { $hour: "$fechaRadi" } },
+          ":",
+          { $toString: { $minute: "$fechaRadi" } },
+        ],
+      },
+      nit: { $concat: [{ $toString: ["$nit"] }] },
+      tipoCorres: 1,
+      descrip: 1,
+      ser: 1,
+      operdiri: 1,
+      dep: 1,
+      esta: { $concat: [{ $toString: ["$esta"] }] },
+      estaR: {
+        $switch: {
+          branches: [
+            { case: { $eq: ["$esta", 1] }, then: "EN TRAMITE" },
+            { case: { $eq: ["$esta", 2] }, then: "VENCIDA" },
+            { case: { $eq: ["$esta", 3] }, then: "RESUELTA" },
+            { case: { $eq: ["$esta", 4] }, then: "RESUELTA" }, //Se consulto con encargado de correspondencia daniel, el numero 4 es resuelta tambien, igual que el 6 lo toman como resuelta.
+            { case: { $eq: ["$esta", 5] }, then: "PRORROGA" },
+            { case: { $eq: ["$esta", 6] }, then: "ANULADO" },
+          ],
+          default: "SIN DEFINIR",
+        },
+      },
+      codAuxco: 1,
+      codUnifun: 1,
+      proceden: 1,
+      oper: 1,
+      operModi: 1,
+      medio: 1,
+      numeroFact: 1,
+      monto: 1,
+      nroGuia: 1,
+      perRec: 1, //Esto en el codigo cobol es "presente"
+    })
+    .match({codResp:codResp})
+    get_response("rescorr",data[0],codResp,res);
+
+  } catch (error) {
+    console.error(error)
+    res.json({msg:error})
+  }
+}
