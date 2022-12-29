@@ -142,7 +142,7 @@ export const getCorresF8 = async (req: Request, res: Response) => {
         persentre: 1,
         observ: 1,
         tablaDep: 1,
-        codAu1x: 1,
+        codAux: 1,
         tablaOper: 1,
         llaveResp: 1,
         errorRips: 1,
