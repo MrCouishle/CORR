@@ -299,6 +299,13 @@ export const getRescorrLlave = async (req: Request, res: Response) => {
         oper: 1,
         operModi: 1,
         fechaModi: 1,
+        horaModi: {
+          $concat: [
+            { $toString: { $hour: "$fechaModi" } },
+            ":",
+            { $toString: { $minute: "$fechaModi" } },
+          ],
+        },
         medio: 1,
         numeroFact: 1,
         nroGuia: 1,
