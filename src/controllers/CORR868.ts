@@ -48,8 +48,14 @@ export const getCorresF8 = async (req: Request, res: Response) => {
         {
           $lookup: {
             from: "remidep",
-            localField: "deptoremi",
-            foreignField: "codigo",
+            let: { codigoRemidep: { $toString: "$deptoremi" } },
+            pipeline: [
+              {
+                $match: {
+                  $expr: { $eq: ["$codigo", "$$codigoRemidep"] },
+                },
+              },
+            ],
             as: "remidep",
           },
         },
@@ -91,7 +97,6 @@ export const getCorresF8 = async (req: Request, res: Response) => {
         hora: {
           $concat: [{ $toString: { $hour: "$fecha" } }, ":", { $toString: { $minute: "$fecha" } }],
         },
-        minutos: { $minute: "$fecha" },
         nit: { $concat: [{ $toString: ["$nit"] }] },
         tipoCorres: 1,
         descripDep: {

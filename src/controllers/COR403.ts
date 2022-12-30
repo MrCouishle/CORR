@@ -1,5 +1,11 @@
 import { Request, Response } from "express";
-import { get_response, get_all_response, edit_response, delete_response, omitirId } from "../global/global";
+import {
+  get_response,
+  get_all_response,
+  edit_response,
+  delete_response,
+  omitirId,
+} from "../global/global";
 import { rescorr_model } from "../models/RESCORR";
 import { pdf_res_model } from "../models/pdf-res";
 import nodemailer from "nodemailer";
@@ -31,7 +37,12 @@ export const putRescorr = async (req: Request, res: Response) => {
     const codResp = req.body.codResp;
     delete req.body.codResp;
     const data = await rescorr_model.updateOne({ codResp: codResp }, req.body);
-    edit_response("rescorr", data, `${codResp.anoLlave} / ${codResp.cont}`, res);
+    edit_response(
+      "rescorr",
+      data,
+      `${codResp.anoLlave} / ${codResp.cont}`,
+      res
+    );
   } catch (error) {
     console.log(error);
     res.json({ msg: error });
@@ -45,7 +56,12 @@ export const deleteRescorr = async (req: Request, res: Response) => {
       cont: Number(req.params.cont),
     };
     const data = await rescorr_model.deleteOne({ codResp });
-    delete_response("rescorres", data, `${codResp.anoLlave} / ${codResp.cont}`, res);
+    delete_response(
+      "rescorres",
+      data,
+      `${codResp.anoLlave} / ${codResp.cont}`,
+      res
+    );
   } catch (error) {
     console.log(error);
     res.json({ msg: error });
@@ -62,17 +78,27 @@ export const f8Rescorr = async (req: Request, res: Response) => {
       .project({
         _id: 0,
         codResp: {
-          $concat: [{ $toString: ["$codResp.anoLlave"] }, { $toString: ["$codResp.cont"] }],
+          $concat: [
+            { $toString: ["$codResp.anoLlave"] },
+            { $toString: ["$codResp.cont"] },
+          ],
         },
         swRadi: 1,
         fecha: 1,
         fechaR: { $substr: ["$fecha", 0, 10] },
         horaFecha: {
-          $concat: [{ $toString: { $hour: "$fecha" } }, ":", { $toString: { $minute: "$fecha" } }],
+          $concat: [
+            { $toString: { $hour: "$fecha" } },
+            ":",
+            { $toString: { $minute: "$fecha" } },
+          ],
         },
         firma: 1,
         llaveMacro: {
-          $concat: [{ $toString: ["$codigoMacro"] }, { $toString: ["$clMacro"] }],
+          $concat: [
+            { $toString: ["$codigoMacro"] },
+            { $toString: ["$clMacro"] },
+          ],
         },
         asunto: 1,
         tabla: 1,
@@ -83,7 +109,11 @@ export const f8Rescorr = async (req: Request, res: Response) => {
         },
         fechaRadi: 1,
         horaRadi: {
-          $concat: [{ $toString: { $hour: "$fechaRadi" } }, ":", { $toString: { $minute: "$fechaRadi" } }],
+          $concat: [
+            { $toString: { $hour: "$fechaRadi" } },
+            ":",
+            { $toString: { $minute: "$fechaRadi" } },
+          ],
         },
         nit: { $concat: [{ $toString: ["$nit"] }] },
         tipoCorres: 1,
@@ -143,13 +173,20 @@ export const ultResCorr = async (req: Request, res: Response) => {
           _id: 0,
           codResp: 1,
           codRespR: {
-            $concat: [{ $toString: "$codResp.anoLlave" }, { $toString: "$codResp.cont" }],
+            $concat: [
+              { $toString: "$codResp.anoLlave" },
+              { $toString: "$codResp.cont" },
+            ],
           },
           cont: { $concat: [{ $toString: "$codResp.cont" }] },
           fecha: 1,
           fechaR: { $substr: ["$fecha", 0, 10] },
           hora: {
-            $concat: [{ $toString: { $hour: "$fecha" } }, ":", { $toString: { $minute: "$fecha" } }],
+            $concat: [
+              { $toString: { $hour: "$fecha" } },
+              ":",
+              { $toString: { $minute: "$fecha" } },
+            ],
           },
         }
       )
@@ -200,14 +237,24 @@ export const getRescorrLlave = async (req: Request, res: Response) => {
       .project({
         _id: 0,
         codResp2: {
-          $concat: [{ $toString: ["$codResp.anoLlave"] }, { $toString: ["$codResp.cont"] }],
+          $concat: [
+            { $toString: ["$codResp.anoLlave"] },
+            { $toString: ["$codResp.cont"] },
+          ],
         },
         codResp: 1,
         anoLlave: { $concat: [{ $toString: ["$codResp.anoLlave"] }] },
         contLlave: { $concat: [{ $toString: ["$codResp.cont"] }] },
         swRadi: 1,
-        fecha: 1,
-        hora: {$concat:[{ $toString:{$hour: "$fecha"} },":",{$toString:{ $minute: "$fecha" }}]},
+        // fecha:1,
+        fecha: { $substr: ["$fecha", 0, 10] },
+        hora: {
+          $concat: [
+            { $toString: { $hour: "$fecha" } },
+            ":",
+            { $toString: { $minute: "$fecha" } },
+          ],
+        },
         firma: 1,
         codigoMacro: 1,
         asunto: 1,
@@ -215,8 +262,15 @@ export const getRescorrLlave = async (req: Request, res: Response) => {
         respon: 1,
         cargo: 1,
         llaveRadi: { $concat: [{ $toString: ["$anoRadi"] }, "$contRadi"] },
-        fechaRadi: 1,
-        horaRadi: { $hour: "$fechaRadi" },
+        // fechaRadi:1,
+        fechaRadi: { $substr: ["$fechaRadi", 0, 10] },
+        horaRadi: {
+          $concat: [
+            { $toString: { $hour: "$fechaRadi" } },
+            ":",
+            { $toString: { $minute: "$fechaRadi" } },
+          ],
+        },
         nit: { $concat: [{ $toString: ["$nit"] }] }, //Para filtrar se convierte a string para que el regex funciones
         tipoCorres: 1,
         descripTipco: {
@@ -261,7 +315,18 @@ export const getRescorrLlave = async (req: Request, res: Response) => {
 
 export const envioCorreos = async (req: Request, res: Response) => {
   try {
-    const { server_email, remitente, clave, puerto, id, propietario, anoLlave, cont, destino, nom_empresa } = req.body;
+    const {
+      server_email,
+      remitente,
+      clave,
+      puerto,
+      id,
+      propietario,
+      anoLlave,
+      cont,
+      destino,
+      nom_empresa,
+    } = req.body;
 
     const llave = {
       anoLlave: parseInt(anoLlave),
