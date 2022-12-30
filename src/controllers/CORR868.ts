@@ -94,6 +94,12 @@ export const getCorresF8 = async (req: Request, res: Response) => {
         minutos: { $minute: "$fecha" },
         nit: { $concat: [{ $toString: ["$nit"] }] },
         tipoCorres: 1,
+        descripDep: {
+          $concat: [{$arrayElemAt:["$depco.descripcion",0]}]
+        },
+        cargoDep: {
+          $concat: [{ $arrayElemAt:["$depco.cargo",0]}]
+        },
         responsableDep: {
           $concat: [{ $arrayElemAt: ["$depco.responsable", 0] }],
         },
