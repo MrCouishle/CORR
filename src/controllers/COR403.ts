@@ -311,7 +311,7 @@ export const getRescorrLlave = async (req: Request, res: Response) => {
           $concat: [{ $arrayElemAt: ["$depco.responsable", 0] }],
         },
         esta: 1,
-        descripEsta: {
+        estaR: {
           $switch: {
             branches: [
               { case: { $eq: ["$esta", 1] }, then: "PENDIENTE LEER" },
