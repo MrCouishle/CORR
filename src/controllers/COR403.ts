@@ -275,10 +275,22 @@ export const getRescorrLlave = async (req: Request, res: Response) => {
         anoLlave: { $concat: [{ $toString: ["$codResp.anoLlave"] }] },
         contLlave: { $concat: [{ $toString: ["$codResp.cont"] }] },
         swRadi: 1,
+<<<<<<< HEAD
         clMacro:1,
         fecha: 1,
         hora: { $hour: "$fecha" },
         minutos: { $minute: "$fecha" },
+=======
+        // fecha:1,
+        fecha: { $substr: ["$fecha", 0, 10] },
+        hora: {
+          $concat: [
+            { $toString: { $hour: "$fecha" } },
+            ":",
+            { $toString: { $minute: "$fecha" } },
+          ],
+        },
+>>>>>>> 013cb4349abba9a98d431017aee65b7c9338ce58
         firma: 1,
         codigoMacro: 1,
         asunto: 1,
@@ -286,8 +298,15 @@ export const getRescorrLlave = async (req: Request, res: Response) => {
         respon: 1,
         cargo: 1,
         llaveRadi: { $concat: [{ $toString: ["$anoRadi"] }, "$contRadi"] },
-        fechaRadi: 1,
-        horaRadi: { $hour: "$fechaRadi" },
+        // fechaRadi:1,
+        fechaRadi: { $substr: ["$fechaRadi", 0, 10] },
+        horaRadi: {
+          $concat: [
+            { $toString: { $hour: "$fechaRadi" } },
+            ":",
+            { $toString: { $minute: "$fechaRadi" } },
+          ],
+        },
         nit: { $concat: [{ $toString: ["$nit"] }] }, //Para filtrar se convierte a string para que el regex funciones
         tipoCorres: 1,
         descripTipco: {
@@ -325,6 +344,13 @@ export const getRescorrLlave = async (req: Request, res: Response) => {
         oper: 1,
         operModi: 1,
         fechaModi: 1,
+        horaModi: {
+          $concat: [
+            { $toString: { $hour: "$fechaModi" } },
+            ":",
+            { $toString: { $minute: "$fechaModi" } },
+          ],
+        },
         medio: 1,
         numeroFact: 1,
         nroGuia: 1,
