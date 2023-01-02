@@ -67,7 +67,7 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
     //   console.log(`Dia final: ${diasFinal.toString()}`);
     // }
     if (nit != "99") nitt = { nit: Number(nit) };
-    if (dep != "**") depp = { dep: dep };
+    if (dep != "**") depp = { dep: Number(dep) };
     if (tipoCorr != "**") tipoCorrr = { tipoCorres: tipoCorr };
     if (jornada != "**") {
       if (jornada == "M")
@@ -80,7 +80,7 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
     if (proceden != "**") procedenn = { proceden: Number(proceden) };
     if (manejo != "**") manejoo = { manejo: Number(manejo) };
     if (estado != "**" && estado != null) {
-      estadoo = { estado: Number(estado) };
+      estadoo = { esta: Number(estado) };
     }
 
     const data = await corres_model

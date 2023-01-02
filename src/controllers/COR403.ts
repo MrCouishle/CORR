@@ -220,6 +220,20 @@ export const getRescorrLlave = async (req: Request, res: Response) => {
         },
         {
           $lookup: {
+            from: "macorr",
+            let: { llaveMacorr: [{ $toString: "$clMacor"},{$toString:"$codigoMacro"}]  },
+            pipeline: [
+              {
+                $match: {
+                  $expr: { $eq: ["$llave", "$$llaveMacorr"] },
+                },
+              },
+            ],
+            as: "macorr",
+          },
+        },
+        {
+          $lookup: {
             from: "depco",
             let: { dep: { $toInt: "$dep" } },
             pipeline: [
@@ -275,9 +289,8 @@ export const getRescorrLlave = async (req: Request, res: Response) => {
         anoLlave: { $concat: [{ $toString: ["$codResp.anoLlave"] }] },
         contLlave: { $concat: [{ $toString: ["$codResp.cont"] }] },
         swRadi: 1,
-        fecha: 1,
-        hora: { $hour: "$fecha" },
-        minutos: { $minute: "$fecha" },
+        fecha: {$substr:["$fecha",0,10]},
+        hora: {$concat:[{ $toString:{$hour: "$fecha"} },":",{ $toString:{$minute: "$fecha"} }]},
         firma: 1,
         codigoMacro: 1,
         asunto: 1,
@@ -343,6 +356,9 @@ export const getRescorrLlave = async (req: Request, res: Response) => {
         nroGuia: 1,
         perRec: 1,
         monto: 1,
+        llaveMacorr:1,
+        detalleMacorr:{ $concat: [{ $arrayElemAt: ["$macorr.detalle", 0] }] },
+        operMacorr:{ $concat: [{ $arrayElemAt: ["$macorr.oper", 0] }] },
       })
       .match({ codResp: codResp });
       console.log(data[0])
