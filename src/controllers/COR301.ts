@@ -71,11 +71,13 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
     if (tipoCorr != "**") tipoCorrr = { tipoCorres: tipoCorr };
     if (jornada != "**") {
       if (jornada == "M")
-        jornadaa = {
-          hour: { $lt: 12 },
-        };
+        jornadaa =  { 
+          $expr:
+          { $lt: [ {$hour: "$fecha"}, 12 ] }
+        }
       //$lt para que tome valores de 12 hacia atras, si le pongo la e tomaria el 12
-      else jornadaa = { hour: { $gte: 12 } };
+      else jornadaa = { $expr:
+        { $gte: [ {$hour: "$fecha"}, 12 ] } };
     }
     if (proceden != "**") procedenn = { proceden: Number(proceden) };
     if (manejo != "**") manejoo = { manejo: Number(manejo) };
