@@ -275,22 +275,9 @@ export const getRescorrLlave = async (req: Request, res: Response) => {
         anoLlave: { $concat: [{ $toString: ["$codResp.anoLlave"] }] },
         contLlave: { $concat: [{ $toString: ["$codResp.cont"] }] },
         swRadi: 1,
-<<<<<<< HEAD
-        clMacro:1,
         fecha: 1,
         hora: { $hour: "$fecha" },
         minutos: { $minute: "$fecha" },
-=======
-        // fecha:1,
-        fecha: { $substr: ["$fecha", 0, 10] },
-        hora: {
-          $concat: [
-            { $toString: { $hour: "$fecha" } },
-            ":",
-            { $toString: { $minute: "$fecha" } },
-          ],
-        },
->>>>>>> 013cb4349abba9a98d431017aee65b7c9338ce58
         firma: 1,
         codigoMacro: 1,
         asunto: 1,
