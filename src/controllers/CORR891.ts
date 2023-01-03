@@ -59,7 +59,6 @@ export const getCorrId = async (req: Request, res: Response) => {
         anoLlave: { $toString: ["$llave.anoLlave"] },
         contLlave: { $toString: ["$llave.cont"] },
         fecha: { $substr: ["$fecha", 0, 10] },
-        fechaR: { $substr: ["$fecha", 0, 10] },
         hora: {
           $concat: [
             { $toString: { $hour: "$fecha" } },
@@ -67,7 +66,6 @@ export const getCorrId = async (req: Request, res: Response) => {
             { $toString: { $minute: "$fecha" } },
           ],
         },
-        minutos: { $minute: "$fecha" },
         nit: { $concat: [{ $toString: ["$nit"] }] },
         tipoCorres: 1,
         descrip: 1,

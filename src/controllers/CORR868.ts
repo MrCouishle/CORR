@@ -119,6 +119,7 @@ export const getCorresF8 = async (req: Request, res: Response) => {
         descripAux: {
           $concat: [{ $arrayElemAt: ["$auxtip.descripcion", 0] }],
         },
+        deptoremi: 1,
         descripDeptoremi: {
           $concat: [{ $arrayElemAt: ["$remidep.descripcion", 0] }],
         },
@@ -159,7 +160,6 @@ export const getCorresF8 = async (req: Request, res: Response) => {
         errorRips: 1,
         nroEnvio: 1,
         proceden: 1,
-        deptoremi: 1,
         manejo: 1,
         holding: 1,
         centroCos: 1,
@@ -222,6 +222,7 @@ export const getCorres = async (req: Request, res: Response) => {
         llave: {
           $concat: [{ $toString: ["$llave.anoLlave"] }, { $toString: ["$llave.cont"] }],
         },
+        deptoremi: 1,
         anoLlave: { $toString: ["$llave.anoLlave"] },
         contLlave: { $toString: ["$llave.cont"] },
         fecha: 1,
@@ -268,7 +269,6 @@ export const getCorres = async (req: Request, res: Response) => {
         errorRips: 1,
         nroEnvio: 1,
         proceden: 1,
-        deptoremi: 1,
         manejo: 1,
         holding: 1,
         centroCos: 1,

@@ -120,7 +120,6 @@ export const getCorres = async (req: Request, res: Response) => {
         hora: {
           $concat: [{ $toString: { $hour: "$fecha" } }, ":", { $toString: { $minute: "$fecha" } }],
         },
-        minutos: { $minute: "$fecha" },
         nit: { $toString: ["$nit"] },
         tipoCorres: 1,
         descripTipco: {

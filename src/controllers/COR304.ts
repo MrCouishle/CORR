@@ -77,11 +77,11 @@ export const listadoControlRespuestas = async (req: Request, res: Response) => {
         {
           $lookup: {
             from: "depco",
-            let: { codigo: { $toInt: ["$dep"] } },
+            let: { codigoDep: { $toInt: "$dep" } },
             pipeline: [
               {
                 $match: {
-                  $expr: { $eq: ["$codigo", "$$codigo"] },
+                  $expr: { $eq: ["$codigo", "$$codigoDep"] },
                 },
               },
             ],
@@ -91,6 +91,8 @@ export const listadoControlRespuestas = async (req: Request, res: Response) => {
       ])
       .project({
         _id: 0,
+        codResp:1,
+        codRespR: {$concat: [{$toString:"$codResp.anoLlave"},{$toString:"$codResp.cont"}]},
         contResPon: { $concat: [{ $toString: ["$codResp.cont"] }," -S"]},
         fecha: 1,
         fechaR: {$substr: ["$fecha",0,10]},
@@ -112,7 +114,6 @@ export const listadoControlRespuestas = async (req: Request, res: Response) => {
         responsableDep: {
           $concat: [{ $arrayElemAt: ["$depco.responsable", 0] }],
         },
-        codResp: 1,
         fechaPon: {
           $let: {
             vars: {},
