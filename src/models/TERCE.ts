@@ -158,177 +158,142 @@ const terce_schema = new Schema<terce>({
   },
   codigo: {
     type: Number,
-    required: true,
   },
   descrip: {
     type: String,
     default: "",
-    required: true,
   },
   direcc: {
     type: String,
     default: "",
-    required: true,
   },
   dv: {
     type: String,
     default: "",
-    required: true,
   },
   zona: {
     type: String,
     default: "",
-    required: true,
   },
   ruta: {
     type: String,
     default: "",
-    required: true,
   },
   orden: {
     type: Number,
     default: 0,
-    required: true,
   },
   bloq: {
     type: String,
     default: "",
-    required: true,
   },
   tipo: {
     type: String,
     default: "",
-    required: true,
   },
   grado: {
     type: String,
     default: "",
-    required: true,
   },
   calific: {
     type: String,
     default: "",
-    required: true,
   },
   regIva: {
     type: String,
     default: "",
-    required: true,
   },
   rut: {
     type: String,
     default: "",
-    required: true,
   },
   convenio: {
     type: String,
     default: "",
-    required: true,
   },
   plazo: {
     type: Number,
     default: 0,
-    required: true,
   },
   telefono: {
     type: String,
     default: "",
-    required: true,
   },
   nit: {
     type: Number,
     default: 0,
-    required: true,
   },
   act: {
     type: Number,
     default: 0,
-    required: true,
   },
   vendedor: {
     type: String,
     default: "",
-    required: true,
   },
   entidad: {
     type: String,
     default: "",
-    required: true,
   },
   retenedor: {
     type: String,
     default: "",
-    required: true,
   },
   factor: {
     type: Number,
     default: 0,
-    required: true,
   },
   codCiu: {
     type: Number,
     default: 0,
-    required: true,
   },
   pago: {
     type: Number,
     default: 0,
-    required: true,
   },
   exent: {
     type: String,
     default: "",
-    required: true,
   },
   retIva: {
     type: String,
     default: "",
-    required: true,
   },
   marcaVeh: {
     type: String,
     default: "",
-    required: true,
   },
   empresaVeh: {
     type: String,
     default: "",
-    required: true,
   },
   nroVeh: {
     type: String,
     default: "",
-    required: true,
   },
   placaVeh: {
     type: String,
     default: "",
-    required: true,
   },
   fechaAlinVeh: {
     type: String,
     default: "",
-    required: true,
   },
   fechaNac: {
     type: String,
     default: "",
-    required: true,
   },
   cant: {
     type: Number,
     default: 0,
-    required: true,
   },
   cupo: {
     type: Number,
     default: 0,
-    required: true,
   },
   refer1: {
     type: String,
     default: "",
-    required: true,
   },
   refer2: {
     type: String,
@@ -341,27 +306,22 @@ const terce_schema = new Schema<terce>({
   cargo: {
     type: String,
     default: "",
-    required: true,
   },
   seguro: {
     type: String,
     default: "",
-    required: true,
   },
   datacre: {
     type: String,
     default: "",
-    required: true,
   },
   fechaCre: {
     type: String,
     default: "",
-    required: true,
   },
   apel1: {
     type: String,
     default: "",
-    required: true,
   },
   apel2: {
     type: String,
@@ -370,92 +330,74 @@ const terce_schema = new Schema<terce>({
   nomb1a: {
     type: String,
     default: "",
-    required: true,
   },
   nomb1b: {
     type: String,
     default: "",
-    required: true,
   },
   nomRef1: {
     type: String,
     default: "",
-    required: true,
   },
   dirRef1: {
     type: String,
     default: "",
-    required: true,
   },
   telRef1: {
     type: String,
     default: "",
-    required: true,
   },
   relRef1: {
     type: String,
     default: "",
-    required: true,
   },
   nomRef2: {
     type: String,
     default: "",
-    required: true,
   },
   dirRef2: {
     type: String,
     default: "",
-    required: true,
   },
   telRef2: {
     type: String,
     default: "",
-    required: true,
   },
   relRef2: {
     type: String,
     default: "",
-    required: true,
   },
   nomRef3: {
     type: String,
     default: "",
-    required: true,
   },
   dirRef3: {
     type: String,
     default: "",
-    required: true,
   },
   telRef3: {
     type: String,
     default: "",
-    required: true,
   },
   relRef3: {
     type: String,
     default: "",
-    required: true,
   },
   nomTrab: {
     type: String,
     default: "",
-    required: true,
   },
   dirTrab: {
     type: String,
     default: "",
-    required: true,
   },
   telTrab: {
     type: String,
     default: "",
-    required: true,
   },
   carTrab: {
     type: String,
     default: "",
-    required: true,
   },
   sueTrab: {
     type: Number,
@@ -464,7 +406,6 @@ const terce_schema = new Schema<terce>({
   antTrab: {
     type: String,
     default: "",
-    required: true,
   },
   ciuExp: {
     type: Number,
@@ -477,22 +418,18 @@ const terce_schema = new Schema<terce>({
   fechaAfi: {
     type: String,
     default: "",
-    required: true,
   },
   emailTer2: {
     type: String,
     default: "",
-    required: true,
   },
   granContrib: {
     type: String,
     default: "",
-    required: true,
   },
   retIvaCompra: {
     type: String,
     default: "",
-    required: true,
   },
   activIca: {
     type: Number,
@@ -501,7 +438,6 @@ const terce_schema = new Schema<terce>({
   embargos: {
     type: String,
     default: "",
-    required: true,
   },
   porcIca: {
     type: Number,
@@ -514,7 +450,6 @@ const terce_schema = new Schema<terce>({
   acuePago: {
     type: String,
     default: "",
-    required: true,
   },
   idReprLegal: {
     type: Number,
@@ -523,7 +458,6 @@ const terce_schema = new Schema<terce>({
   reprLegal: {
     type: String,
     default: "",
-    required: true,
   },
   idTesor: {
     type: Number,
@@ -532,22 +466,18 @@ const terce_schema = new Schema<terce>({
   tesorero: {
     type: String,
     default: "",
-    required: true,
   },
   emailRep: {
     type: String,
     default: "",
-    required: true,
   },
   emailtes: {
     type: String,
     default: "",
-    required: true,
   },
   capitado: {
     type: String,
     default: "",
-    required: true,
   },
   tipoCupo: {
     type: Number,
@@ -556,42 +486,34 @@ const terce_schema = new Schema<terce>({
   indicativo: {
     type: String,
     default: "",
-    required: true,
   },
   asesor: {
     type: String,
     default: "",
-    required: true,
   },
   nit1Cli: {
     type: String,
     default: "",
-    required: true,
   },
   retIcav: {
     type: String,
     default: "",
-    required: true,
   },
   adminMod: {
     type: String,
     default: "",
-    required: true,
   },
   fechaMod: {
     type: String,
     default: "",
-    required: true,
   },
   procesoMod: {
     type: String,
     default: "",
-    required: true,
   },
   admiCre: {
     type: String,
     default: "",
-    required: true,
   },
   regWeb: {
     type: Number,
@@ -604,37 +526,30 @@ const terce_schema = new Schema<terce>({
   email: {
     type: String,
     default: "",
-    required: true,
   },
   descripCont: {
     type: String,
     default: "",
-    required: true,
   },
   telCont: {
     type: String,
     default: "",
-    required: true,
   },
   emailCont: {
     type: String,
     default: "",
-    required: true,
   },
   proced: {
     type: String,
     default: "",
-    required: true,
   },
   destino: {
     type: String,
     default: "",
-    required: true,
   },
   nacional: {
     type: String,
     default: "",
-    required: true,
   },
   habit: {
     type: Number,
@@ -643,12 +558,10 @@ const terce_schema = new Schema<terce>({
   pasaport1: {
     type: String,
     default: "",
-    required: true,
   },
   pasaport2: {
     type: String,
     default: "",
-    required: true,
   },
   tablaAcomp: [
     {
@@ -760,6 +673,6 @@ const terce_schema = new Schema<terce>({
   },
 });
 
-terce_schema.index({codigo:1},{unique:true})
+terce_schema.index({ codigo: 1 }, { unique: true });
 
-export const terce_model = model<terce>("terce", terce_schema)
+export const terce_model = model<terce>("terce", terce_schema);
