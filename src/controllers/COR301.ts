@@ -9,6 +9,7 @@ import {
   get_all_response,
   get_response,
   omitirId,
+  padStart,
 } from "../global/global";
 import { corres_model } from "../models/CORRES";
 import { dia_no_habil_model } from "../models/DNHABIL";
@@ -130,11 +131,7 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
         fecha: 1,
         fechaR: { $substr: ["$fecha", 0, 10] },
         hora: {
-          $concat: [
-            { $toString: { $hour: "$fecha" } },
-            ":",
-            { $toString: { $minute: "$fecha" } },
-          ],
+          $concat: [padStart({ $toString: { $hour: "$fecha" } }, 2, "0"), ":", padStart({ $toString: { $minute: "$fecha" } }, 2, "0")],
         },
         esta: 1,
         dep: 1,
@@ -172,27 +169,28 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
             amount: { $arrayElemAt: ["$tipc.dias", 0] },
           },
         },
-        diasVence: {
-          $dateDiff: {
-            startDate: new Date(),
-            endDate: {
-              $dateAdd: {
-                startDate: "$fecha",
-                unit: "day",
-                amount: { $arrayElemAt: ["$tipc.dias", 0] },
-              },
-            },
-            unit: "day",
-          },
-        },
+        // diasVence: {
+        //   $dateDiff: {
+        //     startDate: new Date(),
+        //     endDate: {
+        //       $dateAdd: {
+        //         startDate: "$fecha",
+        //         unit: "day",
+        //         amount: { $arrayElemAt: ["$tipc.dias", 0] },
+        //       },
+        //     },
+        //     unit: "day",
+        //   },
+        // },
+        diasVence:1,
         descripAuxco: { $concat: [{ $arrayElemAt: ["$aux.descripcion", 0] }] },
         descripSerco: { $concat: [{ $arrayElemAt: ["$serc.descripcion", 0] }] },
         responsableDep: {
           $concat: [{ $arrayElemAt: ["$depc.responsable", 0] }],
         },
         correoRespDep: { $concat: [{ $arrayElemAt: ["$depc.correo", 0] }] },
-        fol: 1,
-        fold: 1,
+        folios:{$concat:[
+          "$fol"," de ","$fold"]}, 
         nroFact: 1,
         monto: 1,
         fecheFactR: { $substr: ["$fechaFact", 0, 10] },
@@ -238,12 +236,13 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
             in: { $add: [{ $arrayElemAt: ["$rescorr.codResp.anoLlave", 0] }] },
           },
         },
-        contResp: {
+        contResp: { $concat: [{$toString:{
           $let: {
             vars: {},
             in: { $add: [{ $arrayElemAt: ["$rescorr.codResp.cont", 0] }] },
-          },
-        },
+          },}
+        }," -S"]//Tener esto pendiente, se hizo a solicitud del front pero es dudosa la argumentacion referente a que en electron coinciden todos los datos menos este al hacer comparacion de respuestas.
+      },
         fechaRespuesta: {
           $substr: [
             {
@@ -286,7 +285,6 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
           estadoo,
         ],
       });
-
     for (let i = 0; i < data.length; i++) {
       // if(typeof data[i].diasTipc != "object") console.log(data[i].diasTipc)
       //console.log(data[i].fecha);
@@ -299,10 +297,13 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
       } else {
         data[i].fechaVence = null;
       }
+      const of =" de ";
+      const max =" máximo ";
       const diasVence = await diasHabilesTranscurridos(fechaVenceD);
-      data[i].diasVence = diasVence;
+      // const diasTrans = await diasHabilesTranscurridos(fechaVenceD);
+      data[i].diasTrans = diasVence;
+      data[i].diasVence = diasVence + of + data[i].diasTipc + max;
     }
-
     get_all_response(data, res);
     // console.log("RES en la validacion de COR301", res);
     console.log("LENGTH en la validacion de COR301", data.length);

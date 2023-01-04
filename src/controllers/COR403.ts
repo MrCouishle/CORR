@@ -5,6 +5,7 @@ import {
   edit_response,
   delete_response,
   omitirId,
+  padStart
 } from "../global/global";
 import { rescorr_model } from "../models/RESCORR";
 import { pdf_res_model } from "../models/pdf-res";
@@ -221,7 +222,7 @@ export const getRescorrLlave = async (req: Request, res: Response) => {
         {
           $lookup: {
             from: "macorr",
-            let: { llaveMacorr: [{ $toString: "$clMacor"},{$toString:"$codigoMacro"}]  },
+            let: { llaveMacorr: [{ $toString: "$clMacor"},{$toInt:"$codigoMacro"}]  },
             pipeline: [
               {
                 $match: {
@@ -244,6 +245,14 @@ export const getRescorrLlave = async (req: Request, res: Response) => {
               },
             ],
             as: "depco",
+          },
+        },
+        {
+          $lookup: {
+            from: "remidep",
+            localField: "deptoremi",
+            foreignField: "codigo",
+            as: "remidep",
           },
         },
         {
@@ -298,7 +307,9 @@ export const getRescorrLlave = async (req: Request, res: Response) => {
         contLlave: { $concat: [{ $toString: ["$codResp.cont"] }] },
         swRadi: 1,
         fecha: {$substr:["$fecha",0,10]},
-        hora: {$concat:[{ $toString:{$hour: "$fecha"} },":",{ $toString:{$minute: "$fecha"} }]},
+        hora: {
+          $concat: [padStart({ $toString: { $hour: "$fecha" } }, 2, "0"), ":", padStart({ $toString: { $minute: "$fecha" } }, 2, "0")],
+        },
         firma: 1,
         asunto: 1,
         tabla: 1,
@@ -309,11 +320,7 @@ export const getRescorrLlave = async (req: Request, res: Response) => {
         llaveRadi: { $concat: [{ $toString: ["$anoRadi"] },{$toString:["$contRadi"]}] },
         fechaRadi: { $substr: ["$fechaRadi", 0, 10] },
         horaRadi: {
-          $concat: [
-            { $toString: { $hour: "$fechaRadi" } },
-            ":",
-            { $toString: { $minute: "$fechaRadi" } },
-          ],
+          $concat: [padStart({ $toString: { $hour: "$fechaRadi" } }, 2, "0"), ":", padStart({ $toString: { $minute: "$fechaRadi" } }, 2, "0")],
         },
         nit: 1, //Para filtrar se convierte a string para que el regex funciones
         tipoCorres: 1,
@@ -356,11 +363,7 @@ export const getRescorrLlave = async (req: Request, res: Response) => {
         operModi: 1,
         fechaModi: 1,
         horaModi: {
-          $concat: [
-            { $toString: { $hour: "$fechaModi" } },
-            ":",
-            { $toString: { $minute: "$fechaModi" } },
-          ],
+          $concat: [padStart({ $toString: { $hour: "$fechaModi" } }, 2, "0"), ":", padStart({ $toString: { $minute: "$fechaModi" } }, 2, "0")],
         },
         medio: 1,
         numeroFact: 1,
@@ -371,6 +374,10 @@ export const getRescorrLlave = async (req: Request, res: Response) => {
         codigoMacro: 1,
         detalleMacorr:{ $concat: [{ $arrayElemAt: ["$macorr.detalle", 0] }] },
         operMacorr:{ $concat: [{ $arrayElemAt: ["$macorr.oper", 0] }] },
+        descripDeptoremi: {
+          $concat: [{ $arrayElemAt: ["$remidep.descripcion", 0] }],
+        },
+        // deptoremi:,
       })
       .match({ codResp: codResp });
       console.log(data[0])
