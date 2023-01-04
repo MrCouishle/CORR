@@ -1,12 +1,10 @@
 import { Request, Response } from "express";
 import nodemailer from "nodemailer";
-import { concatenarCodigos, delete_response, edit_response, get_all_response, get_response, omitirId } from "../global/global";
+import { concatenarCodigos, delete_response, padStart, edit_response, get_all_response, get_response, omitirId } from "../global/global";
 import fs from "fs";
 import { corres_model } from "../models/CORRES";
-import { pdf_model } from "../models/PDF";
 import { pdf_res_model } from "../models/pdf-res";
-
-//corres, terce, tipco
+import { pdf_model } from "../models/PDF";
 
 export const postCorres = async (req: Request, res: Response) => {
   try {
@@ -22,7 +20,6 @@ export const postCorres = async (req: Request, res: Response) => {
 export const putCorres = async (req: Request, res: Response) => {
   try {
     const llave = req.body.llave;
-    console.log("Datos", req.body);
     delete req.body.llave;
     const data = await corres_model.updateOne({ llave: llave }, req.body);
     edit_response("corres", data, `${llave.anoLlave} / ${llave.cont}`, res);
@@ -118,7 +115,7 @@ export const getCorres = async (req: Request, res: Response) => {
         contLlave: { $toString: ["$llave.cont"] },
         fecha: { $substr: ["$fecha", 0, 10] },
         hora: {
-          $concat: [{ $toString: { $hour: "$fecha" } }, ":", { $toString: { $minute: "$fecha" } }],
+          $concat: [padStart({ $toString: { $hour: "$fecha" } }, 2, "0"), ":", padStart({ $toString: { $minute: "$fecha" } }, 2, "0")],
         },
         minutos: { $minute: "$fecha" },
         nit: { $toString: ["$nit"] },
@@ -393,7 +390,6 @@ export const envioCorreos = async (req: Request, res: Response) => {
 
 export const ultCorres = async (req: Request, res: Response) => {
   try {
-    // const data = await corres_model.find().sort({ $natural: -1 }).limit(1);
     const data = await corres_model
       .find(
         {},
@@ -405,8 +401,9 @@ export const ultCorres = async (req: Request, res: Response) => {
             $concat: [{ $toString: "$llave.anoLlave" }, { $toString: "$llave.cont" }],
           },
           fechaR: { $substr: ["$fecha", 0, 10] },
+
           hora: {
-            $concat: [{ $toString: { $hour: "$fecha" } }, ":", { $toString: { $minute: "$fecha" } }],
+            $concat: [padStart({ $toString: { $hour: "$fecha" } }, 2, "0"), ":", padStart({ $toString: { $minute: "$fecha" } }, 2, "0")],
           },
         }
       )

@@ -8,10 +8,8 @@ import { dia_no_habil_model } from "../models/DNHABIL";
 const fs = require("fs");
 var rimraf = require("rimraf");
 
-export const maxlength = (num: Number) =>
-  `({PATH}): {VALUE} sobrepasa el máximo de caracteres permitido (${num})`;
-export const minlength = (num: Number) =>
-  `({PATH}): {VALUE} el minimo de caracteres permitido es (${num})`;
+export const maxlength = (num: Number) => `({PATH}): {VALUE} sobrepasa el máximo de caracteres permitido (${num})`;
+export const minlength = (num: Number) => `({PATH}): {VALUE} el minimo de caracteres permitido es (${num})`;
 
 export const concat_cod = (elements: any) => {
   if (Array.isArray(elements)) return elements.join(" | ");
@@ -64,20 +62,7 @@ export const fecha_schema = {
     type: String,
     maxlength: [2, maxlength(2)],
     enum: {
-      values: [
-        "01",
-        "02",
-        "03",
-        "04",
-        "05",
-        "06",
-        "07",
-        "08",
-        "09",
-        "10",
-        "11",
-        "12",
-      ],
+      values: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"],
       message: "Los meses van de 1- 12. Valor recibido: {VALUE}.",
     },
     default: "01",
@@ -166,12 +151,7 @@ export function null_to_0(next: any, self: any) {
 
 /*  CRONTROLLERS RESPONSE 💡 */
 
-export const delete_response = (
-  nom: String,
-  doc: any,
-  codigo = "",
-  res: Response
-) => {
+export const delete_response = (nom: String, doc: any, codigo = "", res: Response) => {
   if (doc === null) res.json({ msg: "No existe documento" }).status(204);
   else if (doc.deletedCount == 0)
     res
@@ -183,14 +163,8 @@ export const delete_response = (
   else res.json({ N1: "eliminado" }).status(200);
 };
 
-export const edit_response = (
-  nom: String,
-  doc: any,
-  codigo = "",
-  res: Response
-) => {
-  if (doc === null)
-    res.json({ msg: "No existe documento", cod_error: "01" }).status(204);
+export const edit_response = (nom: String, doc: any, codigo = "", res: Response) => {
+  if (doc === null) res.json({ msg: "No existe documento", cod_error: "01" }).status(204);
   else if (doc.matchedCount == 0)
     res
       .json({
@@ -202,12 +176,7 @@ export const edit_response = (
   else res.json({ N1: "editado" }).status(200);
 };
 
-export const get_response = (
-  nom: String,
-  doc: any,
-  codigo: any,
-  res: Response
-) => {
+export const get_response = (nom: String, doc: any, codigo: any, res: Response) => {
   if (doc === "" || doc === null || doc === undefined || doc.length < 1) {
     res
       .json({
@@ -219,11 +188,25 @@ export const get_response = (
 };
 
 export const get_all_response = (doc: any, res: Response) => {
-  if (doc.length === 0)
-    res.json({ msg: `No hay datos disponibles.`, cod_error: "01" }).status(200);
+  if (doc.length === 0) res.json({ msg: `No hay datos disponibles.`, cod_error: "01" }).status(200);
   else res.json(doc).status(204);
 };
-
+export const padStart = (str: any, len: any, padstr: string) => {
+  let redExpr = {
+    $reduce: {
+      input: { $range: [0, { $subtract: [len, { $strLenCP: str }] }] },
+      initialValue: "",
+      in: { $concat: ["$$value", padstr] },
+    },
+  };
+  return {
+    $cond: {
+      if: { $gte: [{ $strLenCP: str }, len] },
+      then: str,
+      else: { $concat: [redExpr, str] },
+    },
+  };
+};
 export const concatenarCodigos = (datos: any) => {
   let concatenado: any;
   for (const i in datos) {
@@ -334,14 +317,9 @@ export const removeAccents = (str: any) => {
 export const cambio_contra_automatico = async () => {
   const fecha = new Date();
   const ano = fecha.getFullYear() - 2000;
-  const pass = `SC${ano + fecha.getMonth() + 1}${ano + fecha.getDate()}${
-    fecha.getMonth() + 1 + fecha.getDate()
-  }`;
+  const pass = `SC${ano + fecha.getMonth() + 1}${ano + fecha.getDate()}${fecha.getMonth() + 1 + fecha.getDate()}`;
   const new_password = await bcrypt.hash(pass, 10);
-  const data = await usuvue_model.updateOne(
-    { llaveOper: "GEBC" },
-    { $set: { clave: new_password } }
-  );
+  const data = await usuvue_model.updateOne({ llaveOper: "GEBC" }, { $set: { clave: new_password } });
   console.log("Cambia contra");
 };
 
@@ -349,11 +327,7 @@ export const copia_segurdad = () => {
   console.log("Creando copia de seguridad...");
   let fecha = new Date();
   const fechaActual = `${fecha.getFullYear()}-${fecha.getMonth()}-${fecha.getDate()}`;
-  const horaActual = `${fecha
-    .toLocaleTimeString("en-US")
-    .replace(":", ".")
-    .replace(":", ".")
-    .replace(" ", "")}`;
+  const horaActual = `${fecha.toLocaleTimeString("en-US").replace(":", ".").replace(":", ".").replace(" ", "")}`;
 
   let backupProcess = spawn("mongodump", [
     "--host=localhost",
@@ -367,8 +341,7 @@ export const copia_segurdad = () => {
 
   backupProcess.on("exit", (code, signal) => {
     if (code) console.log("Error al genrera backup, codigo: ", code);
-    else if (signal)
-      console.error("El proceso de backup tuvo un error: ", signal);
+    else if (signal) console.error("El proceso de backup tuvo un error: ", signal);
     else {
       fs.writeFile(
         `C:/BACKUP_MONGO_CORRESPONDENCIA/${fechaActual}/${horaActual}/restaurar.bat`,
@@ -390,15 +363,10 @@ export const copia_segurdad = () => {
             return;
           }
           console.log("ZIP Generado con exito");
-          rimraf(
-            `C:\\BACKUP_MONGO_CORRESPONDENCIA\\${fechaActual}\\${horaActual}\\dump`,
-            function () {
-              console.log("done");
-            }
-          );
-          fs.unlinkSync(
-            `C:\\BACKUP_MONGO_CORRESPONDENCIA\\${fechaActual}\\${horaActual}\\restaurar.bat`
-          );
+          rimraf(`C:\\BACKUP_MONGO_CORRESPONDENCIA\\${fechaActual}\\${horaActual}\\dump`, function () {
+            console.log("done");
+          });
+          fs.unlinkSync(`C:\\BACKUP_MONGO_CORRESPONDENCIA\\${fechaActual}\\${horaActual}\\restaurar.bat`);
         }
       );
       console.log("Backup generado con exito");
@@ -416,33 +384,25 @@ export const limipar_backup = () => {
     files = result;
     if (files.length > 4) {
       const carpeta = files[files.length - 4]; //se debe poner -3
-      fs.readdir(
-        `C:/BACKUP_MONGO_CORRESPONDENCIA/${carpeta}`,
-        (err: any, result: any) => {
-          if (err) {
-            console.error(err);
-            throw Error(err);
-          }
-          for (let i = 0; i < result.length - 1; i++) {
-            console.log(
-              `C:\\BACKUP_MONGO_CORRESPONDENCIA\\${carpeta}\\${result[i]}`
-            );
-            rimraf(
-              `C:\\BACKUP_MONGO_CORRESPONDENCIA\\${carpeta}\\${result[i]}`,
-              function () {
-                console.log("done");
-              }
-            );
-          }
+      fs.readdir(`C:/BACKUP_MONGO_CORRESPONDENCIA/${carpeta}`, (err: any, result: any) => {
+        if (err) {
+          console.error(err);
+          throw Error(err);
         }
-      );
+        for (let i = 0; i < result.length - 1; i++) {
+          console.log(`C:\\BACKUP_MONGO_CORRESPONDENCIA\\${carpeta}\\${result[i]}`);
+          rimraf(`C:\\BACKUP_MONGO_CORRESPONDENCIA\\${carpeta}\\${result[i]}`, function () {
+            console.log("done");
+          });
+        }
+      });
     }
   });
 };
 
 export const fechaVence = async (fechaCorres: Date, diasTipc = 0) => {
   try {
-    if(diasTipc == 0 || diasTipc == null) return 0 //Esta validacion no deberia ser necesaria, revisar migracion.
+    if (diasTipc == 0 || diasTipc == null) return 0; //Esta validacion no deberia ser necesaria, revisar migracion.
     const ano = fechaCorres.getFullYear().toString();
     const festivos = await dia_no_habil_model.find({
       $expr: { $eq: [{ $year: "$date" }, { $year: new Date(ano) }] },
@@ -456,14 +416,10 @@ export const fechaVence = async (fechaCorres: Date, diasTipc = 0) => {
 
     while (contadorDiasHabiles < diasTipc) {
       fechaInicial.setDate(fechaInicial.getDate() + 1);
-      if (
-        !festivos.find((festivos) => festivos.date === fechaInicial) &&
-        fechaInicial.getDay() != 6 &&
-        fechaInicial.getDay() != 0
-      ) {
+      if (!festivos.find((festivos) => festivos.date === fechaInicial) && fechaInicial.getDay() != 6 && fechaInicial.getDay() != 0) {
         contadorDiasHabiles++;
         fechaLimite = fechaInicial;
-      }    
+      }
     }
     // console.log(fechaPrueba)
     // console.log(fechaPrueba)
@@ -484,35 +440,27 @@ export const diasHabilesTranscurridos = async (fechaLimite: Date) => {
     //console.log("Fecha Actual", fechaActual)
     //console.log("Fecha Limite", fechaLimite)
 
-    let dias = fechaLimite.getTime() - fechaActual.getTime() ;
+    let dias = fechaLimite.getTime() - fechaActual.getTime();
     dias = Math.round(dias / (1000 * 60 * 60 * 24));
-    let contadorDiasHabiles = 0
-    if (dias >= 0){
-      for (let i = 0; i < dias; i++) { 
+    let contadorDiasHabiles = 0;
+    if (dias >= 0) {
+      for (let i = 0; i < dias; i++) {
         fechaActual.setDate(fechaActual.getDate() + 1);
-        if (
-          !festivos.find((festivos) => festivos.date === fechaActual) &&
-          fechaActual.getDay() != 6 &&
-          fechaActual.getDay() != 0
-        ) {
+        if (!festivos.find((festivos) => festivos.date === fechaActual) && fechaActual.getDay() != 6 && fechaActual.getDay() != 0) {
           contadorDiasHabiles++;
         }
       }
-      return contadorDiasHabiles
-    }else {
+      return contadorDiasHabiles;
+    } else {
       //console.log("Else")
-      dias = dias * -1
-      for (let i = 0; i < dias; i++) { 
+      dias = dias * -1;
+      for (let i = 0; i < dias; i++) {
         fechaLimite.setUTCDate(fechaLimite.getDate() + 1);
-        if (
-          !festivos.find((festivos) => festivos.date === fechaLimite) &&
-          fechaLimite.getDay() != 6 &&
-          fechaLimite.getDay() != 0
-        ) {
+        if (!festivos.find((festivos) => festivos.date === fechaLimite) && fechaLimite.getDay() != 6 && fechaLimite.getDay() != 0) {
           contadorDiasHabiles++;
         }
       }
-      return contadorDiasHabiles - (contadorDiasHabiles * 2)
+      return contadorDiasHabiles - contadorDiasHabiles * 2;
     }
   } catch (error) {}
 };
