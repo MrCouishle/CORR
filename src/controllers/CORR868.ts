@@ -90,7 +90,7 @@ export const getCorresF8 = async (req: Request, res: Response) => {
         },
         anoLlave: { $toString: ["$llave.anoLlave"] },
         contLlave: { $toString: ["$llave.cont"] },
-        fechaR: { $substr: ["$fecha", 0, 10] },
+        fecha: { $substr: ["$fecha", 0, 10] },
         hora: {
           $concat: [padStart({ $toString: { $hour: "$fecha" } }, 2, "0"), ":", padStart({ $toString: { $minute: "$fecha" } }, 2, "0")],
         },

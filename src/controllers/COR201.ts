@@ -395,12 +395,11 @@ export const ultCorres = async (req: Request, res: Response) => {
         {
           _id: 0,
           llave: 1,
-          fecha: 1,
           llaveR: {
             $concat: [{ $toString: "$llave.anoLlave" }, { $toString: "$llave.cont" }],
           },
+          fecha: 1,
           fechaR: { $substr: ["$fecha", 0, 10] },
-
           hora: {
             $concat: [padStart({ $toString: { $hour: "$fecha" } }, 2, "0"), ":", padStart({ $toString: { $minute: "$fecha" } }, 2, "0")],
           },
