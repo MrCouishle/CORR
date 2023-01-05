@@ -230,7 +230,7 @@ export async function validar_catidad(model: any) {
 export const validarJwt = (req: Request, res: Response, next: NextFunction) => {
   const token = req.header("x_token");
   if (!token) {
-    console.log("Se intento ingresar sin token");
+    console.error("Se intento ingresar sin token");
     return res.status(401).json({
       msg: "No tienes acceso.",
     });
@@ -257,7 +257,7 @@ export const generarJwt = (uid = "") => {
       },
       (err, token) => {
         if (err) {
-          console.log(err);
+          console.error(err);
           reject("No se genero el token");
         } else {
           resolve(token);
@@ -310,7 +310,6 @@ export function diacriticSensitiveRegex(string: any) {
 }
 
 export const removeAccents = (str: any) => {
-  console.log(str);
   return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 };
 
@@ -340,7 +339,7 @@ export const copia_segurdad = () => {
   ]);
 
   backupProcess.on("exit", (code, signal) => {
-    if (code) console.log("Error al genrera backup, codigo: ", code);
+    if (code) console.error("Error al genrera backup, codigo: ", code);
     else if (signal) console.error("El proceso de backup tuvo un error: ", signal);
     else {
       fs.writeFile(
@@ -358,8 +357,8 @@ export const copia_segurdad = () => {
         `7z a C:\\BACKUP_MONGO_CORRESPONDENCIA\\${fechaActual}\\${horaActual}\\backup.7z -pprosoft -mhe C:\\BACKUP_MONGO_CORRESPONDENCIA\\${fechaActual}\\${horaActual}\\dump C:\\BACKUP_MONGO_CORRESPONDENCIA\\${fechaActual}\\${horaActual}\\restaurar.bat`,
         (error, stdout, stderr) => {
           if (error) {
-            console.log("Error al generar .zip");
-            console.log(error);
+            console.error("Error al generar .zip");
+            console.error(error);
             return;
           }
           console.log("ZIP Generado con exito");
@@ -421,8 +420,6 @@ export const fechaVence = async (fechaCorres: Date, diasTipc = 0) => {
         fechaLimite = fechaInicial;
       }
     }
-    // console.log(fechaPrueba)
-    // console.log(fechaPrueba)
     return fechaLimite;
   } catch (error) {}
 };
@@ -430,15 +427,11 @@ export const fechaVence = async (fechaCorres: Date, diasTipc = 0) => {
 export const diasHabilesTranscurridos = async (fechaLimite: Date) => {
   try {
     let fechaActual = new Date();
-    //console.log(fechaLimite)
 
     const ano = fechaLimite.getFullYear().toString();
     const festivos = await dia_no_habil_model.find({
       $expr: { $eq: [{ $year: "$date" }, { $year: new Date(ano) }] },
     });
-
-    //console.log("Fecha Actual", fechaActual)
-    //console.log("Fecha Limite", fechaLimite)
 
     let dias = fechaLimite.getTime() - fechaActual.getTime();
     dias = Math.round(dias / (1000 * 60 * 60 * 24));
@@ -452,7 +445,6 @@ export const diasHabilesTranscurridos = async (fechaLimite: Date) => {
       }
       return contadorDiasHabiles;
     } else {
-      //console.log("Else")
       dias = dias * -1;
       for (let i = 0; i < dias; i++) {
         fechaLimite.setUTCDate(fechaLimite.getDate() + 1);

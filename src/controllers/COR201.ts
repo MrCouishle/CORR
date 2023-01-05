@@ -24,7 +24,7 @@ export const putCorres = async (req: Request, res: Response) => {
     const data = await corres_model.updateOne({ llave: llave }, req.body);
     edit_response("corres", data, `${llave.anoLlave} / ${llave.cont}`, res);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.json({ msg: error });
   }
 };
@@ -197,7 +197,7 @@ export const getCorres = async (req: Request, res: Response) => {
 
     get_response("res", data[0], llave, res);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.json({ msg: error });
   }
 };
@@ -330,7 +330,7 @@ export const getCorresF8 = async (req: Request, res: Response) => {
       .limit(Number(cantidad));
     get_all_response(data, res);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.json({ msg: error });
   }
 };
@@ -338,7 +338,7 @@ export const getCorresF8 = async (req: Request, res: Response) => {
 export const envioCorreos = async (req: Request, res: Response) => {
   try {
     const { server_email, remitente, clave, puerto, id, propietario, anoLlave, cont, destino, nom_empresa } = req.body;
-    console.log("BODY send email", req.body);
+
     const llave = {
       anoLlave: parseInt(anoLlave),
       cont: parseInt(cont),
@@ -381,8 +381,7 @@ export const envioCorreos = async (req: Request, res: Response) => {
       res.json({ msg: `El pdf solicitado no existe`, cod_error: "01" });
     }
   } catch (error) {
-    console.log(error);
-
+    console.error(error);
     res.json({ msg: error });
   }
 };

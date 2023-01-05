@@ -21,7 +21,7 @@ let storage = multer.diskStorage({
     try {
       cb(null, "./pdf");
     } catch (error) {
-      console.log("ERROR", error);
+      console.error("ERROR", error);
     }
   },
   filename: (req: any, file: any, cb: any) => {
@@ -29,7 +29,7 @@ let storage = multer.diskStorage({
       const filename = `${req.params.anoLlave}${req.params.cont}`;
       cb(null, filename + path.extname(file.originalname));
     } catch (error) {
-      console.log("ERROR", error);
+      console.error("ERROR", error);
     }
   },
 });
@@ -45,15 +45,7 @@ route_corres.delete("/corres/:anoLlave/:cont", deleteCorres);
 route_corres.get("/getCorresF8/:desde/:cantidad", getCorresF8);
 route_corres.post("/enviocCorreo", envioCorreos);
 route_corres.get("/ultimaCorres", ultCorres);
-route_corres.post(
-  "/guardarPdf/:anoLlave/:cont",
-  upload.single("file"),
-  guardarPdf
-);
-route_corres.post(
-  "/guardarPdf_res/:anoLlave/:cont",
-  upload.single("file"),
-  guardarPdf_res
-);
+route_corres.post("/guardarPdf/:anoLlave/:cont", upload.single("file"), guardarPdf);
+route_corres.post("/guardarPdf_res/:anoLlave/:cont", upload.single("file"), guardarPdf_res);
 route_corres.get("/buscarPdf/:anoLlave/:cont", buscarPdf);
 route_corres.get("/buscarPdf_res/:anoLlave/:cont", buscarPdf_res);

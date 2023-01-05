@@ -11,7 +11,7 @@ export const generarJwt = (uid = "") => {
       },
       (err, token) => {
         if (err) {
-          console.log(err);
+          console.error(err);
           reject("No se genero el token");
         } else {
           resolve(token);
