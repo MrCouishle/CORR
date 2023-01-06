@@ -1,22 +1,16 @@
 import { Request, Response } from "express";
-import {
-  get_response,
-  get_all_response,
-  omitirId,
-  generarJwt,
-  edit_response,
-} from "../global/global";
+import { get_response, get_all_response, omitirId, generarJwt, edit_response } from "../global/global";
 import { usuvue_model } from "../models/USUVUE";
-import bcrypt from 'bcrypt'
+import bcrypt from "bcrypt";
 
 export const getusuvue = async (req: Request, res: Response) => {
   try {
-    let clave : any
-    let llaveResp : any
+    let clave: any;
+    let llaveResp: any;
     llaveResp = req.query.llave;
     clave = req.query.clave;
     console.log(llaveResp, clave);
-    if(!clave) clave="TlVFVk8xMjM="
+    if (!clave) clave = "TlVFVk8xMjM=";
     const data = await usuvue_model.aggregate([
       {
         $lookup: {
@@ -55,13 +49,12 @@ export const getusuvue = async (req: Request, res: Response) => {
       },
     ]);
     if (data[0]) {
-
-      if (data[0].clave == atob(clave) || await bcrypt.compare(atob(clave), data[0].clave)) {
+      if (data[0].clave == atob(clave) || (await bcrypt.compare(atob(clave), data[0].clave))) {
         const token = await generarJwt(data[0].llaveOper);
         if (atob(clave) === "NUEVO123") {
           delete data[0].clave;
           res.json({ data: data[0], token, changePassword: true });
-        } else res.json({ data:data[0], token });
+        } else res.json({ data: data[0], token });
       } else res.json({ msg: "USER" });
     } else {
       get_response("usuvue", data, "", res);
@@ -74,26 +67,22 @@ export const getusuvue = async (req: Request, res: Response) => {
 
 export const cambiarContra = async (req: Request, res: Response) => {
   try {
-    const { nueva_pass,llave } = req.params;
+    const { nueva_pass, llave } = req.params;
     const user = await usuvue_model.findOne({
       $and: [{ llaveOper: llave }],
     });
-    
+
     if (user) {
-        const new_password = await bcrypt.hash(atob(nueva_pass),10)      
-        console.log(llave)
-        const data = await usuvue_model.updateOne(
-          { llaveOper: llave },
-          { $set: { clave: new_password } }
-          );
-          console.log(data)
-        edit_response("usuvue", data, llave, res);
-      
+      const new_password = await bcrypt.hash(atob(nueva_pass), 10);
+      console.log(llave);
+      const data = await usuvue_model.updateOne({ llaveOper: llave }, { $set: { clave: new_password } });
+      console.log(data);
+      edit_response("usuvue", data, llave, res);
     } else {
-      res.json({msg:"error perro"})
+      res.json({ msg: "error perro" });
     }
   } catch (error) {
-    res.json({msg:error})
+    res.json({ msg: error });
   }
 };
 
@@ -106,6 +95,22 @@ export const getUsuvueLlave = async (req: Request, res: Response) => {
     res.json({ msg: error });
   }
 };
+export const getUsuarios = async (req: Request, res: Response) => {
+  try {
+    const data = await usuvue_model.find({}, omitirId);
+    get_all_response(data, res);
+  } catch (error) {
+    res.json({ msg: error });
+  }
+};
+export const agregarModuloUsu = async (req: Request, res: Response) => {
+  try {
+    const data = await usuvue_model.find({}, omitirId);
+    get_all_response(data, res);
+  } catch (error) {
+    res.json({ msg: error });
+  }
+};
 
 export const f8Usuvue = async (req: Request, res: Response) => {
   try {
@@ -114,16 +119,15 @@ export const f8Usuvue = async (req: Request, res: Response) => {
     const data = await usuvue_model
       .find(
         {
-          $or: [
-            { llaveOper: { $regex: dato, $options: "ix" } },
-            { nombre: { $regex: dato, $options: "i" } },
-          ],
-        },{
-          subdirect:0,
-          direct:0,
-          ubicacion:0,
-          clave:0
-        })
+          $or: [{ llaveOper: { $regex: dato, $options: "ix" } }, { nombre: { $regex: dato, $options: "i" } }],
+        },
+        {
+          subdirect: 0,
+          direct: 0,
+          ubicacion: 0,
+          clave: 0,
+        }
+      )
       .skip(Number(desde))
       .limit(Number(cantidad));
     get_all_response(data, res);

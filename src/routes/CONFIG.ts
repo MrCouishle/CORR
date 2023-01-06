@@ -13,6 +13,4 @@ router_config.put("/editar_estado_modulos/:modulo/:contab/:estado", editar_estad
 
 router_config.put("/agregar_modulos_mod/:contab/:modulo", agregar_modulos_mod)
 router_config.delete("/eliminar_modulos_mod/:contab/:modulo", eliminar_modulos_mod)
-
-
 router_config.get("/modulos_por_contabilidad/:contab", modulos_por_contabilidad)
