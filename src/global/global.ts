@@ -327,6 +327,8 @@ export const copia_segurdad = () => {
   let fecha = new Date();
   const fechaActual = `${fecha.getFullYear()}-${fecha.getMonth()}-${fecha.getDate()}`;
   const horaActual = `${fecha.toLocaleTimeString("en-US").replace(":", ".").replace(":", ".").replace(" ", "")}`;
+  const directorio = "C:/BACKUP_MONGO_CORRESPONDENCIA"
+  const directorio2 = "C:\\BACKUP_MONGO_CORRESPONDENCIA"
 
   let backupProcess = spawn("mongodump", [
     "--host=localhost",
@@ -334,7 +336,7 @@ export const copia_segurdad = () => {
     "--db=scPros",
     // "--username=diego",
     // "--password=Diego09",
-    `--out=C:/BACKUP_MONGO_CORRESPONDENCIA/${fechaActual}/${horaActual}/dump`,
+    `--out=${directorio}/${fechaActual}/${horaActual}/dump`,
     "--gzip",
   ]);
 
@@ -343,7 +345,7 @@ export const copia_segurdad = () => {
     else if (signal) console.error("El proceso de backup tuvo un error: ", signal);
     else {
       fs.writeFile(
-        `C:/BACKUP_MONGO_CORRESPONDENCIA/${fechaActual}/${horaActual}/restaurar.bat`,
+        `${directorio}/${fechaActual}/${horaActual}/restaurar.bat`,
         "mongorestore --uri mongodb://localhost:27017 --gzip --drop",
         function (err: any) {
           if (err) {
@@ -354,7 +356,7 @@ export const copia_segurdad = () => {
       );
 
       let zip_clave = exec(
-        `7z a C:\\BACKUP_MONGO_CORRESPONDENCIA\\${fechaActual}\\${horaActual}\\backup.7z -pprosoft -mhe C:\\BACKUP_MONGO_CORRESPONDENCIA\\${fechaActual}\\${horaActual}\\dump C:\\BACKUP_MONGO_CORRESPONDENCIA\\${fechaActual}\\${horaActual}\\restaurar.bat`,
+        `7z a ${directorio2}\\${fechaActual}\\${horaActual}\\backup.7z -pprosoft -mhe ${directorio2}\\${fechaActual}\\${horaActual}\\dump ${directorio2}\\${fechaActual}\\${horaActual}\\restaurar.bat`,
         (error, stdout, stderr) => {
           if (error) {
             console.error("Error al generar .zip");
@@ -362,10 +364,10 @@ export const copia_segurdad = () => {
             return;
           }
           console.log("ZIP Generado con exito");
-          rimraf(`C:\\BACKUP_MONGO_CORRESPONDENCIA\\${fechaActual}\\${horaActual}\\dump`, function () {
+          rimraf(`${directorio2}\\${fechaActual}\\${horaActual}\\dump`, function () {
             console.log("done");
           });
-          fs.unlinkSync(`C:\\BACKUP_MONGO_CORRESPONDENCIA\\${fechaActual}\\${horaActual}\\restaurar.bat`);
+          fs.unlinkSync(`${directorio2}\\${fechaActual}\\${horaActual}\\restaurar.bat`);
         }
       );
       console.log("Backup generado con exito");
@@ -375,7 +377,9 @@ export const copia_segurdad = () => {
 
 export const limipar_backup = () => {
   let files = [];
-  fs.readdir("C:/BACKUP_MONGO_CORRESPONDENCIA/", (err: any, result: any) => {
+  const directorio = "C:/BACKUP_MONGO_CORRESPONDENCIA"
+  const directorio2 = "C:\\BACKUP_MONGO_CORRESPONDENCIA"
+  fs.readdir(`${directorio}/`, (err: any, result: any) => {
     if (err) {
       console.error(err);
       throw Error(err);
@@ -383,14 +387,14 @@ export const limipar_backup = () => {
     files = result;
     if (files.length > 4) {
       const carpeta = files[files.length - 4]; //se debe poner -3
-      fs.readdir(`C:/BACKUP_MONGO_CORRESPONDENCIA/${carpeta}`, (err: any, result: any) => {
+      fs.readdir(`${directorio}/${carpeta}`, (err: any, result: any) => {
         if (err) {
           console.error(err);
           throw Error(err);
         }
         for (let i = 0; i < result.length - 1; i++) {
-          console.log(`C:\\BACKUP_MONGO_CORRESPONDENCIA\\${carpeta}\\${result[i]}`);
-          rimraf(`C:\\BACKUP_MONGO_CORRESPONDENCIA\\${carpeta}\\${result[i]}`, function () {
+          console.log(`${directorio2}\\${carpeta}\\${result[i]}`);
+          rimraf(`${directorio2}\\${carpeta}\\${result[i]}`, function () {
             console.log("done");
           });
         }

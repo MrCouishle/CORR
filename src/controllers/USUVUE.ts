@@ -41,6 +41,15 @@ export const getusuvue = async (req: Request, res: Response) => {
           ],
           as: "restr",
         },
+        
+      },
+      {
+        $lookup:{
+          from:"asigmodulos",
+          localField:"llaveOper",
+          foreignField:"llave",
+          as:"modulos"
+        }
       },
       {
         $match: {
