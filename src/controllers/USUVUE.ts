@@ -52,11 +52,15 @@ export const getusuvue = async (req: Request, res: Response) => {
         }
       },
       {
+        $unwind:"$modulos"
+      },
+      {
         $match: {
           llaveOper: llaveResp,
         },
       },
-    ]);
+    ])
+    .project({"modulos.llave":0, "modulos._id":0});
     if (data[0]) {
       if (data[0].clave == atob(clave) || (await bcrypt.compare(atob(clave), data[0].clave))) {
         const token = await generarJwt(data[0].llaveOper);

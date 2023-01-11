@@ -16,7 +16,7 @@ const asigna_modulos_schema = new Schema<asigmodulos>({
     modulos:{
         type:[],
     }
-})
+}, {versionKey:false})
 
 
 asigna_modulos_schema.pre("save", async function (next) {

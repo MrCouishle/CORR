@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { edit_response } from "../global/global";
+import { edit_response, get_response } from "../global/global";
 import { asigna_modulos_model } from "../models/ASIGNAMODULOS";
 import { modulos_schema } from "../models/MODULOS";
 import { usuvue_model } from "../models/USUVUE";
@@ -37,3 +37,15 @@ export const asigar_modulo = async (req: Request, res: Response) => {
     res.json({ msg: error });
   }
 };
+
+export const consultar_modulos_asignados =async (req:Request, res:Response) => {
+
+  try {
+    const {llave} = req.params
+    const data = await asigna_modulos_model.findOne({llave}, {_id:0})
+    get_response("asignamodul", data, llave, res)
+  } catch (error) {
+    res.json({msg:error})
+  }
+  
+}
