@@ -1,11 +1,5 @@
 import { Request, Response } from "express";
-import {
-  get_response,
-  get_all_response,
-  omitirId,
-  generarJwt,
-  edit_response,
-} from "../global/global";
+import { get_response, get_all_response, omitirId, generarJwt, edit_response } from "../global/global";
 import { usuvue_model } from "../models/USUVUE";
 import bcrypt from "bcrypt";
 
@@ -86,6 +80,7 @@ export const getusuvue = async (req: Request, res: Response) => {
         fecha: 1,
         admin: 1,
         dias: 1,
+        restr: 1,
         depen: 1,
         ser: 1,
         serial: 1,
@@ -95,10 +90,7 @@ export const getusuvue = async (req: Request, res: Response) => {
         vend: 1,
       });
     if (data[0]) {
-      if (
-        data[0].clave == atob(clave) ||
-        (await bcrypt.compare(atob(clave), data[0].clave))
-      ) {
+      if (data[0].clave == atob(clave) || (await bcrypt.compare(atob(clave), data[0].clave))) {
         const token = await generarJwt(data[0].llaveOper);
         if (atob(clave) === "NUEVO123") {
           delete data[0].clave;
@@ -124,10 +116,7 @@ export const cambiarContra = async (req: Request, res: Response) => {
     if (user) {
       const new_password = await bcrypt.hash(atob(nueva_pass), 10);
       console.log(llave);
-      const data = await usuvue_model.updateOne(
-        { llaveOper: llave },
-        { $set: { clave: new_password } }
-      );
+      const data = await usuvue_model.updateOne({ llaveOper: llave }, { $set: { clave: new_password } });
       console.log(data);
       edit_response("usuvue", data, llave, res);
     } else {
@@ -171,10 +160,7 @@ export const f8Usuvue = async (req: Request, res: Response) => {
     const data = await usuvue_model
       .find(
         {
-          $or: [
-            { llaveOper: { $regex: dato, $options: "ix" } },
-            { nombre: { $regex: dato, $options: "i" } },
-          ],
+          $or: [{ llaveOper: { $regex: dato, $options: "ix" } }, { nombre: { $regex: dato, $options: "i" } }],
         },
         {
           subdirect: 0,
