@@ -39,7 +39,6 @@ export const asigar_modulo = async (req: Request, res: Response) => {
 };
 
 export const consultar_modulos_asignados =async (req:Request, res:Response) => {
-
   try {
     const {llave} = req.params
     const data = await asigna_modulos_model.findOne({llave}, {_id:0})
