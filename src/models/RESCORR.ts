@@ -19,11 +19,10 @@ interface rescorr {
     swRadi: string;
     fecha: Date;
     firma: string;
-    clMacro: string;
-    codigoMacro: {
-      type: Number,
-      default: 0
-    },
+    llaveMacro: {
+      clMacro: string;
+      codigoMacro: String
+    }
     asunto: string;
     tabla: string;
     respon: string;
@@ -86,13 +85,15 @@ const rescorr_schema = new Schema<rescorr>({
       type: String,
       default: " "
     },
-    clMacro: {
+    llaveMacro: {
+      clMacro: {
       type: String,
       default: " "
     },
     codigoMacro: {
-      type: Number,
+      type: String,
       default: 0
+      },
     },
     asunto: {
       type: String,
