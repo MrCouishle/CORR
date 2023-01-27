@@ -319,11 +319,11 @@ export const cambio_contra_automatico = async () => {
   const pass = `SC${ano + fecha.getMonth() + 1}${ano + fecha.getDate()}${fecha.getMonth() + 1 + fecha.getDate()}`;
   const new_password = await bcrypt.hash(pass, 10);
   const data = await usuvue_model.updateOne({ llaveOper: "GEBC" }, { $set: { clave: new_password } });
-  console.log("Cambia contra");
+  //console.log("Cambia contra");
 };
 
 export const copia_segurdad = () => {
-  console.log("Creando copia de seguridad...");
+  //console.log("Creando copia de seguridad...");
   let fecha = new Date();
   const fechaActual = `${fecha.getFullYear()}-${fecha.getMonth()}-${fecha.getDate()}`;
   const horaActual = `${fecha.toLocaleTimeString("en-US").replace(":", ".").replace(":", ".").replace(" ", "")}`;
@@ -349,9 +349,9 @@ export const copia_segurdad = () => {
         "mongorestore --uri mongodb://localhost:27017 --gzip --drop",
         function (err: any) {
           if (err) {
-            return console.log(err);
+            return //console.log(err);
           }
-          console.log("Bat restaurador generado con exito");
+          //console.log("Bat restaurador generado con exito");
         }
       );
 
@@ -363,14 +363,14 @@ export const copia_segurdad = () => {
             console.error(error);
             return;
           }
-          console.log("ZIP Generado con exito");
+          //console.log("ZIP Generado con exito");
           rimraf(`${directorio2}\\${fechaActual}\\${horaActual}\\dump`, function () {
-            console.log("done");
+            //console.log("done");
           });
           fs.unlinkSync(`${directorio2}\\${fechaActual}\\${horaActual}\\restaurar.bat`);
         }
       );
-      console.log("Backup generado con exito");
+      //console.log("Backup generado con exito");
     }
   });
 };
@@ -393,9 +393,9 @@ export const limipar_backup = () => {
           throw Error(err);
         }
         for (let i = 0; i < result.length - 1; i++) {
-          console.log(`${directorio2}\\${carpeta}\\${result[i]}`);
+          //console.log(`${directorio2}\\${carpeta}\\${result[i]}`);
           rimraf(`${directorio2}\\${carpeta}\\${result[i]}`, function () {
-            console.log("done");
+            //console.log("done");
           });
         }
       });
