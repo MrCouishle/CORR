@@ -77,7 +77,7 @@ export const listadoControlRespuestas = async (req: Request, res: Response) => {
         {
           $lookup: {
             from: "depco",
-            let: { codigoDep: { $toInt: "$dep" } },
+            let: { codigoDep:[{ $toInt: "$dep" }] },
             pipeline: [
               {
                 $match: {
@@ -169,7 +169,7 @@ export const listadoControlRespuestas = async (req: Request, res: Response) => {
       });
     get_all_response(data, res);
   } catch (error) {
-
+    console.log(error)
     res.json({ msg: error });
   }
 };

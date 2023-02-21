@@ -69,7 +69,7 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
         {
           $lookup: {
             from: "auxtip",
-            localField: "codAux",
+            localField: "codAuxco",
             foreignField: "codigo",
             as: "aux",
           },
@@ -87,7 +87,7 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
         {
           $lookup: {
             from: "rescorr",
-            localField: "llave",
+            localField: "llaveResp",
             foreignField: "codResp",
             as: "rescorr",
           },
@@ -96,7 +96,7 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
         {
           $lookup: {
             from: "tipco",
-            let: { tipoCorres: { $toString: "$tipoCorres" } },
+            let: { tipoCorres: "$tipoCorres" },
             pipeline: [
               {
                 $match: {
@@ -169,19 +169,6 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
             amount: { $arrayElemAt: ["$tipc.dias", 0] },
           },
         },
-        // diasVence: {
-        //   $dateDiff: {
-        //     startDate: new Date(),
-        //     endDate: {
-        //       $dateAdd: {
-        //         startDate: "$fecha",
-        //         unit: "day",
-        //         amount: { $arrayElemAt: ["$tipc.dias", 0] },
-        //       },
-        //     },
-        //     unit: "day",
-        //   },
-        // },
         diasVence:1,
         descripAuxco: { $concat: [{ $arrayElemAt: ["$aux.descripcion", 0] }] },
         descripSerco: { $concat: [{ $arrayElemAt: ["$serc.descripcion", 0] }] },
@@ -308,6 +295,7 @@ export const getImpresionCorr = async (req: Request, res: Response) => {
     // //console.log("RES en la validacion de COR301", res);
     // //console.log("DATA en la validacion de COR301", data);
   } catch (error) {
+    console.log(error)
     res.json({ msg: error });
   }
 };
